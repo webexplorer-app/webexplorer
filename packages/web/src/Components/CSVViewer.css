@@ -1,0 +1,15 @@
+.csv__viewer {
+  overflow: scroll;
+}
+
+.csv__viewer table {
+  margin-top: 0.5rem;
+  max-width: fit-content;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.csv__viewer td {
+  padding: 0.5rem;
+  border: 1px solid #f0f0f0;
+}
