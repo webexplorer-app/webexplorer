@@ -1,10 +1,10 @@
 import React, { Suspense } from "react";
 import { mimeType } from "../Utils/file";
 import "./FileViewer.css";
-import GtpViewer from "./GtpViewer";
 import { Loading } from "./Loading";
 import { useDocumentTitle } from "./DocumentTitle";
 
+const GtpViewer = React.lazy(() => import("./GtpViewer"));
 const PdfViewer = React.lazy(() => import("./PdfViewer"));
 const ArchiveViewer = React.lazy(() => import("./ArchiveViewer"));
 const ThreeViewer = React.lazy(() => import("./ThreeViewer"));
