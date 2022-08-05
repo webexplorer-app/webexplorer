@@ -145,6 +145,12 @@ export function DropZone(props: DropZoneProps) {
               </td>
               <td>.torrent</td>
             </tr>
+            <tr>
+              <td>
+                <Localized id="csv-file">CSV File</Localized>
+              </td>
+              <td>.csv</td>
+            </tr>
           </tbody>
         </table>
       </div>

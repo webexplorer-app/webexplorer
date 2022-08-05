@@ -29,3 +29,4 @@ default-viewer = 默认预览
 text = 文本
 binary = 二进制
 file-is-too-large = 文件太大，无法打开
+csv-file = CSV文件

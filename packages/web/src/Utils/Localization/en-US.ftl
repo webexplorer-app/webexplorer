@@ -29,3 +29,4 @@ default-viewer = Default Viewer
 text = Text
 binary = Binary
 file-is-too-large = File is too large
+csv-file = CSV File
