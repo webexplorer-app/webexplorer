@@ -14,6 +14,7 @@ const TorrentViewer = React.lazy(() => import("./TorrentViewer"));
 const VideoViewer = React.lazy(() => import("./VideoViewer"));
 const ImageViewer = React.lazy(() => import("./ImageViewer"));
 const CSVViewer = React.lazy(() => import("./CSVViewer"));
+const WasmViewer = React.lazy(() => import("./WasmViewer"));
 const DefaultViewer = React.lazy(() => import("./DefaultViewer"));
 
 export interface FileViewerProps {
@@ -78,6 +79,9 @@ export function FileViewer(props: FileViewerProps) {
       break;
     case "text/csv":
       viewer = <CSVViewer file={file} />
+      break;
+    case "application/wasm":
+      viewer = <WasmViewer file={file} />
       break;
     default:
       viewer = <DefaultViewer file={file} />;
