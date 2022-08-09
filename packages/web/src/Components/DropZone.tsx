@@ -151,6 +151,12 @@ export function DropZone(props: DropZoneProps) {
               </td>
               <td>.csv</td>
             </tr>
+            <tr>
+              <td>
+                <Localized id="wasm-file">WASM File</Localized>
+              </td>
+              <td>.wasm</td>
+            </tr>
           </tbody>
         </table>
       </div>
