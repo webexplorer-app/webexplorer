@@ -11,6 +11,7 @@ const ThreeViewer = React.lazy(() => import("./ThreeViewer"));
 const EPubViewer = React.lazy(() => import("./EPubViewer"));
 const MobiViewer = React.lazy(() => import("./MobiViewer"));
 const TorrentViewer = React.lazy(() => import("./TorrentViewer"));
+const AudioViewer = React.lazy(() => import("./AudioViewer"));
 const VideoViewer = React.lazy(() => import("./VideoViewer"));
 const ImageViewer = React.lazy(() => import("./ImageViewer"));
 const CSVViewer = React.lazy(() => import("./CSVViewer"));
@@ -69,6 +70,14 @@ export function FileViewer(props: FileViewerProps) {
     case "video/quicktime":
       viewer = <VideoViewer file={file} />;
       break;
+    case "audio/mpeg":
+    case "audio/flac":
+    case "audio/aac":
+    case "audio/ogg":
+    case "audio/wav":
+    case "audio/mp3":
+      viewer = <AudioViewer file={file} />;
+      break;
     case "image/png":
     case "image/jpeg":
     case "image/jpg":
@@ -78,10 +87,10 @@ export function FileViewer(props: FileViewerProps) {
       viewer = <ImageViewer file={file} />;
       break;
     case "text/csv":
-      viewer = <CSVViewer file={file} />
+      viewer = <CSVViewer file={file} />;
       break;
     case "application/wasm":
-      viewer = <WasmViewer file={file} />
+      viewer = <WasmViewer file={file} />;
       break;
     default:
       viewer = <DefaultViewer file={file} />;

@@ -157,6 +157,18 @@ export function DropZone(props: DropZoneProps) {
               </td>
               <td>.wasm</td>
             </tr>
+            <tr>
+              <td>
+                <Localized id="audio-file">Audio File</Localized>
+              </td>
+              <td>.mp3 .flac .aac .ogg</td>
+            </tr>
+            <tr>
+              <td>
+                <Localized id="video-file">Video File</Localized>
+              </td>
+              <td>.mp4 .webm .ogg .mov</td>
+            </tr>
           </tbody>
         </table>
       </div>

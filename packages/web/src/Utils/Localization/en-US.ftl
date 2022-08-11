@@ -30,4 +30,6 @@ text = Text
 binary = Binary
 file-is-too-large = File is too large
 csv-file = CSV File
-wasm-file = WASM file
+wasm-file = WASM File
+audio-file = Audio File
+video-file = Video File
