@@ -1,6 +1,6 @@
-cd ./scripts/docker
+cd ./scripts
 
-docker build -t pdfium .
+docker build -t pdfium . --progress=plain
 
 cd -
 

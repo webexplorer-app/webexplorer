@@ -1,6 +1,6 @@
 import libarchive, { LibPdfiumModule } from "./libpdfium";
 
-export type ArchiveModule = ReturnType<typeof wrap>;
+export type PdfiumModule = ReturnType<typeof wrap>;
 
 export function wrap(module: LibPdfiumModule) {
   return {
@@ -71,7 +71,7 @@ export type ArchiveEntry = {
 };
 
 export async function unarchive(
-  module: ArchiveModule,
+  module: PdfiumModule,
   filePtr: number,
   fileLength: number,
   passphrase: string | null,
