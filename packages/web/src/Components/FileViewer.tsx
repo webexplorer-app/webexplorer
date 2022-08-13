@@ -84,6 +84,10 @@ export function FileViewer(props: FileViewerProps) {
     case "image/webp":
     case "image/apng":
     case "image/bmp":
+    case "image/.avif":
+    case "image/svg+xml":
+    case "image/x-icon":
+    case "image/tiff":
       viewer = <ImageViewer file={file} />;
       break;
     case "text/csv":

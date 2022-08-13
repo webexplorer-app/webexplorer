@@ -159,6 +159,12 @@ export function DropZone(props: DropZoneProps) {
             </tr>
             <tr>
               <td>
+                <Localized id="image-file">Image File</Localized>
+              </td>
+              <td>.png .jpg .jpeg .gif .webp .apng .bmp .svg .avif .ico .tiff</td>
+            </tr>
+            <tr>
+              <td>
                 <Localized id="audio-file">Audio File</Localized>
               </td>
               <td>.mp3 .flac .aac .ogg</td>
