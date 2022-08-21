@@ -19,6 +19,8 @@ RUN mkdir -p out/Release
 COPY args.gn out/Release/args.gn
 RUN ./build/install-build-deps.sh
 RUN gn gen out/Release
+RUN alias cc="emcc"
+RUN alias cxx="em++"
 RUN ninja -C out/Release pdfium_all
 
 WORKDIR /var/local/scripts/
