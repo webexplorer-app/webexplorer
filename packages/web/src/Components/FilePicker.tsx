@@ -1,4 +1,4 @@
-import { ComponentProps, useCallback, useState } from "react";
+import { ChangeEvent, ComponentProps, useCallback, useState } from "react";
 import "./FilePicker.css";
 import { Localized } from "@fluent/react";
 
@@ -14,8 +14,11 @@ export function FilePicker(props: FilePickerProps) {
   });
 
   const onChange = useCallback(
-    (evt) => {
-      onFiles(evt.target.files);
+    (evt: ChangeEvent) => {
+      const target = evt.target as HTMLInputElement;
+      if (target.files) {
+        onFiles(target.files);
+      }
     },
     [onFiles]
   );
