@@ -6,68 +6,58 @@ import {
   PdfDocument,
   PdfNavigatorContextProvider,
   PdfPages,
-  PdfPageAnnotationBase,
-  PdfPageAnnotationComponentProps,
-  PdfPageAnnotations,
-  PdfPageCanvas,
-  PdfPageContentComponentProps,
-  PdfPageLinkAnnotation,
-  PdfPageTextAnnotation,
-  PdfNavigator,
+  LoggerContextProvider,
+  PdfApplication,
+  PdfApplicationContextProvider,
+  PdfAttachments,
+  PdfBookmarks,
+  PdfDownloader,
+  PdfEditorContextProvider,
+  PdfMetadata,
+  PdfNativeAdapterProvider,
+  PdfPageAnnotationComponentContextProvider,
+  PdfPageAnnotationsLayer,
+  PdfPageCanvasLayer,
+  PdfPageDefaultAnnotation,
+  PdfPageEditorLayer,
+  PdfPageTextLayer,
+  PdfPrinter,
+  PdfSearchPanel,
+  PdfSignatures,
+  PdfThumbnails,
+  PdfToolbar,
+  PrinterMethod,
+  ThemeContextProvider,
+  StoragePdfApplicationConfigurationProvider,
 } from "@unionpdf/react";
-import {
-  PdfAnnotationSubtype,
-} from "@unionpdf/models";
-
-function PdfPageAnnotation(props: PdfPageAnnotationComponentProps) {
-  const { page, annotation, rotation, scaleFactor } = props;
-  switch (annotation.type) {
-    case PdfAnnotationSubtype.LINK:
-      return (
-        <PdfPageLinkAnnotation
-          page={page}
-          annotation={annotation}
-          rotation={rotation}
-          scaleFactor={scaleFactor}
-        />
-      );
-    case PdfAnnotationSubtype.TEXT:
-      return (
-        <PdfPageTextAnnotation
-          page={page}
-          annotation={annotation}
-          rotation={rotation}
-          scaleFactor={scaleFactor}
-        />
-      );
-    default:
-      return <PdfPageAnnotationBase {...props} />;
-  }
-}
-
-function PdfPageContent(props: PdfPageContentComponentProps) {
-  return (
-    <>
-      <PdfPageCanvas {...props} />
-      <PdfPageAnnotations {...props} annotationComponent={PdfPageAnnotation} />
-    </>
-  );
-}
+import { PdfEngineError } from "@unionpdf/models";
+import { logger } from "workbox-core/_private";
 
 export interface PdfViewerProps {
   file: File;
 }
 
 export function PdfViewer(props: PdfViewerProps) {
+  const [provider] = useState(() => {
+    return new StoragePdfApplicationConfigurationProvider(
+      localStorage,
+      "pdfviewer.configurtion"
+    );
+  });
+
   const [engine] = useState(() => {
-    const engine = new WebWorkerEngine(new URL("./PdfViewer.worker.ts", import.meta.url));
+    const engine = new WebWorkerEngine(
+      new URL("./PdfViewer.worker", import.meta.url)
+    );
     engine.initialize();
 
     return engine;
   });
-  const [file, setFile] = useState<{ id: string; source: ArrayBuffer } | null>(
-    null
-  );
+  const [file, setFile] = useState<{
+    id: string;
+    name: string;
+    content: ArrayBuffer;
+  } | null>(null);
 
   useEffect(() => {
     const reader = new FileReader();
@@ -75,7 +65,8 @@ export function PdfViewer(props: PdfViewerProps) {
       const result = reader.result as ArrayBuffer;
       setFile({
         id: props.file.name,
-        source: result,
+        name: props.file.name,
+        content: result,
       });
     };
 
@@ -86,29 +77,66 @@ export function PdfViewer(props: PdfViewerProps) {
     };
   }, [props.file, engine]);
 
-  const [pdfNavigator] = useState(() => {
-    return new PdfNavigator();
-  });
-
   return (
     <div className="pdf__viewer">
       {file ? (
-        <PdfEngineContextProvider engine={engine}>
-          <PdfNavigatorContextProvider navigator={pdfNavigator}>
-            <PdfDocument
-              id={file.id}
-              source={file.source}
-              onOpenSuccess={() => {}}
-              onOpenFailure={() => {}}
+        <PdfNativeAdapterProvider>
+          <LoggerContextProvider logger={logger}>
+            <ThemeContextProvider
+              theme={{
+                background: "blue",
+              }}
             >
-              <PdfPages
-                prerenderRange={[-1, 1]}
-                cacheRange={[-5, 5]}
-                pageContentComponent={PdfPageContent}
-              />
-            </PdfDocument>
-          </PdfNavigatorContextProvider>
-        </PdfEngineContextProvider>
+              <PdfApplicationContextProvider provider={provider}>
+                <PdfEngineContextProvider engine={engine}>
+                  <PdfApplication>
+                    <PdfNavigatorContextProvider>
+                      <PdfDocument
+                        file={file}
+                        password=""
+                        onOpenSuccess={() => {}}
+                        onOpenFailure={(error: PdfEngineError) => {}}
+                      >
+                        <PdfEditorContextProvider>
+                          <PdfToolbar />
+                          <PdfPageAnnotationComponentContextProvider
+                            component={PdfPageDefaultAnnotation}
+                          >
+                            <PdfPages
+                              prerenderRange={[-1, 1]}
+                              cacheRange={[-1, 1]}
+                              pageLayers={[
+                                PdfPageCanvasLayer,
+                                PdfPageTextLayer,
+                                PdfPageAnnotationsLayer,
+                                PdfPageEditorLayer,
+                              ]}
+                            />
+                          </PdfPageAnnotationComponentContextProvider>
+                          <PdfMetadata />
+                          <PdfThumbnails
+                            layout={{
+                              direction: "vertical",
+                              itemsCount: 2,
+                            }}
+                            size={{ width: 100, height: 100 }}
+                            scaleFactor={0.25}
+                          />
+                          <PdfBookmarks />
+                          <PdfSearchPanel />
+                          <PdfAttachments />
+                          <PdfSignatures />
+                          <PdfDownloader />
+                          <PdfPrinter method={PrinterMethod.Iframe} />
+                        </PdfEditorContextProvider>
+                      </PdfDocument>
+                    </PdfNavigatorContextProvider>
+                  </PdfApplication>
+                </PdfEngineContextProvider>
+              </PdfApplicationContextProvider>
+            </ThemeContextProvider>
+          </LoggerContextProvider>
+        </PdfNativeAdapterProvider>
       ) : null}
     </div>
   );

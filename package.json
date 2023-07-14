@@ -1,7 +1,11 @@
 {
   "name": "root",
   "private": true,
-  "devDependencies": {
-    "lerna": "^6.0.1"
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
   }
 }
