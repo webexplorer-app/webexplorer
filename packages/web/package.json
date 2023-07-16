@@ -2,6 +2,7 @@
   "name": "@webexplorer/web",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://webexplorer-app.github.io/webexplorer",
   "dependencies": {
     "@babel/core": "^7.22.9",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
