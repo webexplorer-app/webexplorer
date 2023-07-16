@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./PdfViewer.css";
+import { NoopLogger, PdfEngineError } from "@unionpdf/models";
 import { WebWorkerEngine } from "@unionpdf/engines";
 import {
   PdfEngineContextProvider,
@@ -30,8 +31,6 @@ import {
   ThemeContextProvider,
   StoragePdfApplicationConfigurationProvider,
 } from "@unionpdf/react";
-import { PdfEngineError } from "@unionpdf/models";
-import { logger } from "workbox-core/_private";
 
 export interface PdfViewerProps {
   file: File;
@@ -46,9 +45,10 @@ export function PdfViewer(props: PdfViewerProps) {
   });
 
   const [engine] = useState(() => {
-    const engine = new WebWorkerEngine(
-      new URL("./PdfViewer.worker", import.meta.url)
-    );
+    const worker = new Worker(new URL("./PdfViewer.worker", import.meta.url), {
+      type: "module",
+    });
+    const engine = new WebWorkerEngine(worker);
     engine.initialize();
 
     return engine;
@@ -81,7 +81,7 @@ export function PdfViewer(props: PdfViewerProps) {
     <div className="pdf__viewer">
       {file ? (
         <PdfNativeAdapterProvider>
-          <LoggerContextProvider logger={logger}>
+          <LoggerContextProvider logger={new NoopLogger()}>
             <ThemeContextProvider
               theme={{
                 background: "blue",
