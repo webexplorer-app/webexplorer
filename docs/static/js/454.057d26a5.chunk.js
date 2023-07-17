@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_webexplorer_web=self.webpackChunk_webexplorer_web||[]).push([[454],{4454:function(e,r,n){n.r(r),n.d(r,{AudioViewer:function(){return c},default:function(){return i}});var u=n(6266);function c(e){var r=e.file;return(0,u.jsx)("div",{className:"audio__viewer",children:(0,u.jsx)("audio",{controls:!0,src:URL.createObjectURL(r)})})}var i=c}}]);

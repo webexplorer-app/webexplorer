@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_webexplorer_web=self.webpackChunk_webexplorer_web||[]).push([[384],{4384:function(e,r,n){n.r(r),n.d(r,{VideoViewer:function(){return i},default:function(){return t}});var c=n(6266);function i(e){var r=e.file;return(0,c.jsx)("div",{className:"video__viewer",children:(0,c.jsx)("video",{controls:!0,src:URL.createObjectURL(r)})})}var t=i}}]);

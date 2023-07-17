@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_webexplorer_web=self.webpackChunk_webexplorer_web||[]).push([[847],{9847:function(e,r,n){n.r(r),n.d(r,{ImageViewer:function(){return t},default:function(){return c}});var a=n(6266);function t(e){var r=e.file;return(0,a.jsx)("div",{className:"image__viewer",children:(0,a.jsx)("img",{alt:r.name,src:URL.createObjectURL(r)})})}var c=t}}]);

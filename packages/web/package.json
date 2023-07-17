@@ -2,6 +2,7 @@
   "name": "@webexplorer/web",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://webexplorer-app.github.io/webexplorer/",
   "dependencies": {
     "@babel/core": "^7.22.9",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
@@ -104,7 +105,9 @@
   "scripts": {
     "start": "cross-env GENERATE_SOURCEMAP=false node scripts/start.js",
     "build": "cross-env GENERATE_SOURCEMAP=false node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -179,5 +182,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
   }
 }
