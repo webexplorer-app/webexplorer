@@ -72,7 +72,7 @@ function App(props: AppProps) {
       <LocalizationProvider l10n={l10n}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<HomePage />}></Route>
+            <Route path="/webexplorer" element={<HomePage />}></Route>
           </Routes>
         </BrowserRouter>
       </LocalizationProvider>
