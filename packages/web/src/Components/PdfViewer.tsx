@@ -30,6 +30,7 @@ import {
   PrinterMethod,
   ThemeContextProvider,
   StoragePdfApplicationConfigurationProvider,
+  PdfEditor,
 } from "@unionpdf/react";
 
 export interface PdfViewerProps {
@@ -128,6 +129,7 @@ export function PdfViewer(props: PdfViewerProps) {
                           <PdfSignatures />
                           <PdfDownloader />
                           <PdfPrinter method={PrinterMethod.Iframe} />
+                          <PdfEditor />
                         </PdfEditorContextProvider>
                       </PdfDocument>
                     </PdfNavigatorContextProvider>
