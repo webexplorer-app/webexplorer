@@ -48,6 +48,7 @@
     "eslint": "^8.44.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-webpack-plugin": "^4.0.1",
+    "ffmpeg-webassembly": "file:../../../ffmpeg-webassembly",
     "file-loader": "^6.2.0",
     "fs-extra": "^11.1.1",
     "history": "^5.3.0",

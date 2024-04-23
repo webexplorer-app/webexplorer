@@ -30,7 +30,7 @@ export class ArchiveWorker {
   }
 
   async open(file: File, passphrase: string | null) {
-    if (!this.filePtr) {
+    if (this.filePtr) {
       this.close();
     }
 

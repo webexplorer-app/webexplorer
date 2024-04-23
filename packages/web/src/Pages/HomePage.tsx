@@ -11,7 +11,7 @@ import { Locale } from "../Utils/Localization";
 import "./HomePage.css";
 import { useLocalization } from "@fluent/react";
 
-export interface HomePageProps {}
+export interface HomePageProps { }
 
 export function HomePage(props: HomePageProps) {
   const [file, setFile] = useState<File | null>(null);
@@ -38,7 +38,6 @@ export function HomePage(props: HomePageProps) {
           })}
         </select>
         <FilePicker
-          accept="*/pdf"
           onFiles={(files) => {
             if (files.length > 0) {
               setFile(files[0]);

@@ -16,6 +16,7 @@ const VideoViewer = React.lazy(() => import("./VideoViewer"));
 const ImageViewer = React.lazy(() => import("./ImageViewer"));
 const CSVViewer = React.lazy(() => import("./CSVViewer"));
 const WasmViewer = React.lazy(() => import("./WasmViewer"));
+const FFmpegViewer = React.lazy(() => import("./FFmpegViewer"));
 const DefaultViewer = React.lazy(() => import("./DefaultViewer"));
 
 export interface FileViewerProps {
@@ -97,7 +98,11 @@ export function FileViewer(props: FileViewerProps) {
       viewer = <WasmViewer file={file} />;
       break;
     default:
-      viewer = <DefaultViewer file={file} />;
+      if (fileType?.startsWith('video/')) {
+        viewer = <FFmpegViewer file={file} />
+      } else {
+        viewer = <DefaultViewer file={file} />;
+      }
   }
 
   useDocumentTitle({ title: file.name });
