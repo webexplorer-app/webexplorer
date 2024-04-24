@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./CSVViewer.css";
-import { parse } from "csv-parse/browser/esm/sync";
+import { parse } from "csv-parse";
 
 export interface CSVViewerProps {
   file: File;
@@ -15,8 +15,10 @@ export function CSVViewer(props: CSVViewerProps) {
       const reader = new FileReader();
       reader.onload = () => {
         const content = reader.result as string;
-        const records = parse(content);
-        setRecords(records);
+        const parser = parse(content);
+        parser.on('data', (data) => {
+          setRecords(data);
+        })
       };
 
       reader.readAsText(file);

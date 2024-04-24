@@ -14,6 +14,10 @@
     ".": {
       "import": "./dist/esm/index.mjs",
       "require": "./dist/cjs/index.js"
+    },
+    "./ffmpeg.wasm": {
+      "import": "./dist/esm/ffmpeg.bbea0d83.wasm",
+      "require": "./dist/cjs/ffmpeg.bbea0d83.wasm"
     }
   },
   "scripts": {

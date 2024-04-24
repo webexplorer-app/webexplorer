@@ -13,7 +13,7 @@ export function FFmpegViewer(props: FFmpegViewerProps) {
 
     const videoElementRef = useRef<HTMLVideoElement>(null);
     const worker = useFFmpegWorker();
-    const [isTranscoding, setIsTranscoding] = useState(true);
+    const [isTranscoding, setIsTranscoding] = useState(false);
 
     useEffect(() => {
         let isAbort = false;

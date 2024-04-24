@@ -36,7 +36,6 @@ CONF_FLAGS=(
   -sWASM_BIGINT                            # enable big int support
   -sUSE_SDL=2                              # use emscripten SDL2 lib port
   -sMODULARIZE                             # modularized to use as a library
-  -sSINGLE_FILE
   -sINITIAL_MEMORY=1024MB   # ALLOW_MEMORY_GROWTH is not recommended when using threads, thus we use a large initial memory
   -sPTHREAD_POOL_SIZE=64    # use 32 threads
   -sEXPORT_NAME="$EXPORT_NAME"             # required in browser env, so that user can access this module from window object

@@ -1,5 +1,5 @@
 import { init, unarchive, ArchiveModule } from "@webexplorer/archive";
-import wasmUrl from "@webexplorer/archive/libarchive.wasm";
+import wasmUrl from "url:@webexplorer/archive/dist/cjs/libarchive.aca5a88e.wasm";
 import * as comlink from "comlink";
 
 export class ArchiveWorker {

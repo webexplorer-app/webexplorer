@@ -1,5 +1,5 @@
-import enUS from "./en-US.ftl";
-import zhCN from "./zh-CN.ftl";
+import enUS from "bundle-text:./en-US.ftl";
+import zhCN from "bundle-text:./zh-CN.ftl";
 import { ReactLocalization } from "@fluent/react";
 import { FluentBundle, FluentResource } from "@fluent/bundle";
 

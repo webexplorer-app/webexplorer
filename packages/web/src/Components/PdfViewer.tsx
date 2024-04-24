@@ -46,7 +46,7 @@ export function PdfViewer(props: PdfViewerProps) {
   });
 
   const [engine] = useState(() => {
-    const worker = new Worker(new URL("./PdfViewer.worker", import.meta.url), {
+    const worker = new Worker(new URL("./PdfViewer.worker.ts", import.meta.url), {
       type: "module",
     });
     const engine = new WebWorkerEngine(worker);
@@ -95,8 +95,8 @@ export function PdfViewer(props: PdfViewerProps) {
                       <PdfDocument
                         file={file}
                         password=""
-                        onOpenSuccess={() => {}}
-                        onOpenFailure={(error: PdfEngineError) => {}}
+                        onOpenSuccess={() => { }}
+                        onOpenFailure={(error: PdfEngineError) => { }}
                       >
                         <PdfEditorContextProvider>
                           <PdfToolbar />

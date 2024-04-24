@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import * as comlink from "comlink";
-import { FFmpegWorker } from "../Worker/FFmpegWorker";
+import { type FFmpegWorker } from "../Worker/FFmpegWorker";
 
 export function useFFmpegWorker() {
-  const [worker] = useState(() => {
+  const worker = useMemo(() => {
     const worker = new Worker(
-      new URL("../Worker/FFmpegWorker.ts", import.meta.url)
+      new URL("url:../Worker/FFmpegWorker.ts", import.meta.url),
+      { type: 'module' }
     );
     return comlink.wrap<FFmpegWorker>(worker);
-  });
+  }, []);
 
   return worker;
 }
