@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import * as comlink from "comlink";
 import { ArchiveWorker } from "../Worker/ArchiveWorker";
 

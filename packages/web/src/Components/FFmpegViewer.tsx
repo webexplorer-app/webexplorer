@@ -1,7 +1,8 @@
 import "./FFmpegViewer.css";
 import { useFFmpegWorker } from "../Hooks/useFFmpegWorker";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { readFile } from '../Utils/file';
+import { Localized } from "@fluent/react";
 
 export interface FFmpegViewerProps {
     file: File;
@@ -12,10 +13,12 @@ export function FFmpegViewer(props: FFmpegViewerProps) {
 
     const videoElementRef = useRef<HTMLVideoElement>(null);
     const worker = useFFmpegWorker();
+    const [isTranscoding, setIsTranscoding] = useState(true);
 
     useEffect(() => {
         let isAbort = false;
         async function transcode() {
+            setIsTranscoding(true);
             const buffer = await readFile(file);
             if (isAbort) {
                 return;
@@ -40,6 +43,7 @@ export function FFmpegViewer(props: FFmpegViewerProps) {
             if (videoElement) {
                 videoElement.src = URL.createObjectURL(new Blob([data.buffer], { type: 'video/webm' }));
             }
+            setIsTranscoding(false);
         }
 
         transcode();
@@ -47,10 +51,11 @@ export function FFmpegViewer(props: FFmpegViewerProps) {
         return () => {
             isAbort = true;
         }
-    }, [worker, file]);
+    }, [worker, file, setIsTranscoding]);
 
     return (
         <div className="ffmpeg__viewer">
+            {isTranscoding ? <p><Localized id="transcoding">Transcoding</Localized></p> : null}
             <video ref={videoElementRef} controls></video>
         </div>
     );

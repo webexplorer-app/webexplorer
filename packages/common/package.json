@@ -2,9 +2,23 @@
   "name": "@webexplorer/common",
   "version": "0.1.0",
   "description": "common utilities for file parser",
-  "main": "src/index.js",
+  "source": "./src/index.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "dist/cjs",
+    "dist/esm",
+    "dist/types"
+  ],
   "scripts": {
-    "build": "tsc",
+    "build": "parcel build",
     "test": "tape"
   },
   "keywords": [
@@ -15,6 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "@webexplorer/archive": "^0.1.0",
+    "parcel": "^2.12.0",
     "typescript": "^5.1.6"
   }
 }

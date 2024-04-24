@@ -1,6 +1,6 @@
 import * as Comlink from "comlink";
 
-import createFFmpeg, { FFmpegCoreModule } from 'ffmpeg-webassembly';
+import { init, FFmpegCoreModule } from '@webexplorer/ffmpeg';
 
 export class FFmpegWorker {
     wasmModule: FFmpegCoreModule | undefined;
@@ -10,11 +10,7 @@ export class FFmpegWorker {
             return;
         }
 
-        const wasmModule = await createFFmpeg({
-            locateFile: (...args: any[]) => {
-                console.log(args);
-            }
-        });
+        const wasmModule = await init({});
 
         wasmModule.setLogger((data: any) => {
             console.log(data.message);

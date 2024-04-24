@@ -1,6 +1,5 @@
 import { init, unarchive, ArchiveModule } from "@webexplorer/archive";
-// @ts-ignore
-import wasmUrl from "@webexplorer/archive/src/libarchive.wasm";
+import wasmUrl from "@webexplorer/archive/libarchive.wasm";
 import * as comlink from "comlink";
 
 export class ArchiveWorker {

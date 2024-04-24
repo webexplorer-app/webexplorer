@@ -34,3 +34,4 @@ wasm-file = WASM文件
 audio-file = 音频文件
 video-file = 视频文件
 image-file = 图片文件
+transcoding = 正在转码

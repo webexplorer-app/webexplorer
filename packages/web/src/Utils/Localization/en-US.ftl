@@ -34,3 +34,4 @@ wasm-file = WASM File
 audio-file = Audio File
 video-file = Video File
 image-file = Image File
+transcoding = Transcoding
