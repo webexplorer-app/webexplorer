@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./PdfViewer.css";
 import { NoopLogger } from "@unionpdf/models";
 import { WebWorkerEngine } from "@unionpdf/engines";
@@ -31,6 +31,7 @@ import {
   ThemeContextProvider,
   StoragePdfApplicationConfigurationProvider,
   PdfEditor,
+  PanelMountPointContextProvider,
 } from "@unionpdf/react";
 
 export interface PdfViewerProps {
@@ -44,9 +45,10 @@ export function PdfViewer(props: PdfViewerProps) {
       "pdfviewer.configurtion"
     );
   });
+  const panelMountPointElemRef = useRef<HTMLDivElement>(null);
 
   const [engine] = useState(() => {
-    const worker = new Worker(new URL("./PdfViewer.worker.ts", import.meta.url), {
+    const worker = new Worker(new URL("../Worker/PdfWorker.ts", import.meta.url), {
       type: "module",
     });
     const engine = new WebWorkerEngine(worker);
@@ -80,7 +82,13 @@ export function PdfViewer(props: PdfViewerProps) {
 
   return (
     <div className="pdf__viewer">
-      {file ? (
+      <div
+        className="pdf__panel__mount__point"
+        ref={panelMountPointElemRef}
+      />
+      {file ? (<PanelMountPointContextProvider
+        domElem={panelMountPointElemRef.current}
+      >
         <PdfNativeAdapterProvider>
           <LoggerContextProvider logger={new NoopLogger()}>
             <ThemeContextProvider
@@ -139,7 +147,9 @@ export function PdfViewer(props: PdfViewerProps) {
             </ThemeContextProvider>
           </LoggerContextProvider>
         </PdfNativeAdapterProvider>
+      </PanelMountPointContextProvider>
       ) : null}
+
     </div>
   );
 }

@@ -9,5 +9,11 @@ export default defineConfig({
       'Cross-Origin-Opener-Policy': 'same-origin',
       'Cross-Origin-Embedder-Policy': 'require-corp'
     }
+  },
+  resolve: {
+    alias: {
+      stream: 'rollup-plugin-node-polyfills/polyfills/stream',
+      util: 'rollup-plugin-node-polyfills/polyfills/util'
+    }
   }
 })

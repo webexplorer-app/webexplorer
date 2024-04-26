@@ -1,5 +1,13 @@
 .pdf__viewer {
+  position: relative;
   padding: 2px 1rem;
+}
+
+.pdf__panel__mount__point {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
 }
 
 .pdf__viewer__pages {

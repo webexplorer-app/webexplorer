@@ -9,10 +9,10 @@ import {
 } from "three";
 import { useEffect, useRef } from "react";
 import { useElementSize } from "../Hooks/useElementSize";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { ThreeMFLoader } from "three/examples/jsm/loaders/3MFLoader";
-import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { ThreeMFLoader } from "three/examples/jsm/loaders/3MFLoader.js";
+import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 export type SupportedFormat = "gltf" | "3mf" | "stl" | "obj";
@@ -155,7 +155,7 @@ export function ThreeViewer(props: ThreeViewerProps) {
 
     load();
 
-    return () => {};
+    return () => { };
   }, [file, format]);
 
   return (

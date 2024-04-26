@@ -9,8 +9,3 @@ declare module "*.wasm" {
 
   export = url;
 }
-
-declare module 'mime' {
-  export const define: (arg: any) => void;
-  export const getType: (ext: string) => string;
-}

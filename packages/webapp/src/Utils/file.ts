@@ -1,4 +1,8 @@
-import * as mime from "mime";
+import { Mime } from 'mime';
+import standardTypes from 'mime/types/standard.js';
+import otherTypes from 'mime/types/other.js';
+
+const mime = new Mime(standardTypes, otherTypes);
 
 const typeMap = {
   "application/x-gtp": ["gp3", "gp4", "gp5"],
