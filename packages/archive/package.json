@@ -4,11 +4,11 @@
   "description": "libarchive ported to wasm",
   "source": "./src/index.ts",
   "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.mjs",
+  "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/esm/index.mjs",
+      "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     },
     "./libarchive.wasm": {
@@ -19,7 +19,7 @@
   "scripts": {
     "build": "parcel build",
     "postbuild": "npm run copy-types",
-    "copy-types": "cpy ./src/libarchive.d.ts ./dist/types --flat ",
+    "copy-types": "cpy ./src/libarchive.d.ts ./dist/types --flat && cpy ./dist/types/* ./dist/cjs --flat && cpy ./dist/types/* ./dist/esm --flat",
     "build:wasm": "./scripts/wasm.sh && cp -r ./scripts/output/libarchive.* ./src"
   },
   "files": [

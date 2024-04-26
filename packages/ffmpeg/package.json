@@ -8,11 +8,11 @@
   "description": "FFmpeg webassebmly for web platform",
   "source": "./src/index.ts",
   "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.mjs",
+  "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/esm/index.mjs",
+      "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     },
     "./ffmpeg.wasm": {
@@ -24,7 +24,8 @@
     "typecheck": "tsc --noEmit",
     "start": "serve",
     "build": "parcel build",
-    "postbuild": "cpy src/ffmpeg.d.ts dist/types/ --flat",
+    "postbuild": "npm run copy-types",
+    "copy-types": "cpy src/ffmpeg.d.ts dist/types/ --flat && cpy ./dist/types/* ./dist/cjs --flat && cpy ./dist/types/* ./dist/esm --flat",
     "build:wasm": "make",
     "test": "jest"
   },

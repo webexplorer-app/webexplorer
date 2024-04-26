@@ -4,11 +4,11 @@
   "description": "epub parser",
   "source": "./src/index.ts",
   "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.mjs",
+  "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/esm/index.mjs",
+      "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     }
   },
@@ -19,6 +19,8 @@
   ],
   "scripts": {
     "build": "parcel build",
+    "postbuild": "npm run copy-types",
+    "copy-types": "cpy ./dist/types/* ./dist/cjs --flat && cpy ./dist/types/* ./dist/esm --flat",
     "test": "tape"
   },
   "keywords": [
