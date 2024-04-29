@@ -42,7 +42,7 @@ export function PdfViewer(props: PdfViewerProps) {
   const [provider] = useState(() => {
     return new StoragePdfApplicationConfigurationProvider(
       localStorage,
-      "pdfviewer.configurtion"
+      "pdfviewer.configuration"
     );
   });
   const panelMountPointElemRef = useRef<HTMLDivElement>(null);

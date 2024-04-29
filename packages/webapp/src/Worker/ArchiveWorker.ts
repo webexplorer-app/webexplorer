@@ -46,7 +46,7 @@ export class ArchiveWorker {
     const module = this.getModule();
 
     const filePtr = module.malloc(array.length);
-    module.HEAP8.set(array, filePtr);
+    module.module.HEAP8.set(array, filePtr);
 
     this.filePtr = filePtr;
     this.fileLength = array.length;

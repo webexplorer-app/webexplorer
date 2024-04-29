@@ -1,14 +1,9 @@
-import type {
-  EmscriptenModuleFactory,
-  EmscriptenModule,
-  cwrap,
-} from "emscripten";
+/// <reference types="emscripen" />
 
 export interface LibArchiveModule extends EmscriptenModule {
   cwrap: typeof cwrap;
-  HEAP8: Int8Array;
 }
 
-const libarchive: EmscriptenModuleFactory<LibArchiveModule>;
+declare const libarchive: EmscriptenModuleFactory<LibArchiveModule>;
 
 export default libarchive;

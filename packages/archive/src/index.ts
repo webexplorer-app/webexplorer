@@ -4,7 +4,7 @@ export type ArchiveModule = ReturnType<typeof wrap>;
 
 export function wrap(module: LibArchiveModule) {
   return {
-    HEAP8: module.HEAP8,
+    module: module,
     open: module.cwrap("archive_open", "number", [
       "number",
       "number",
@@ -43,9 +43,7 @@ export function wrap(module: LibArchiveModule) {
   };
 }
 
-export async function init(options?: {
-  locateFile?: (path: string, prefix: string) => string;
-}) {
+export async function init(options?: Partial<LibArchiveModule>) {
   const module = await libarchive(options);
 
   return wrap(module);
@@ -77,7 +75,7 @@ export async function unarchive(
   passphrase: string | null,
   skipExtraction: boolean = true
 ) {
-  const archive = module.open(filePtr, fileLength, passphrase);
+  const archive = module.open(filePtr, fileLength, passphrase || "");
 
   const entries: ArchiveEntry[] = [];
 
@@ -103,7 +101,7 @@ export async function unarchive(
     } else {
       const ptr = module.malloc(size);
       module.readData(archive, ptr, size);
-      data = module.HEAP8.slice(ptr, ptr + size);
+      data = module.module.HEAP8.slice(ptr, ptr + size);
       module.free(ptr);
     }
 
