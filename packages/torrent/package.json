@@ -18,6 +18,7 @@
     "dist/types"
   ],
   "scripts": {
+    "clean": "del-cli --force dist .parcel-cache",
     "build": "parcel build",
     "postbuild": "npm run copy-types",
     "copy-types": "cpy ./dist/types/* ./dist/cjs --flat && cpy ./dist/types/* ./dist/esm --flat",
@@ -33,6 +34,7 @@
   "dependencies": {
     "@types/tape": "^5.6.4",
     "@webexplorer/common": "^0.1.0",
+    "del-cli": "^5.1.0",
     "parcel": "^2.12.0",
     "tape": "^5.7.5",
     "typescript": "^5.4.5"

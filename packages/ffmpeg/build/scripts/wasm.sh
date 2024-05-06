@@ -41,6 +41,8 @@ CONF_FLAGS=(
   -sEXPORT_NAME="$EXPORT_NAME"             # required in browser env, so that user can access this module from window object
   -sEXPORTED_FUNCTIONS=$(node js/export.js) # exported functions
   -sEXPORTED_RUNTIME_METHODS=$(node js/export-runtime.js) # exported built-in functions
+  -sALLOW_MEMORY_GROWTH=1 
+  -sWASM=1
   -sEXPORT_ES6
   -lworkerfs.js
   --pre-js js/pre.js        # extra bindings, contains most of the ffmpeg.wasm javascript code

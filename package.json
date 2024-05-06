@@ -5,6 +5,7 @@
     "packages/*"
   ],
   "scripts": {
+    "clean": "del ./.parcel-cache && npm run clean --workspaces",
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"
   },
@@ -18,5 +19,8 @@
     "stream-browserify": "^3.0.0",
     "typescript": "^5.4.5",
     "vm-browserify": "^1.1.2"
+  },
+  "dependencies": {
+    "del-cli": "^5.1.0"
   }
 }

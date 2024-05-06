@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "clean": "del-cli --force dist .parcel-cache",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -26,6 +27,7 @@
     "comlink": "^4.4.1",
     "cross-env": "^7.0.3",
     "csv": "^6.3.8",
+    "del-cli": "^5.1.0",
     "history": "^5.3.0",
     "js-cookie": "^3.0.5",
     "mime": "^4.0.3",

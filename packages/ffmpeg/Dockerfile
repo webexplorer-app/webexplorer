@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile-upstream:master-labs
 
 # Base emsdk image with environment variables.
-FROM emscripten/emsdk:3.1.58 AS emsdk-base
+FROM emscripten/emsdk:3.1.59 AS emsdk-base
 ARG EXTRA_CFLAGS
 ARG EXTRA_LDFLAGS
 ENV INSTALL_DIR=/opt
