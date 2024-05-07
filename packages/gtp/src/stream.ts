@@ -1,4 +1,4 @@
-import { Stream, bytesToString } from "@webexplorer/common";
+import { Stream, bytesToUTF8 } from "@webexplorer/common";
 
 export class GtpStream extends Stream {
   readBool(): boolean {
@@ -12,7 +12,7 @@ export class GtpStream extends Stream {
     }
 
     const count = size > 0 ? size : length;
-    return bytesToString(this.readBytes(count).slice(0, length));
+    return bytesToUTF8(this.readBytes(count).slice(0, length));
   }
 
   readByteSizeString(size: number) {

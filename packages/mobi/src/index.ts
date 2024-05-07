@@ -1,4 +1,4 @@
-import { BufferBuilder, Stream, bytesToString } from "@webexplorer/common";
+import { BufferBuilder, Stream, bytesToUTF8 } from "@webexplorer/common";
 
 // https://github.com/kovidgoyal/calibre/blob/master/format_docs/pdb/mobi.txt
 
@@ -123,7 +123,7 @@ export function parsePDBHeader(stream: Stream): PDBHeader {
   const recordNum = stream.readUint16();
 
   return {
-    name: bytesToString(name),
+    name: bytesToUTF8(name),
     attr,
     version,
     ctime,
@@ -132,8 +132,8 @@ export function parsePDBHeader(stream: Stream): PDBHeader {
     modificationNumber,
     appInfoOffset,
     sortInfoOffset,
-    type: bytesToString(type),
-    creator: bytesToString(creator),
+    type: bytesToUTF8(type),
+    creator: bytesToUTF8(creator),
     uniquiId,
     nextRec,
     recordNum,

@@ -1,0 +1,8 @@
+.attachments ol {
+    padding: 0;
+}
+
+.attachments ol span {
+    display: inline-block;
+    margin-right: 1rem;
+}

@@ -1,0 +1,22 @@
+.email__viewer {}
+
+.email__viewer table {
+  margin-top: 0.5rem;
+  max-width: fit-content;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.email__viewer td {
+  padding: 0.5rem;
+  border: 1px solid #f0f0f0;
+}
+
+.email__viewer td:first-child {
+  font-weight: bold;
+}
+
+.email__viewer .content {
+  white-space: pre-wrap;
+  text-wrap: wrap;
+}
