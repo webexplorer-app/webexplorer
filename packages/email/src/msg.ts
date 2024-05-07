@@ -108,10 +108,6 @@ export interface MsgFile {
 export function parseMsgFile(data: Uint8Array): MsgFile {
     const cfb = parse(data);
 
-    for (const fileIndex of cfb.FileIndex) {
-        console.log(fileIndex.name, readProperty(cfb, fileIndex.name));
-    }
-
     const attachments: Attachment[] = [];
     const attachmentPrefix = MSG_PROPERTY_TAGS.ATTACHMENT_ENTRY.tag;
     const attachmentEntries = cfb.FullPaths.filter((path) => {

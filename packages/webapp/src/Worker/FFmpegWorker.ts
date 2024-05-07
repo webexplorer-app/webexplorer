@@ -16,10 +16,6 @@ export class FFmpegWorker {
       },
     });
 
-    wasmModule.setLogger((data: any) => {
-      console.log(data.message);
-    });
-
     this.wasmModule = wasmModule;
   }
 

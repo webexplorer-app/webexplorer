@@ -9,9 +9,6 @@ export class FFmpeg {
         }
 
         this.wasmModule = await createFFmpeg();
-        this.wasmModule.setLogger(data => {
-            console.log(data.message);
-        });
     }
 
     async writeFile(...args) {

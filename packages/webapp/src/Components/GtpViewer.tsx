@@ -17,7 +17,6 @@ export function GtpViewer(props: GtpViewerProps) {
       reader.onload = () => {
         const gtp = parse(reader.result as ArrayBuffer);
         if (gtp) {
-          console.log(gtp);
           setGtp(gtp);
         }
       };

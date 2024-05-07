@@ -51,7 +51,6 @@ export function WasmViewerInner(props: WasmViewerProps) {
       const reader = new FileReader();
       reader.onload = () => {
         const result = reader.result as ArrayBuffer;
-        console.log(result);
         const mod = module?.readWasm(new Uint8Array(result), {
           readDebugNames: true,
         });

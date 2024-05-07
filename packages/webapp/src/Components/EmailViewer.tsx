@@ -18,7 +18,6 @@ export function EmailViewer(props: EmailViewerProps) {
       reader.onload = () => {
         const content = reader.result as ArrayBuffer;
         const msgFile = parseMsgFile(new Uint8Array(content));
-        console.log(msgFile);
         if (msgFile) {
           setMsgFile(msgFile);
         }

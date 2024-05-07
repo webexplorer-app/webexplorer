@@ -175,6 +175,12 @@ export function DropZone(props: DropZoneProps) {
               </td>
               <td>.mp4 .webm .ogg .mov</td>
             </tr>
+            <tr>
+              <td>
+                <Localized id="email-file">Email File</Localized>
+              </td>
+              <td>.msg</td>
+            </tr>
           </tbody>
         </table>
       </div>

@@ -284,7 +284,6 @@ export function readTextRecord(
   const end = recordList[index + 1].offset;
 
   let data = new Uint8Array(stream.view.buffer.slice(begin, end));
-  console.log(data.byteLength, data[0], data[data.byteLength - 1]);
 
   let pos = data.length - 1;
   let extra = 0;
@@ -307,7 +306,6 @@ export function readTextRecord(
   if (palmDDCHeader.compression === Compression.PalmDDC) {
     const buffer = uncompressionLZ77(data);
     data = buffer.combine();
-    console.log(data.byteLength, data[0], data[data.byteLength - 1]);
     return data;
   } else {
     return data;
