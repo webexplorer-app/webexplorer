@@ -1,4 +1,4 @@
-import * as Comlink from "/node_modules/comlink/dist/esm/comlink.js";
+const init = import('./init');
 
 async function readFile(file) {
     return new Promise((resolve, reject) => {
@@ -60,16 +60,6 @@ async function process(evt, ffmpeg) {
     }
 }
 
-async function init() {
-    const elm = document.getElementById('uploader');
-    elm.addEventListener('change', (evt) => {
-        const worker = new Worker("/static/worker.js", {
-            type: 'module'
-        });
-        const ffmpeg = Comlink.wrap(worker);
-
-        process(evt, ffmpeg);
-    });
-}
-
-init();
+init.then(module => {
+    module.init(process);
+});

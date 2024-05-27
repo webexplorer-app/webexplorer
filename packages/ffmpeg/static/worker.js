@@ -1,6 +1,7 @@
-import * as Comlink from "/node_modules/comlink/dist/esm/comlink.js";
+import * as Comlink from "comlink";
 
-import createFFmpeg from '/src/esm/ffmpeg.js';
+import createFFmpeg from '../src/ffmpeg.js';
+import wasm from 'url:../src/ffmpeg.wasm';
 
 export class FFmpeg {
     async init() {
@@ -8,7 +9,14 @@ export class FFmpeg {
             return;
         }
 
-        this.wasmModule = await createFFmpeg();
+        console.log('init module')
+        this.wasmModule = await createFFmpeg({
+            locateFile: () => {
+                console.log('locate file: ', wasm, arguments);
+                return wasm;
+            }
+        });
+        console.log('init module succeed')
     }
 
     async writeFile(...args) {
