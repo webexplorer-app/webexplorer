@@ -1,4 +1,4 @@
-import { init, FFmpegCoreModule } from '@webexplorer/ffmpeg';
+import { init, type FFmpegCoreModule } from '@webexplorer/ffmpeg';
 import wasmUrl from "@webexplorer/ffmpeg/ffmpeg.wasm?url";
 import * as Comlink from "comlink";
 

@@ -1,8 +1,8 @@
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import { Container } from "./Container";
 import "./PageContent.css";
 
-export interface PageContentProps extends ComponentProps<"div"> {}
+export interface PageContentProps extends ComponentProps<"div"> { }
 
 export function PageContent(props: PageContentProps) {
   const { children } = props;

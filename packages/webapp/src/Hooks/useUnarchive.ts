@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import * as comlink from "comlink";
 import { ArchiveWorker } from "../Worker/ArchiveWorker";
-import { ArchiveEntry } from "../../../archive/dist/esm";
+import type { ArchiveEntry } from "../../../archive/dist/esm";
 
 export function useUnarchive(
   worker: comlink.Remote<ArchiveWorker>,

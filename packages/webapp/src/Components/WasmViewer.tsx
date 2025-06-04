@@ -1,5 +1,5 @@
 import {
-  ComponentProps,
+  type ComponentProps,
   createContext,
   useContext,
   useEffect,

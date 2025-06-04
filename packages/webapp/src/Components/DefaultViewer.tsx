@@ -1,5 +1,5 @@
 import { Localized } from "@fluent/react";
-import { ReactNode, useState } from "react";
+import { type ReactNode, useState } from "react";
 import { BinaryViewer } from "./BinaryViewer";
 import "./DefaultViewer.css";
 import { TextViewer } from "./TextViewer";

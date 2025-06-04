@@ -1,5 +1,5 @@
 import React from "react";
-import { Locale } from "../Utils/Localization";
+import type { Locale } from "../Utils/Localization";
 
 export interface Preferences {
   locale: Locale;

@@ -1,4 +1,4 @@
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import "./PageTitle.css";
 
 export interface PageTitleProps extends ComponentProps<"h4"> {

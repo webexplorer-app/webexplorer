@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./CSVViewer.css";
 import { parse } from "csv-parse";
+import { Loading } from "./Loading";
 
 export interface CSVViewerProps {
   file: File;
@@ -17,7 +18,9 @@ export function CSVViewer(props: CSVViewerProps) {
         const content = reader.result as string;
         const parser = parse(content);
         parser.on('data', (data) => {
-          setRecords(data);
+          setRecords(records => {
+            return [...records, data];
+          });
         })
       };
 
@@ -27,15 +30,28 @@ export function CSVViewer(props: CSVViewerProps) {
     init();
   }, [file, setRecords]);
 
+  if (records.length === 0) {
+    return <Loading />
+  }
+
+  const [head, ...rows] = records;
+
   return (
     <div className="csv__viewer">
       <table>
+        <thead>
+          <tr>
+            {Object.keys(head).map((key, index) => {
+              return <th key={index}>{head[key]}</th>
+            })}
+          </tr>
+        </thead>
         <tbody>
-          {records.map((record, index) => {
+          {rows.map((rows, index) => {
             return (
               <tr key={index}>
-                {Object.keys(record).map((key, index) => {
-                  return <td key={index}>{record[key]}</td>;
+                {Object.keys(rows).map((key, index) => {
+                  return <td key={index}>{rows[key]}</td>;
                 })}
               </tr>
             );

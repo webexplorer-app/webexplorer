@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Song, parse } from "@webexplorer/gtp";
+import { type Song, parse } from "@webexplorer/gtp";
 import "./GtpViewer.css";
 
 export type GtpViewerProps = {

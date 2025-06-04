@@ -1,7 +1,7 @@
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import "./Page.css";
 
-export interface PageProps extends ComponentProps<"div"> {}
+export interface PageProps extends ComponentProps<"div"> { }
 
 export function Page(props: PageProps) {
   const { children } = props;

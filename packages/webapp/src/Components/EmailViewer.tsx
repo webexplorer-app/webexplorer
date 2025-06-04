@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./EmailViewer.css";
-import { MsgFile, parseMsgFile } from "@webexplorer/email";
+import { type MsgFile, parseMsgFile } from "@webexplorer/email";
 import { Localized } from "@fluent/react";
 import { Attachments } from "./Attachments";
 

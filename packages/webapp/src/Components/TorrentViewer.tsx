@@ -2,8 +2,8 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import "./TorrentViewer.css";
 import { State, Stateful } from "./Stateful";
 import WebTorrent, {
-  Torrent,
-  TorrentFile,
+  type Torrent,
+  type TorrentFile,
 } from "webtorrent/dist/webtorrent.min";
 import { Buffer } from "buffer";
 import { Localized } from "@fluent/react";

@@ -7,7 +7,7 @@ import { PageContent } from "../Components/PageContent";
 import { PageHeader } from "../Components/PageHeader";
 import { PageTitle } from "../Components/PageTitle";
 import { PreferencesContext } from "../Contexts/Preferences";
-import { Locale } from "../Utils/Localization";
+import type { Locale } from "../Utils/Localization";
 import "./HomePage.css";
 import { useLocalization } from "@fluent/react";
 

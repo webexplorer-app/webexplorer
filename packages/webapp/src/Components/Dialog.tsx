@@ -1,5 +1,5 @@
 import "./Dialog.css";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import ReactDOM from "react-dom";
 
 export interface DialogProps extends ComponentProps<"div"> {

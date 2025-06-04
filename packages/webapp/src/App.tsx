@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback } from "react";
 import {
   createReactLocalization,
   localizations,
-  Locale,
+  type Locale,
   locales,
 } from "./Utils/Localization";
 import { negotiateLanguages } from "@fluent/langneg";

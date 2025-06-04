@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App, { AppEvent } from "./App";
+import App, { type AppEvent } from "./App";
 import { Channel } from "./Utils/channel";
 
 const channel = new Channel<AppEvent>();

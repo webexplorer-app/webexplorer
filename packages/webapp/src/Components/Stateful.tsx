@@ -1,5 +1,5 @@
 import "./Stateful.css";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import { Loading } from "./Loading";
 import { Localized } from "@fluent/react";
 

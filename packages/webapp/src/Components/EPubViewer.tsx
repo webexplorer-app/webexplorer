@@ -2,7 +2,7 @@ import "./EPubViewer.css";
 import { useArchiveWorker } from "../Hooks/useArchiveWorker";
 import { useUnarchive } from "../Hooks/useUnarchive";
 import { useEffect, useState } from "react";
-import { parse, EPub } from "@webexplorer/epub";
+import { parse, type EPub } from "@webexplorer/epub";
 
 export type EPubViewerProps = {
   file: File;

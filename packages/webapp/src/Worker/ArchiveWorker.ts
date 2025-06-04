@@ -1,4 +1,4 @@
-import { init, unarchive, ArchiveModule } from "@webexplorer/archive";
+import { init, unarchive, type ArchiveModule } from "@webexplorer/archive";
 import wasmUrl from "@webexplorer/archive/libarchive.wasm?url";
 import * as comlink from "comlink";
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Mobi, parse } from "@webexplorer/mobi";
+import { type Mobi, parse } from "@webexplorer/mobi";
 import "./MobiViewer.css";
 
 export type MobiViewerProps = {
