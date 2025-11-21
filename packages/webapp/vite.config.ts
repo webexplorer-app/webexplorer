@@ -1,8 +1,7 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react-swc'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
-const reactPluginOptins = react();
 const nodePolyfillsPluginOptions = nodePolyfills({
   // To add only specific polyfills, add them here. If no option is passed, adds all polyfills
   include: ['stream'],
@@ -26,7 +25,7 @@ const nodePolyfillsPluginOptions = nodePolyfills({
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    reactPluginOptins,
+    react(),
     nodePolyfillsPluginOptions
   ],
   server: {

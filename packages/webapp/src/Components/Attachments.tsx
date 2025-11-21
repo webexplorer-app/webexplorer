@@ -15,7 +15,7 @@ export function Attachments(props: AttachmentsProps) {
         return attachments.map(attachment => {
             return {
                 ...attachment,
-                downloadUrl: URL.createObjectURL(new Blob([attachment.content]))
+                downloadUrl: URL.createObjectURL(new Blob([attachment.content.buffer as ArrayBuffer]))
             }
         })
     }, [attachments])

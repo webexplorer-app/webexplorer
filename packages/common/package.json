@@ -32,8 +32,8 @@
   "license": "MIT",
   "dependencies": {
     "@webexplorer/archive": "^0.1.0",
-    "del-cli": "^6.0.0",
-    "parcel": "^2.15.2",
-    "typescript": "^5.8.3"
+    "del-cli": "^7.0.0",
+    "parcel": "^2.16.1",
+    "typescript": "^5.9.3"
   }
 }
