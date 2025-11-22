@@ -1,6 +1,6 @@
 cd ./scripts/docker
 
-docker build -t libarchive .
+docker build --progress=plain -t libarchive .
 
 cd -
 
