@@ -1,51 +1,48 @@
-import "./Dialog.css";
-import type { ComponentProps } from "react";
-import ReactDOM from "react-dom";
+import type { ComponentProps, ReactNode } from "react";
+import {
+  Dialog as FluentDialog,
+  DialogSurface,
+  DialogTitle,
+  DialogBody,
+  DialogActions,
+  DialogContent,
+  type DialogOpenChangeData,
+  type DialogOpenChangeEvent,
+} from "@fluentui/react-components";
 
-export interface DialogProps extends ComponentProps<"div"> {
+export interface DialogProps {
   isVisible: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children: ReactNode;
+  className?: string;
 }
 
 export function Dialog(props: DialogProps) {
-  const { className, isVisible, children, ...rest } = props;
+  const { className, isVisible, children, onOpenChange } = props;
 
-  const classes = ["dialog"];
-  if (className) {
-    classes.push(className);
-  }
-
-  if (isVisible) {
-    classes.push("dialog--shown");
-  }
-
-  return ReactDOM.createPortal(
-    <div
-      aria-modal="true"
-      role="dialog"
-      className={classes.join(" ")}
-      {...rest}
-    >
-      <div className="dialog__backdrop"></div>
-      <div className="dialog__body">{isVisible ? children : null}</div>
-    </div>,
-    document.body
+  return (
+    <FluentDialog open={isVisible} onOpenChange={(_event: DialogOpenChangeEvent, data: DialogOpenChangeData) => onOpenChange?.(data.open)}>
+      <DialogSurface className={className}>
+        <DialogBody>{children}</DialogBody>
+      </DialogSurface>
+    </FluentDialog>
   );
 }
 
 type DialogHeaderProps = ComponentProps<"div">;
 
 export function DialogHeader(props: DialogHeaderProps) {
-  return <div className="dialog__header">{props.children}</div>;
+  return <DialogTitle>{props.children}</DialogTitle>;
 }
 
 type DialogMainProps = ComponentProps<"div">;
 
 export function DialogMain(props: DialogMainProps) {
-  return <div className="dialog__main">{props.children}</div>;
+  return <DialogContent>{props.children}</DialogContent>;
 }
 
 type DialogFooterProps = ComponentProps<"div">;
 
 export function DialogFooter(props: DialogFooterProps) {
-  return <div className="dialog__footer">{props.children}</div>;
+  return <DialogActions>{props.children}</DialogActions>;
 }

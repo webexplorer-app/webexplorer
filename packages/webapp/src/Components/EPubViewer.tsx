@@ -1,8 +1,18 @@
-import "./EPubViewer.css";
+import { makeStyles } from "@fluentui/react-components";
 import { useArchiveWorker } from "../Hooks/useArchiveWorker";
 import { useUnarchive } from "../Hooks/useUnarchive";
 import { useEffect, useState } from "react";
 import { parse, type EPub } from "@webexplorer/epub";
+
+const useStyles = makeStyles({
+  epubViewer: {
+    margin: "1rem",
+    "& iframe": {
+      width: "100%",
+      height: "calc(100vh - 6rem)",
+    },
+  },
+});
 
 export type EPubViewerProps = {
   file: File;
@@ -50,12 +60,14 @@ export function EPubViewer(props: EPubViewerProps) {
     }
   }, [epub, entries, index]);
 
+  const styles = useStyles();
+
   if (!epub) {
     return null;
   }
 
   return (
-    <div className="epub__viewer">
+    <div className={styles.epubViewer}>
       <div>
         <button
           type="button"

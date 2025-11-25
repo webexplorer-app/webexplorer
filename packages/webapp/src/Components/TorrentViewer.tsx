@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import "./TorrentViewer.css";
+import { makeStyles } from "@fluentui/react-components";
 import { State, Stateful } from "./Stateful";
 import WebTorrent, {
   type Torrent,
@@ -8,12 +8,37 @@ import WebTorrent, {
 import { Buffer } from "buffer";
 import { Localized } from "@fluent/react";
 
+const useStyles = makeStyles({
+  torrentViewer: {
+    padding: "1rem",
+  },
+  torrentFile: {
+    "& header": {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    "& header p": {
+      flex: "1",
+    },
+    "& header button": {
+      marginRight: "1rem",
+    },
+  },
+  previewer: {
+    "& *": {
+      width: "100%",
+    },
+  },
+});
+
 export interface TorrentViewerProps {
   file: File;
 }
 
 export function TorrentViewer(props: TorrentViewerProps) {
   const { file } = props;
+  const styles = useStyles();
   const [torrent, setTorrent] = useState<Torrent | null>(null);
   const [state, setState] = useState(State.Initial);
   const [client] = useState(() => {
@@ -52,7 +77,7 @@ export function TorrentViewer(props: TorrentViewerProps) {
 
   return (
     <Stateful state={state}>
-      <div className="torrent__viewer">
+      <div className={styles.torrentViewer}>
         {torrent?.files.map((file, index) => {
           return <TorrentFileItem file={file} key={index}></TorrentFileItem>;
         })}
@@ -62,6 +87,7 @@ export function TorrentViewer(props: TorrentViewerProps) {
 }
 
 export function TorrentFileItem({ file }: { file: TorrentFile }) {
+  const styles = useStyles();
   const previewerElemRef = useRef<HTMLDivElement>(null);
 
   const [isPreview, setIsPreview] = useState(false);
@@ -83,7 +109,7 @@ export function TorrentFileItem({ file }: { file: TorrentFile }) {
   }, [file, setUrl]);
 
   return (
-    <div className="torrent__file">
+    <div className={styles.torrentFile}>
       <header>
         <p>{file.name}</p>
         <Localized id="preview">
@@ -97,7 +123,7 @@ export function TorrentFileItem({ file }: { file: TorrentFile }) {
           </a>
         </Localized>
       </header>
-      <div className="previewer" ref={previewerElemRef}></div>
+      <div className={styles.previewer} ref={previewerElemRef}></div>
     </div>
   );
 }

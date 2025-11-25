@@ -1,8 +1,30 @@
 import { useEffect, useState } from "react";
-import "./EmailViewer.css";
+import { makeStyles } from "@fluentui/react-components";
 import { type MsgFile, parseMsgFile } from "@webexplorer/email";
 import { Localized } from "@fluent/react";
 import { Attachments } from "./Attachments";
+
+const useStyles = makeStyles({
+  emailViewer: {
+    "& table": {
+      marginTop: "0.5rem",
+      maxWidth: "fit-content",
+      borderCollapse: "collapse",
+      whiteSpace: "nowrap",
+    },
+    "& td": {
+      padding: "0.5rem",
+      border: "1px solid #f0f0f0",
+    },
+    "& td:first-child": {
+      fontWeight: "bold",
+    },
+  },
+  content: {
+    whiteSpace: "pre-wrap",
+    textWrap: "wrap",
+  },
+});
 
 export interface EmailViewerProps {
   file: File;
@@ -29,12 +51,14 @@ export function EmailViewer(props: EmailViewerProps) {
     init();
   }, [file, setMsgFile]);
 
+  const styles = useStyles();
+
   if (!msgFile) {
-    return <div className="email__viewer"></div>
+    return <div className={styles.emailViewer}></div>
   }
 
   return (
-    <div className="email__viewer">
+    <div className={styles.emailViewer}>
       <table>
         <tbody>
           <tr>
@@ -73,7 +97,7 @@ export function EmailViewer(props: EmailViewerProps) {
       </table>
       <div>
       </div>
-      <p className="content">
+      <p className={styles.content}>
         {msgFile.text}
       </p>
     </div>

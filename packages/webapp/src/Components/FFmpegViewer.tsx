@@ -1,8 +1,14 @@
-import "./FFmpegViewer.css";
+import { makeStyles } from "@fluentui/react-components";
 import { useFFmpegWorker } from "../Hooks/useFFmpegWorker";
 import { useEffect, useRef, useState } from "react";
 import { readFile } from '../Utils/file';
 import { Localized } from "@fluent/react";
+
+const useStyles = makeStyles({
+  ffmpegViewer: {
+    padding: "2px 1rem",
+  },
+});
 
 export interface FFmpegViewerProps {
     file: File;
@@ -53,8 +59,10 @@ export function FFmpegViewer(props: FFmpegViewerProps) {
         }
     }, [worker, file, setIsTranscoding]);
 
+    const styles = useStyles();
+
     return (
-        <div className="ffmpeg__viewer">
+        <div className={styles.ffmpegViewer}>
             {isTranscoding ? <p><Localized id="transcoding">Transcoding</Localized></p> : null}
             <video ref={videoElementRef} controls></video>
         </div>

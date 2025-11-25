@@ -1,5 +1,36 @@
-import "./DropZone.css";
+import { FolderRegular } from "@fluentui/react-icons";
 import { Localized } from "@fluent/react";
+import { makeStyles } from "@fluentui/react-components";
+
+const useStyles = makeStyles({
+  dropzone: {
+    padding: "1rem",
+    "& ol p": {
+      lineHeight: "1.5rem",
+    },
+    "& h3": {
+      margin: "2rem 0 0.5rem 0",
+    },
+    "& table": {
+      width: "100%",
+      borderCollapse: "collapse",
+    },
+    "& th, & td": {
+      padding: "0.5rem",
+      border: "1px solid #c0c0c0",
+      textAlign: "left",
+    },
+  },
+  dropzoneArea: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    border: "1px solid #ccc",
+    width: "100%",
+    height: "16rem",
+  },
+});
 
 export interface DropZoneProps {
   onDropFile: (file: File) => void;
@@ -7,49 +38,12 @@ export interface DropZoneProps {
 
 export function DropZone(props: DropZoneProps) {
   const { onDropFile } = props;
+  const styles = useStyles();
 
   return (
-    <div className="dropzone">
-      <ol>
-        <li>
-          <Localized id="project-privacy-statement">
-            <p>
-              This website is a personal project. It's build for previewing
-              files, especially when you get some files and you don't have any
-              applications to open it. Do note that it won't upload or save any
-              of any of your files to any places, don't use this as cloud
-              storage.
-            </p>
-          </Localized>
-          <Localized id="offline-support-statement">
-            <p>
-              Once this website is fully loaded, it should be able to work
-              offline if you don't reinstall your browser or clear your browser
-              storage.
-            </p>
-          </Localized>
-          <p>
-            <Localized id="support-and-feedback-statement">
-              Since it's not fully tested, it might have problems when opening
-              some files, especially when the file is huge. If you find any
-              problems, you can create an issue at Github, there's no guarantee
-              that it will be fixed immediately though.
-            </Localized>
-          </p>
-          <p>
-            <a
-              target="_blank"
-              href="https://github.com/exploreronweb/webexplorer/issues"
-              rel="noreferrer"
-            >
-              GitHub
-            </a>
-          </p>
-        </li>
-      </ol>
-
+    <div className={styles.dropzone}>
       <div
-        className="dropzone__area"
+        className={styles.dropzoneArea}
         onDragStart={(evt) => {
           evt.preventDefault();
           evt.stopPropagation();
@@ -76,10 +70,12 @@ export function DropZone(props: DropZoneProps) {
             }
           }
         }}
-      >
-        <Localized id="drag-and-drop-file-here">
-          <p>Drag and drop file here</p>
-        </Localized>
+      ><p>
+          <FolderRegular />
+          <Localized id="drag-and-drop-file-here">
+            Drag and drop file here
+          </Localized>
+        </p>
       </div>
       <div>
         <Localized id="supported-files">

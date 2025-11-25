@@ -1,5 +1,16 @@
 import { useEffect, useState } from "react";
-import "./BinaryViewer.css";
+import { makeStyles } from "@fluentui/react-components";
+
+const useStyles = makeStyles({
+  binaryViewer: {
+    padding: "0 1rem",
+    display: "grid",
+    gridTemplateColumns: "repeat(10, 1fr)",
+    "& div": {
+      textAlign: "center",
+    },
+  },
+});
 
 export interface BinaryViewerProps {
   file: File;
@@ -7,6 +18,7 @@ export interface BinaryViewerProps {
 
 export function BinaryViewer(props: BinaryViewerProps) {
   const { file } = props;
+  const styles = useStyles();
   const [bytes, setBytes] = useState<number[]>([]);
 
   useEffect(() => {
@@ -32,7 +44,7 @@ export function BinaryViewer(props: BinaryViewerProps) {
   }, [file, setBytes]);
 
   return (
-    <div className="binary__viewer">
+    <div className={styles.binaryViewer}>
       {bytes.map((byte, index) => {
         return (
           <div key={index}>

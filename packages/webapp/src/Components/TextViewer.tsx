@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import "./TextViewer.css";
+import { makeStyles } from "@fluentui/react-components";
+
+const useStyles = makeStyles({
+  textViewer: {
+    padding: "0 1rem",
+    wordWrap: "break-word",
+    whiteSpace: "pre-wrap",
+  },
+});
 
 export interface TextViewerProps {
   file: File;
@@ -7,6 +15,7 @@ export interface TextViewerProps {
 
 export function TextViewer(props: TextViewerProps) {
   const { file } = props;
+  const styles = useStyles();
   const [text, setText] = useState("");
 
   useEffect(() => {
@@ -23,7 +32,7 @@ export function TextViewer(props: TextViewerProps) {
   }, [file]);
 
   return (
-    <div className="text__viewer">
+    <div className={styles.textViewer}>
       <p>{text}</p>
     </div>
   );

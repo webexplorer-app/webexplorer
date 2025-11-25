@@ -1,6 +1,5 @@
 import type { ComponentProps } from "react";
 import { Container } from "./Container";
-import "./PageContent.css";
 
 export interface PageContentProps extends ComponentProps<"div"> { }
 

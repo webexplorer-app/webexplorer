@@ -10,6 +10,7 @@ import { PreferencesContext } from "../Contexts/Preferences";
 import type { Locale } from "../Utils/Localization";
 import "./HomePage.css";
 import { useLocalization } from "@fluent/react";
+import { Dropdown, Option, type OptionOnSelectData, type SelectionEvents } from "@fluentui/react-components";
 
 export interface HomePageProps { }
 
@@ -22,21 +23,22 @@ export function HomePage() {
     <Page className="page--home">
       <PageHeader>
         <PageTitle title="Web Explorer"></PageTitle>
-        <select
+        <Dropdown
           className="locale"
-          value={locale}
-          onChange={(evt) => {
-            updateLocale(evt.target.value as Locale);
+          value={l10n.getString(locale)}
+          selectedOptions={[locale]}
+          onOptionSelect={(_event: SelectionEvents, data: OptionOnSelectData) => {
+            if (data.optionValue) {
+              updateLocale(data.optionValue as Locale);
+            }
           }}
         >
-          {locales.map((locale) => {
-            return (
-              <option key={locale} value={locale}>
-                {l10n.getString(locale)}
-              </option>
-            );
-          })}
-        </select>
+          {locales.map((loc) => (
+            <Option key={loc} value={loc}>
+              {l10n.getString(loc)}
+            </Option>
+          ))}
+        </Dropdown>
         <FilePicker
           onFiles={(files) => {
             if (files.length > 0) {

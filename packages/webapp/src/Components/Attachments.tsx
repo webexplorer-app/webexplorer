@@ -1,6 +1,19 @@
 import { useMemo } from 'react';
-import './Attachments.css';
 import { Localized } from '@fluent/react';
+import { Link, makeStyles } from '@fluentui/react-components';
+import { ArrowDownload24Regular } from '@fluentui/react-icons';
+
+const useStyles = makeStyles({
+  attachments: {
+    "& ol": {
+      padding: "0",
+    },
+    "& ol span": {
+      display: "inline-block",
+      marginRight: "1rem",
+    },
+  },
+});
 
 export interface AttachmentsProps {
     attachments: Array<{
@@ -20,16 +33,23 @@ export function Attachments(props: AttachmentsProps) {
         })
     }, [attachments])
 
+    const styles = useStyles();
+
     return (
-        <div className='attachments'>
+        <div className={styles.attachments}>
             <ol>
                 {items.map((item, index) => {
                     return (
                         <li key={index}>
                             <span>{item.filename}</span>
-                            <a download={item.filename} href={item.downloadUrl}>
+                            <Link 
+                                as="a"
+                                download={item.filename} 
+                                href={item.downloadUrl}
+                            >
+                                <ArrowDownload24Regular />
                                 <Localized id="download">Download</Localized>
-                            </a>
+                            </Link>
                         </li>
                     )
                 })}

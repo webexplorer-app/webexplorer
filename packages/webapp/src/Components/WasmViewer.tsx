@@ -5,8 +5,17 @@ import {
   useEffect,
   useState,
 } from "react";
-import "./WasmViewer.css";
+import { makeStyles } from "@fluentui/react-components";
 import wabt from "wabt";
+
+const useStyles = makeStyles({
+  wasmViewer: {
+    "& p": {
+      padding: "1rem",
+      whiteSpace: "pre",
+    },
+  },
+});
 
 type PromiseValue<T> = T extends Promise<infer U> ? U : void;
 
@@ -68,8 +77,10 @@ export function WasmViewerInner(props: WasmViewerProps) {
     init();
   }, [module, file]);
 
+  const styles = useStyles();
+
   return (
-    <div className="wasm__viewer">
+    <div className={styles.wasmViewer}>
       <p>{code}</p>
     </div>
   );

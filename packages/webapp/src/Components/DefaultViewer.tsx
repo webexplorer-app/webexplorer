@@ -1,8 +1,28 @@
 import { Localized } from "@fluent/react";
 import { type ReactNode, useState } from "react";
 import { BinaryViewer } from "./BinaryViewer";
-import "./DefaultViewer.css";
 import { TextViewer } from "./TextViewer";
+import { makeStyles } from "@fluentui/react-components";
+
+const useStyles = makeStyles({
+  defaultViewer: {},
+  defaultViewerHeader: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: "1rem",
+    "& h4": {
+      flex: "1",
+      margin: "0",
+      padding: "0",
+    },
+    "& select": {
+      display: "inline-block",
+      marginRight: "1rem",
+      padding: "0.5rem",
+    },
+  },
+});
 
 export interface DefaultViewerProps {
   file: File;
@@ -14,6 +34,7 @@ export const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 export function DefaultViewer(props: DefaultViewerProps) {
   const { file } = props;
+  const styles = useStyles();
   const [fallbackViewer, setFallbackViewer] =
     useState<FallbackViewer>("TextViewer");
 
@@ -39,8 +60,8 @@ export function DefaultViewer(props: DefaultViewerProps) {
   }
 
   return (
-    <div className="default__viewer">
-      <header className="default__viewer__header">
+    <div className={styles.defaultViewer}>
+      <header className={styles.defaultViewerHeader}>
         <h4>
           <Localized id="default-viewer">Default Viewer</Localized>
         </h4>

@@ -13,6 +13,7 @@ import { negotiateLanguages } from "@fluent/langneg";
 import Cookie from "js-cookie";
 import { PreferencesContext } from "./Contexts/Preferences";
 import { Channel } from "./Utils/channel";
+import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 
 const localeCookieName = "Locale";
 
@@ -68,15 +69,17 @@ function App(props: AppProps) {
   }, [channel]);
 
   return (
-    <PreferencesContext.Provider value={{ locale, locales, updateLocale }}>
-      <LocalizationProvider l10n={l10n}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<HomePage />}></Route>
-          </Routes>
-        </BrowserRouter>
-      </LocalizationProvider>
-    </PreferencesContext.Provider>
+    <FluentProvider theme={webLightTheme}>
+      <PreferencesContext.Provider value={{ locale, locales, updateLocale }}>
+        <LocalizationProvider l10n={l10n}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<HomePage />}></Route>
+            </Routes>
+          </BrowserRouter>
+        </LocalizationProvider>
+      </PreferencesContext.Provider>
+    </FluentProvider>
   );
 }
 

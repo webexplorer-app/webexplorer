@@ -1,8 +1,12 @@
 import React, { Suspense } from "react";
 import { mimeType } from "../Utils/file";
-import "./FileViewer.css";
 import { Loading } from "./Loading";
 import { useDocumentTitle } from "./DocumentTitle";
+import { makeStyles } from "@fluentui/react-components";
+
+const useStyles = makeStyles({
+  fileViewer: {},
+});
 
 const GtpViewer = React.lazy(() => import("./GtpViewer"));
 const PdfViewer = React.lazy(() => import("./PdfViewer"));
@@ -26,6 +30,7 @@ export interface FileViewerProps {
 
 export function FileViewer(props: FileViewerProps) {
   const { file } = props;
+  const styles = useStyles();
   let viewer = null;
 
   const fileType = mimeType(file);
@@ -112,7 +117,7 @@ export function FileViewer(props: FileViewerProps) {
   useDocumentTitle({ title: file.name });
 
   return (
-    <div className="file__viewer">
+    <div className={styles.fileViewer}>
       <Suspense fallback={<Loading />}>{viewer}</Suspense>
     </div>
   );
