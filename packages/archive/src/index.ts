@@ -26,10 +26,10 @@ export function wrap(module: LibArchiveModule) {
       "number",
       "string",
     ]),
-    getError: module.cwrap("_archive_error_string", "string", [
+    getError: module.cwrap("archive_error_string", "string", [
       "number",
     ] as const),
-    getEntrySize: module.cwrap("archive_entry_size", "number", [
+    getEntrySize: module.cwrap("archive_entry_size", "bigint", [
       "number",
     ] as const),
     getEntryFileType: module.cwrap("archive_entry_filetype", "number", [
@@ -62,7 +62,7 @@ const TYPE_MAP = {
 export type ArchiveEntry = {
   ptr: number;
   name: string;
-  size: number;
+  size: bigint;
   path: string;
   type: number;
   data: Int8Array | undefined;
@@ -80,14 +80,14 @@ export async function unarchive(
   const entries: ArchiveEntry[] = [];
 
   while (true) {
-    let ptr = module.readNextEntry(archive);
-    if (ptr === 0) {
+    let entryPtr = module.readNextEntry(archive);
+    if (entryPtr === 0) {
       break;
     }
 
-    const size = module.getEntrySize(ptr);
-    const path = module.getEntryPathName(ptr);
-    const type = module.getEntryFileType(ptr) as keyof typeof TYPE_MAP;
+    const size = module.getEntrySize(entryPtr);
+    const path = module.getEntryPathName(entryPtr);
+    const type = module.getEntryFileType(entryPtr) as keyof typeof TYPE_MAP;
 
     let name = "";
     if (TYPE_MAP[type] === "FILE") {
@@ -99,14 +99,18 @@ export async function unarchive(
     if (skipExtraction) {
       module.readDataSkip(archive);
     } else {
-      const ptr = module.malloc(size);
-      module.readData(archive, ptr, size);
-      data = module.module.HEAP8.slice(ptr, ptr + size);
+      const ptr = module.malloc(Number(size));
+      const len = module.readData(archive, ptr, Number(size));
+      if (len < 0) {
+        const error = module.getError(archive);
+        console.log("Error reading data:", error);
+      }
+      data = module.module.HEAP8.slice(ptr, ptr + Number(size));
       module.free(ptr);
     }
 
     const entry = {
-      ptr,
+      ptr: entryPtr,
       name,
       size,
       path,

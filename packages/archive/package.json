@@ -12,8 +12,8 @@
       "require": "./dist/cjs/index.js"
     },
     "./libarchive.wasm": {
-      "import": "./dist/esm/libarchive.58b905bd.wasm",
-      "require": "./dist/cjs/libarchive.58b905bd.wasm"
+      "import": "./dist/esm/libarchive.90e5509b.wasm",
+      "require": "./dist/cjs/libarchive.90e5509b.wasm"
     }
   },
   "scripts": {
