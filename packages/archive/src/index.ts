@@ -65,7 +65,7 @@ export type ArchiveEntry = {
   size: bigint;
   path: string;
   type: number;
-  data: Int8Array | undefined;
+  data: Int8Array;
 };
 
 export async function unarchive(
@@ -73,7 +73,6 @@ export async function unarchive(
   filePtr: number,
   fileLength: number,
   passphrase: string | null,
-  skipExtraction: boolean = true
 ) {
   const archive = module.open(filePtr, fileLength, passphrase || "");
 
@@ -95,19 +94,14 @@ export async function unarchive(
       name = parts[parts.length - 1];
     }
 
-    let data: Int8Array | undefined = undefined;
-    if (skipExtraction) {
-      module.readDataSkip(archive);
-    } else {
-      const ptr = module.malloc(Number(size));
-      const len = module.readData(archive, ptr, Number(size));
-      if (len < 0) {
-        const error = module.getError(archive);
-        console.log("Error reading data:", error);
-      }
-      data = module.module.HEAP8.slice(ptr, ptr + Number(size));
-      module.free(ptr);
+    const ptr = module.malloc(Number(size));
+    const len = module.readData(archive, ptr, Number(size));
+    if (len < 0) {
+      const error = module.getError(archive);
+      console.log("Error reading data:", error);
     }
+    const data = module.module.HEAP8.slice(ptr, ptr + Number(size));
+    module.free(ptr);
 
     const entry = {
       ptr: entryPtr,

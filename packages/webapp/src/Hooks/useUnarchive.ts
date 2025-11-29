@@ -7,7 +7,6 @@ export function useUnarchive(
   worker: comlink.Remote<ArchiveWorker>,
   file: File,
   passphrase: string,
-  skipExtraction: boolean = true
 ) {
   const [entries, setEntries] = useState<ArchiveEntry[]>([]);
 
@@ -15,12 +14,12 @@ export function useUnarchive(
     async function unarchive() {
       await worker.init();
       await worker.open(file, passphrase);
-      const entries = await worker.entries(skipExtraction);
+      const entries = await worker.entries();
       setEntries(entries);
     }
 
     unarchive();
-  }, [worker, file, passphrase, skipExtraction]);
+  }, [worker, file, passphrase]);
 
   return [entries];
 }

@@ -62,7 +62,7 @@ export class ArchiveWorker {
     }
   }
 
-  entries(skipExtraction = true) {
+  entries() {
     if (!this.filePtr || !this.fileLength) {
       throw new Error("invalid file");
     }
@@ -73,7 +73,6 @@ export class ArchiveWorker {
       this.filePtr,
       this.fileLength,
       this.passphrase,
-      skipExtraction
     );
   }
 }

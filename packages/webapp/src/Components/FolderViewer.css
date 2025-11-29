@@ -1,0 +1,24 @@
+.folder-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.folder-list-item {
+  padding: 5px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+}
+
+.folder-item-name {
+  margin: 0;
+}
+
+.folder-item-details {
+  margin: 5px 0 0 0;
+  font-size: 0.9em;
+}
+
+.folder-empty {
+  padding: 10px;
+}

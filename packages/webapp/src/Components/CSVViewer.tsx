@@ -16,7 +16,9 @@ export function CSVViewer(props: CSVViewerProps) {
       const reader = new FileReader();
       reader.onload = () => {
         const content = reader.result as string;
-        const parser = parse(content);
+        const parser = parse(content, {
+          comment: '#'
+        });
         parser.on('data', (data) => {
           setRecords(records => {
             return [...records, data];

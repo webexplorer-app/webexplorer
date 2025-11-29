@@ -14,7 +14,7 @@ export function EPubViewer(props: EPubViewerProps) {
   const [doc, setDoc] = useState<string>("");
 
   const worker = useArchiveWorker();
-  const [entries] = useUnarchive(worker, file, "", false);
+  const [entries] = useUnarchive(worker, file, "");
 
   useEffect(() => {
     async function parseEpub() {
