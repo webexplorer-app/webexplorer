@@ -1,4 +1,4 @@
-import { makeStyles } from "@fluentui/react-components";
+import { useEffect, useRef } from "react";
 import {
   Scene,
   PerspectiveCamera,
@@ -7,25 +7,6 @@ import {
   AmbientLight,
   MeshPhysicalMaterial,
 } from "three";
-
-const useStyles = makeStyles({
-  threeViewer: {
-    position: "relative",
-    marginTop: "1rem",
-    paddingTop: "40%",
-    width: "100%",
-    boxShadow: "0 0 0 2px black",
-  },
-  canvas: {
-    position: "absolute",
-    top: "0",
-    left: "0",
-    zIndex: "0",
-    width: "100%",
-    height: "100%",
-  },
-});
-import { useEffect, useRef } from "react";
 import { useElementSize } from "../Hooks/useElementSize";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { ThreeMFLoader } from "three/examples/jsm/loaders/3MFLoader.js";
@@ -42,7 +23,6 @@ export interface ThreeViewerProps {
 
 export function ThreeViewer(props: ThreeViewerProps) {
   const { file, format } = props;
-  const styles = useStyles();
   const [containerRef, size] = useElementSize();
   const canvasRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<WebGLRenderer | null>(null);
@@ -178,8 +158,11 @@ export function ThreeViewer(props: ThreeViewerProps) {
   }, [file, format]);
 
   return (
-    <div className={styles.threeViewer} ref={containerRef}>
-      <div className={styles.canvas} ref={canvasRef}></div>
+    <div
+      ref={containerRef as never}
+      style={{ position: 'relative', marginTop: '1rem', paddingTop: '40%', width: '100%', boxShadow: '0 0 0 2px black' }}
+    >
+      <div ref={canvasRef} style={{ position: 'absolute', top: '0', left: '0', zIndex: '0', width: '100%', height: '100%' }}></div>
     </div>
   );
 }

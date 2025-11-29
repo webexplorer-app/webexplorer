@@ -9,7 +9,7 @@ import { PageTitle } from "../Components/PageTitle";
 import { PreferencesContext } from "../Contexts/Preferences";
 import type { Locale } from "../Utils/Localization";
 import { useLocalization } from "@fluent/react";
-import { Dropdown, Option, Toolbar, type OptionOnSelectData, type SelectionEvents } from "@fluentui/react-components";
+import "./HomePage.css";
 
 export interface HomePageProps { }
 
@@ -21,24 +21,19 @@ export function HomePage() {
   return (
     <Page className="page--home">
       <PageHeader>
-        <Toolbar>
+        <div className="toolbar">
           <PageTitle title="Web Explorer"></PageTitle>
-          <Dropdown
-            className="locale"
-            value={l10n.getString(locale)}
-            selectedOptions={[locale]}
-            onOptionSelect={(_event: SelectionEvents, data: OptionOnSelectData) => {
-              if (data.optionValue) {
-                updateLocale(data.optionValue as Locale);
-              }
-            }}
+          <select
+            className="locale-selector"
+            value={locale}
+            onChange={(e) => updateLocale(e.target.value as Locale)}
           >
             {locales.map((loc) => (
-              <Option key={loc} value={loc}>
+              <option key={loc} value={loc}>
                 {l10n.getString(loc)}
-              </Option>
+              </option>
             ))}
-          </Dropdown>
+          </select>
           <FilePicker
             onFiles={(files) => {
               if (files.length > 0) {
@@ -46,7 +41,7 @@ export function HomePage() {
               }
             }}
           />
-        </Toolbar>
+        </div>
       </PageHeader>
       <PageContent>
         {file ? <FileViewer file={file} /> : <DropZone onDropFile={setFile} />}

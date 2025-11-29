@@ -1,0 +1,31 @@
+.filepicker {
+  display: inline-flex;
+  align-items: center;
+}
+
+.filepicker-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.filepicker-button:hover {
+  background-color: #106ebe;
+}
+
+.filepicker-button:active {
+  background-color: #005a9e;
+}
+
+.filepicker-icon {
+  width: 24px;
+  height: 24px;
+}

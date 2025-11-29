@@ -1,23 +1,7 @@
 import { useEffect, useState } from "react";
-import { makeStyles } from "@fluentui/react-components";
 import { parse } from "csv-parse";
 import { Loading } from "./Loading";
-
-const useStyles = makeStyles({
-  csvViewer: {
-    overflow: "scroll",
-    "& table": {
-      marginTop: "0.5rem",
-      maxWidth: "fit-content",
-      borderCollapse: "collapse",
-      whiteSpace: "nowrap",
-    },
-    "& td": {
-      padding: "0.5rem",
-      border: "1px solid #f0f0f0",
-    },
-  },
-});
+import "./CSVViewer.css";
 
 export interface CSVViewerProps {
   file: File;
@@ -50,11 +34,10 @@ export function CSVViewer(props: CSVViewerProps) {
     return <Loading />
   }
 
-  const styles = useStyles();
   const [head, ...rows] = records;
 
   return (
-    <div className={styles.csvViewer}>
+    <div className="csv-viewer">
       <table>
         <thead>
           <tr>

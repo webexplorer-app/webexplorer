@@ -1,18 +1,7 @@
-import { makeStyles } from "@fluentui/react-components";
 import { useArchiveWorker } from "../Hooks/useArchiveWorker";
 import { useUnarchive } from "../Hooks/useUnarchive";
 import { useEffect, useState } from "react";
 import { parse, type EPub } from "@webexplorer/epub";
-
-const useStyles = makeStyles({
-  epubViewer: {
-    margin: "1rem",
-    "& iframe": {
-      width: "100%",
-      height: "calc(100vh - 6rem)",
-    },
-  },
-});
 
 export type EPubViewerProps = {
   file: File;
@@ -60,14 +49,12 @@ export function EPubViewer(props: EPubViewerProps) {
     }
   }, [epub, entries, index]);
 
-  const styles = useStyles();
-
   if (!epub) {
     return null;
   }
 
   return (
-    <div className={styles.epubViewer}>
+    <div style={{ margin: '1rem' }}>
       <div>
         <button
           type="button"
@@ -92,7 +79,7 @@ export function EPubViewer(props: EPubViewerProps) {
         </button>
       </div>
       <div>
-        <iframe title={epub.metadata.title} srcDoc={doc} />
+        <iframe title={epub.metadata.title} srcDoc={doc} style={{ width: '100%', height: 'calc(100vh - 6rem)' }} />
       </div>
     </div>
   );

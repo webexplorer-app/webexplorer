@@ -1,50 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { makeStyles } from "@fluentui/react-components";
 import { NoopLogger } from "@unionpdf/models";
-
-const useStyles = makeStyles({
-  pdfViewer: {
-    position: "relative",
-    padding: "2px 1rem",
-  },
-  pdfPanelMountPoint: {
-    position: "absolute",
-    top: "48px",
-    left: "0",
-    zIndex: "999",
-  },
-  pdfViewerPages: {
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "column",
-  },
-  pdfPage: {
-    display: "block",
-    margin: "2px 0",
-    border: "1px solid #ccc",
-  },
-  formPassword: {
-    maxWidth: "100%",
-    width: "20rem",
-  },
-  formField: {
-    margin: "0 0 1rem 0",
-  },
-  formFieldLabel: {
-    display: "inline-block",
-    padding: "0.5rem",
-  },
-  formFieldInput: {
-    padding: "0.5rem",
-  },
-  formFieldButton: {
-    padding: "0.5rem",
-  },
-  formSubmit: {
-    margin: "2rem 0 0 0",
-  },
-});
 import { WebWorkerEngine } from "@unionpdf/engines";
+import "./PdfViewer.css";
 import {
   PdfEngineContextProvider,
   PdfDocument,
@@ -82,7 +39,6 @@ export interface PdfViewerProps {
 }
 
 export function PdfViewer(props: PdfViewerProps) {
-  const styles = useStyles();
   const [provider] = useState(() => {
     return new StoragePdfApplicationConfigurationProvider(
       localStorage,
@@ -125,9 +81,9 @@ export function PdfViewer(props: PdfViewerProps) {
   }, [props.file, engine]);
 
   return (
-    <div className={styles.pdfViewer}>
+    <div className="pdf-viewer">
       <div
-        className={styles.pdfPanelMountPoint}
+        className="pdf-panel-mount-point"
         ref={panelMountPointElemRef}
       />
       {file ? (<PanelMountPointContextProvider

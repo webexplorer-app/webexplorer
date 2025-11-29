@@ -1,16 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { type Mobi, parse } from "@webexplorer/mobi";
-import { makeStyles } from "@fluentui/react-components";
-
-const useStyles = makeStyles({
-  mobiViewer: {
-    margin: "1rem",
-    "& iframe": {
-      width: "100%",
-      height: "calc(100vh - 6rem)",
-    },
-  },
-});
 
 export type MobiViewerProps = {
   file: File;
@@ -46,14 +35,12 @@ export function MobiViewer(props: MobiViewerProps) {
     render();
   }, [file, setMobi]);
 
-  const styles = useStyles();
-
   if (!mobi) {
     return null;
   }
 
   return (
-    <div className={styles.mobiViewer}>
+    <div style={{ margin: '1rem' }}>
       <div ref={containerRef}></div>
     </div>
   );

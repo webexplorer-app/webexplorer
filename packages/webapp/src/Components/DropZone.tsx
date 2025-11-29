@@ -1,36 +1,5 @@
-import { FolderRegular } from "@fluentui/react-icons";
 import { Localized } from "@fluent/react";
-import { makeStyles } from "@fluentui/react-components";
-
-const useStyles = makeStyles({
-  dropzone: {
-    padding: "1rem",
-    "& ol p": {
-      lineHeight: "1.5rem",
-    },
-    "& h3": {
-      margin: "2rem 0 0.5rem 0",
-    },
-    "& table": {
-      width: "100%",
-      borderCollapse: "collapse",
-    },
-    "& th, & td": {
-      padding: "0.5rem",
-      border: "1px solid #c0c0c0",
-      textAlign: "left",
-    },
-  },
-  dropzoneArea: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    border: "1px solid #ccc",
-    width: "100%",
-    height: "16rem",
-  },
-});
+import "./DropZone.css";
 
 export interface DropZoneProps {
   onDropFile: (file: File) => void;
@@ -38,12 +7,11 @@ export interface DropZoneProps {
 
 export function DropZone(props: DropZoneProps) {
   const { onDropFile } = props;
-  const styles = useStyles();
 
   return (
-    <div className={styles.dropzone}>
+    <div className="dropzone">
       <div
-        className={styles.dropzoneArea}
+        className="dropzone-area"
         onDragStart={(evt) => {
           evt.preventDefault();
           evt.stopPropagation();
@@ -71,7 +39,9 @@ export function DropZone(props: DropZoneProps) {
           }
         }}
       ><p>
-          <FolderRegular />
+          <svg className="dropzone-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+          </svg>
           <Localized id="drag-and-drop-file-here">
             Drag and drop file here
           </Localized>

@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
 import { Loading } from "./Loading";
 import { Localized } from "@fluent/react";
-import { MessageBar, MessageBarBody } from "@fluentui/react-components";
+import "./Stateful.css";
 
 export enum State {
   Initial,
@@ -30,13 +30,13 @@ export function Stateful(props: StatefulProps) {
       break;
     case State.Failure:
       content = (
-        <MessageBar intent="error">
-          <MessageBarBody>
+        <div className="message-bar error">
+          <div className="message-bar-body">
             <Localized id="loading-failure">
               <span>Loading failed</span>
             </Localized>
-          </MessageBarBody>
-        </MessageBar>
+          </div>
+        </div>
       );
       break;
   }

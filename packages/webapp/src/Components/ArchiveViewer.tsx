@@ -1,103 +1,9 @@
 import { useState, useMemo } from "react";
-import { makeStyles, Button, Breadcrumb, BreadcrumbItem, BreadcrumbButton, BreadcrumbDivider } from "@fluentui/react-components";
-import { Folder20Regular, Document20Regular, ArrowLeft20Regular } from "@fluentui/react-icons";
 import { useArchiveWorker } from "../Hooks/useArchiveWorker";
 import { useUnarchive } from "../Hooks/useUnarchive";
 import { FileViewer } from "./FileViewer";
 import type { ArchiveEntry } from "../../../archive/dist/esm";
-
-const useStyles = makeStyles({
-  archiveViewer: {
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    padding: "1rem",
-  },
-  navigation: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    marginBottom: "1rem",
-    paddingBottom: "0.5rem",
-    borderBottom: "1px solid var(--secondary)",
-  },
-  breadcrumb: {
-    flex: 1,
-  },
-  list: {
-    padding: "0",
-    listStyle: "none",
-    margin: "0",
-    flex: 1,
-    overflowY: "auto",
-  },
-  listItem: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    margin: "0.25rem 0",
-    padding: "0.75rem 1rem",
-    border: "1px solid var(--secondary)",
-    borderRadius: "4px",
-    cursor: "pointer",
-    transition: "background-color 0.2s",
-    "&:hover": {
-      backgroundColor: "var(--colorNeutralBackground1Hover)",
-    },
-  },
-  icon: {
-    flexShrink: 0,
-  },
-  itemContent: {
-    flex: 1,
-    minWidth: 0,
-  },
-  itemName: {
-    margin: "0",
-    fontWeight: "500",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-  },
-  itemDetails: {
-    margin: "0.25rem 0 0 0",
-    fontSize: "0.875rem",
-    color: "var(--colorNeutralForeground3)",
-  },
-  fileViewer: {
-    marginTop: "1rem",
-    padding: "1rem",
-    border: "1px solid var(--secondary)",
-    borderRadius: "4px",
-    backgroundColor: "var(--colorNeutralBackground2)",
-  },
-  fileHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "1rem",
-    paddingBottom: "0.5rem",
-    borderBottom: "1px solid var(--secondary)",
-  },
-  fileName: {
-    margin: "0",
-    fontSize: "1.1rem",
-    fontWeight: "600",
-  },
-  fileContent: {
-    maxHeight: "400px",
-    overflowY: "auto",
-  },
-  emptyDirectory: {
-    padding: "1rem",
-    textAlign: "center",
-    color: "var(--colorNeutralForeground3)",
-  },
-  errorMessage: {
-    color: "var(--colorNeutralForeground3)",
-    fontSize: "0.875rem",
-  },
-});
+import "./ArchiveViewer.css";
 
 type FileSystemItem = {
   name: string;
@@ -114,7 +20,6 @@ export interface ArchiveViewerProps {
 
 export function ArchiveViewer(props: ArchiveViewerProps) {
   const { file } = props;
-  const styles = useStyles();
   const [currentPath, setCurrentPath] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<ArchiveEntry | null>(null);
   const [extractedFile, setExtractedFile] = useState<File | null>(null);
@@ -230,40 +135,43 @@ export function ArchiveViewer(props: ArchiveViewerProps) {
   };
 
   return (
-    <div className={styles.archiveViewer}>
-      <div className={styles.navigation}>
+    <div className="archive-viewer">
+      <div className="archive-navigation">
         {currentPath && (
-          <Button
-            icon={<ArrowLeft20Regular />}
-            appearance="subtle"
+          <button
+            className="archive-back-button"
             onClick={handleBack}
-          />
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M12.6 14.4L8.2 10l4.4-4.4L11.2 4.2 5.4 10l5.8 5.8 1.4-1.4z"/>
+            </svg>
+          </button>
         )}
-        <Breadcrumb className={styles.breadcrumb}>
-          <BreadcrumbItem>
-            <BreadcrumbButton onClick={() => handleNavigate("")}>
+        <nav className="archive-breadcrumb">
+          <div className="breadcrumb-item">
+            <button className="breadcrumb-button" onClick={() => handleNavigate("")}>
               /
-            </BreadcrumbButton>
-          </BreadcrumbItem>
+            </button>
+          </div>
           {breadcrumbParts.map((part, index) => {
             const path = breadcrumbParts.slice(0, index + 1).join("/");
             return (
               <span key={path}>
-                <BreadcrumbDivider />
-                <BreadcrumbItem>
-                  <BreadcrumbButton onClick={() => handleNavigate(path)}>
+                <span className="breadcrumb-divider">/</span>
+                <div className="breadcrumb-item">
+                  <button className="breadcrumb-button" onClick={() => handleNavigate(path)}>
                     {part}
-                  </BreadcrumbButton>
-                </BreadcrumbItem>
+                  </button>
+                </div>
               </span>
             );
           })}
-        </Breadcrumb>
+        </nav>
       </div>
 
-      <ul className={styles.list}>
+      <ul className="archive-list">
         {currentItems.length === 0 ? (
-          <li className={styles.emptyDirectory}>
+          <li className="archive-empty-directory">
             Empty directory
           </li>
         ) : (
@@ -278,18 +186,22 @@ export function ArchiveViewer(props: ArchiveViewerProps) {
             .map((item) => (
               <li
                 key={item.path}
-                className={styles.listItem}
+                className="archive-list-item"
                 onClick={() => handleItemClick(item)}
               >
-                <div className={styles.icon}>
+                <div className="archive-icon">
                   {item.type === "directory" ? (
-                    <Folder20Regular />
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+                    </svg>
                   ) : (
-                    <Document20Regular />
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M6 2h8l6 6v12c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2zm7 7h5.5L13 3.5V9z"/>
+                    </svg>
                   )}
                 </div>
-                <div className={styles.itemContent}>
-                  <h4 className={styles.itemName}>{item.name}</h4>
+                <div className="archive-item-content">
+                  <h4 className="archive-item-name">{item.name}</h4>
                 </div>
               </li>
             ))
@@ -297,23 +209,23 @@ export function ArchiveViewer(props: ArchiveViewerProps) {
       </ul>
 
       {selectedFile && (
-        <div className={styles.fileViewer}>
-          <div className={styles.fileHeader}>
-            <h3 className={styles.fileName}>{selectedFile.name}</h3>
-            <Button appearance="subtle" onClick={() => {
+        <div className="archive-file-viewer">
+          <div className="archive-file-header">
+            <h3 className="archive-file-name">{selectedFile.name}</h3>
+            <button onClick={() => {
               setSelectedFile(null);
               setExtractedFile(null);
             }}>
               Close
-            </Button>
+            </button>
           </div>
-          <div className={styles.fileContent}>
+          <div className="archive-file-content">
             {isExtracting ? (
               <p>Extracting file...</p>
             ) : extractedFile ? (
               <FileViewer file={extractedFile} />
             ) : (
-              <p className={styles.errorMessage}>
+              <p className="archive-error-message">
                 Failed to extract file.
               </p>
             )}

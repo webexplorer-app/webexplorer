@@ -1,19 +1,5 @@
 import { useMemo } from 'react';
 import { Localized } from '@fluent/react';
-import { Link, makeStyles } from '@fluentui/react-components';
-import { ArrowDownload24Regular } from '@fluentui/react-icons';
-
-const useStyles = makeStyles({
-  attachments: {
-    "& ol": {
-      padding: "0",
-    },
-    "& ol span": {
-      display: "inline-block",
-      marginRight: "1rem",
-    },
-  },
-});
 
 export interface AttachmentsProps {
     attachments: Array<{
@@ -33,23 +19,23 @@ export function Attachments(props: AttachmentsProps) {
         })
     }, [attachments])
 
-    const styles = useStyles();
-
     return (
-        <div className={styles.attachments}>
-            <ol>
+        <div style={{ padding: '0' }}>
+            <ol style={{ padding: '0' }}>
                 {items.map((item, index) => {
                     return (
                         <li key={index}>
-                            <span>{item.filename}</span>
-                            <Link 
-                                as="a"
+                            <span style={{ display: 'inline-block', marginRight: '1rem' }}>{item.filename}</span>
+                            <a 
                                 download={item.filename} 
                                 href={item.downloadUrl}
+                                style={{ color: '#0078d4', textDecoration: 'none' }}
                             >
-                                <ArrowDownload24Regular />
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{ verticalAlign: 'middle', marginRight: '0.25rem' }}>
+                                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                                </svg>
                                 <Localized id="download">Download</Localized>
-                            </Link>
+                            </a>
                         </li>
                     )
                 })}
