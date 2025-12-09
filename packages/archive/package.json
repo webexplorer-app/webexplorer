@@ -21,7 +21,8 @@
     "build": "parcel build",
     "postbuild": "npm run copy-types",
     "copy-types": "cpy ./src/libarchive.d.ts ./dist/types --flat && cpy ./dist/types/* ./dist/cjs --flat && cpy ./dist/types/* ./dist/esm --flat",
-    "build:wasm": "./scripts/wasm.sh && cp -r ./scripts/output/libarchive.* ./src"
+    "build:wasm": "./scripts/wasm.sh && cp -r ./scripts/output/libarchive.* ./src",
+    "test": "vitest"
   },
   "files": [
     "dist/cjs",
@@ -50,5 +51,8 @@
     "del-cli": "^7.0.0",
     "parcel": "^2.16.1",
     "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "vitest": "^4.0.15"
   }
 }

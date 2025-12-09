@@ -60,7 +60,6 @@ const TYPE_MAP = {
 };
 
 export type ArchiveEntry = {
-  ptr: number;
   name: string;
   size: bigint;
   path: string;
@@ -98,13 +97,12 @@ export async function unarchive(
     const len = module.readData(archive, ptr, Number(size));
     if (len < 0) {
       const error = module.getError(archive);
-      console.log("Error reading data:", error);
+      throw new Error(`Failed to read data: ${error}`);
     }
     const data = module.module.HEAP8.slice(ptr, ptr + Number(size));
     module.free(ptr);
 
     const entry = {
-      ptr: entryPtr,
       name,
       size,
       path,

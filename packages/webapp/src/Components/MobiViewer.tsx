@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { type Mobi, parse } from "@webexplorer/mobi";
+import "./MobiViewer.css";
 
 export type MobiViewerProps = {
   file: File;
@@ -7,7 +8,7 @@ export type MobiViewerProps = {
 
 export function MobiViewer(props: MobiViewerProps) {
   const { file } = props;
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [mobi, setMobi] = useState<Mobi | null>(null);
 
   useEffect(() => {
@@ -17,15 +18,14 @@ export function MobiViewer(props: MobiViewerProps) {
         const result = parse(reader.result as ArrayBuffer);
         setMobi(result);
 
-        if (containerRef.current) {
-          const container = containerRef.current;
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(result.text, "text/html");
-          doc.body.childNodes.forEach((node) => {
-            if (node instanceof Element) {
-              container.appendChild(node);
-            }
-          });
+        if (iframeRef.current) {
+          const iframe = iframeRef.current;
+          const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+          if (iframeDoc) {
+            iframeDoc.open();
+            iframeDoc.write(result.text);
+            iframeDoc.close();
+          }
         }
       };
 
@@ -33,15 +33,19 @@ export function MobiViewer(props: MobiViewerProps) {
     }
 
     render();
-  }, [file, setMobi]);
+  }, [file]);
 
   if (!mobi) {
     return null;
   }
 
   return (
-    <div style={{ margin: '1rem' }}>
-      <div ref={containerRef}></div>
+    <div className="mobi-viewer">
+      <iframe
+        ref={iframeRef}
+        className="mobi-iframe"
+        title="Mobi Document"
+      />
     </div>
   );
 }
