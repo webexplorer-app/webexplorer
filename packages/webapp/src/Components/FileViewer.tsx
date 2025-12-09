@@ -40,6 +40,8 @@ export function FileViewer(props: FileViewerProps) {
       viewer = <MobiViewer file={file} />;
       break;
     case "application/zip":
+    case "application/x-tar":
+    case "application/x-compressed":
     case "application/vnd.rar":
     case "application/x-zip-compressed":
     case "application/x-gzip":

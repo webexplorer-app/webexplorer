@@ -1,7 +1,6 @@
-import { bytesToUTF16LE, isUTF16LE } from '@webexplorer/common';
+import { bytesToUTF16LE, bytesToUTF16, isUTF16LE } from '@webexplorer/common';
 import { CFB$Container, find, parse } from 'cfb';
 
-// https://msopenspecs.azureedge.net/files/MS-OXMSG/%5bMS-OXMSG%5d.pdf
 export const MSG_PROPERTY_TAGS = {
     SENDER_NAME: {
         tag: "__substg1.0_0C1A001F",
@@ -36,7 +35,7 @@ export const MSG_PROPERTY_TAGS = {
         description: "Message BCC",
     },
     SUBJECT: {
-        tag: "__substg1.0_0037001F",
+        tag: "__substg1.0_0037001E",
         description: "Subject",
     },
     PLAIN_TEXT_CONTENT: {
@@ -157,7 +156,20 @@ export function parseMsgFile(data: Uint8Array): MsgFile {
 }
 
 function readProperty(cfg: CFB$Container, tag: string): string | undefined {
-    const entry = find(cfg, tag);
+    let entry = find(cfg, tag);
+    let actualTag = tag;
+    
+    // If not found, try alternative encoding (001F <-> 001E, 0102 stays same)
+    if (!entry) {
+        if (tag.endsWith('001F')) {
+            actualTag = tag.replace('001F', '001E');
+            entry = find(cfg, actualTag);
+        } else if (tag.endsWith('001E')) {
+            actualTag = tag.replace('001E', '001F');
+            entry = find(cfg, actualTag);
+        }
+    }
+    
     if (!entry) {
         return;
     }
@@ -167,5 +179,45 @@ function readProperty(cfg: CFB$Container, tag: string): string | undefined {
         return;
     }
 
-    return isUTF16LE(tag) ? bytesToUTF16LE(content) : content.toString();
+    // Parse based on property type suffix:
+    // 001F = Unicode string (UTF-16LE)
+    // 001E = ANSI string (ASCII/UTF-8)
+    // 0102 = Binary data (should not be called for string properties)
+    // 0003 = Integer
+    // 0040 = Time
+    
+    if (actualTag.endsWith('001F')) {
+        // Unicode string (UTF-16LE)
+        return bytesToUTF16LE(content);
+    } else if (actualTag.endsWith('001E')) {
+        // ANSI string
+        const decoder = new TextDecoder('utf-8');
+        return decoder.decode(content).replace(/\0+$/, '');
+    } else if (actualTag.endsWith('0102')) {
+        // Binary data - convert to base64
+        return btoa(String.fromCharCode(...Array.from(content)));
+    } else if (actualTag.endsWith('0003')) {
+        // Integer (32-bit)
+        if (content.length >= 4) {
+            const view = new DataView(content.buffer, content.byteOffset, content.byteLength);
+            return view.getInt32(0, true).toString();
+        }
+        return undefined;
+    } else if (actualTag.endsWith('0040')) {
+        // FILETIME (64-bit timestamp)
+        if (content.length >= 8) {
+            const view = new DataView(content.buffer, content.byteOffset, content.byteLength);
+            const low = view.getUint32(0, true);
+            const high = view.getUint32(4, true);
+            // Convert Windows FILETIME to Unix timestamp
+            const fileTime = (high * 0x100000000 + low);
+            const unixTime = (fileTime / 10000) - 11644473600000;
+            return new Date(unixTime).toISOString();
+        }
+        return undefined;
+    } else {
+        // Default fallback
+        const decoder = new TextDecoder('utf-8');
+        return decoder.decode(content).replace(/\0+$/, '');
+    }
 }

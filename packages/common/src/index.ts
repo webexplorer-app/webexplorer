@@ -17,6 +17,14 @@ export function bytesToUTF16LE(bytes: Uint8Array | number[]) {
   }
 }
 
+export function bytesToUTF16(bytes: Uint8Array | number[]) {
+  if (Array.isArray(bytes)) {
+    return new TextDecoder("utf-16").decode(new Uint8Array(bytes));
+  } else {
+    return new TextDecoder("utf-16").decode(bytes);
+  }
+}
+
 export function isUTF16LE(str: string): boolean {
   return str.endsWith("001F");
 }
