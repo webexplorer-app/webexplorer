@@ -22,7 +22,7 @@
     "clean": "del-cli --force dist .parcel-cache",
     "postbuild": "npm run copy-types",
     "copy-types": "cpy ./dist/types/* ./dist/cjs --flat && cpy ./dist/types/* ./dist/esm --flat",
-    "test": "tape"
+    "test": "vitest"
   },
   "keywords": [
     "epub",
@@ -35,5 +35,9 @@
     "del-cli": "^7.0.0",
     "parcel": "^2.16.1",
     "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "jsdom": "^27.3.0",
+    "vitest": "^4.0.15"
   }
 }
