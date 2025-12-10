@@ -22,7 +22,7 @@
     "build": "parcel build",
     "postbuild": "npm run copy-types",
     "copy-types": "cpy ./dist/types/* ./dist/cjs --flat && cpy ./dist/types/* ./dist/esm --flat",
-    "test": "tape"
+    "test": "vitest"
   },
   "keywords": [
     "mobi",
@@ -36,5 +36,8 @@
     "del-cli": "^7.0.0",
     "parcel": "^2.16.1",
     "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "vitest": "^4.0.15"
   }
 }

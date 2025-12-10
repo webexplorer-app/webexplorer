@@ -34,16 +34,16 @@ export function HomePage() {
               </option>
             ))}
           </select>
+          <FilePicker onFiles={(files => {
+            setFile(files[0]);
+          })} />
         </div>
       </PageHeader>
       <PageContent>
         {file ? <FileViewer file={file} /> : (
-          <div>
+          <div className="explorer">
             <DropZone onDropFile={setFile} />
-            <FilePicker onFiles={(files => {
-              setFile(files[0]);
-            })} />
-            <div>
+            <div className="supports">
               <Localized id="supported-files">
                 <h3>Supported Files</h3>
               </Localized>

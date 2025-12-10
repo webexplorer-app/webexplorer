@@ -13,3 +13,26 @@
   font-size: 14px;
   background-color: white;
 }
+
+.picker-wrapper {
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.explorer {
+  padding: 1rem;
+}
+
+.supports table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.supports th,
+.supports td {
+  padding: 0.5rem;
+  border: 1px solid #c0c0c0;
+  text-align: left;
+}

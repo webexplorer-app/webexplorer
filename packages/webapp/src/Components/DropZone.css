@@ -1,5 +1,4 @@
 .dropzone {
-  padding: 1rem;
 }
 
 .dropzone ol p {
@@ -8,18 +7,6 @@
 
 .dropzone h3 {
   margin: 2rem 0 0.5rem 0;
-}
-
-.dropzone table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.dropzone th,
-.dropzone td {
-  padding: 0.5rem;
-  border: 1px solid #c0c0c0;
-  text-align: left;
 }
 
 .dropzone-area {
