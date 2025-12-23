@@ -40,3 +40,6 @@ from = 发送
 to = 接收
 subject = 主题
 attachments = 附件
+no-file-selected = 未选择文件
+back-to-home = 返回主页
+please-select-file = 请选择要查看的文件

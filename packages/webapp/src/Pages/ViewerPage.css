@@ -1,13 +1,4 @@
-.filepicker {
-  display: inline-flex;
-  align-items: center;
-}
-
-.filepicker-input {
-  display: none;
-}
-
-.filepicker-button {
+.back-button {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -21,15 +12,15 @@
   transition: background-color 0.2s;
 }
 
-.filepicker-button:hover {
+.back-button:hover {
   background-color: #106ebe;
 }
 
-.filepicker-button:active {
+.back-button:active {
   background-color: #005a9e;
 }
 
-.filepicker-button svg {
+.back-button svg {
   width: 20px;
   height: 20px;
 }

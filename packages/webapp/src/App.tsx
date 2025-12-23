@@ -1,6 +1,7 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { HomePage } from "./Pages/HomePage";
+import { ViewerPage } from "./Pages/ViewerPage";
 import { ReactLocalization, LocalizationProvider } from "@fluent/react";
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -71,12 +72,27 @@ function App(props: AppProps) {
     <PreferencesContext.Provider value={{ locale, locales, updateLocale }}>
       <LocalizationProvider l10n={l10n}>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<HomePage />}></Route>
-          </Routes>
+          <AppRoutes />
         </BrowserRouter>
       </LocalizationProvider>
     </PreferencesContext.Provider>
+  );
+}
+
+function AppRoutes() {
+  const navigate = useNavigate();
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleFileSelected = useCallback((file: File) => {
+    setFile(file);
+    navigate("/viewer");
+  }, [navigate]);
+
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage onFileSelected={handleFileSelected} />}></Route>
+      <Route path="/viewer" element={<ViewerPage file={file} />}></Route>
+    </Routes>
   );
 }
 

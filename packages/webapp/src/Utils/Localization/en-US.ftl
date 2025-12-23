@@ -40,3 +40,6 @@ from = From
 to = To
 subject = Subject
 attachments = Attachments
+no-file-selected = No File Selected
+back-to-home = Back to Home
+please-select-file = Please select a file to view
