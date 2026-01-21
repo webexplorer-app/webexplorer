@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@coderline/alphatab": "^1.7.1",
     "@fluent/bundle": "^0.19.1",
     "@fluent/langneg": "^0.7.0",
     "@fluent/react": "^0.15.2",
@@ -24,7 +25,6 @@
     "@webexplorer/email": "^0.1.0",
     "@webexplorer/epub": "^0.1.0",
     "@webexplorer/ffmpeg": "^0.1.0",
-    "@webexplorer/gtp": "^0.1.0",
     "@webexplorer/mobi": "^0.1.0",
     "@webexplorer/torrent": "^0.1.0",
     "comlink": "^4.4.2",
@@ -42,6 +42,7 @@
     "webtorrent": "^2.8.4"
   },
   "devDependencies": {
+    "@coderline/alphatab-vite": "^1.7.1",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.6",

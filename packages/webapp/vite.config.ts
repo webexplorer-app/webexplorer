@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import { alphaTab } from '@coderline/alphatab-vite'
 
 const nodePolyfillsPluginOptions = nodePolyfills({
   // To add only specific polyfills, add them here. If no option is passed, adds all polyfills
@@ -26,7 +27,8 @@ const nodePolyfillsPluginOptions = nodePolyfills({
 export default defineConfig({
   plugins: [
     react(),
-    nodePolyfillsPluginOptions
+    nodePolyfillsPluginOptions,
+    alphaTab()
   ],
   server: {
     headers: {

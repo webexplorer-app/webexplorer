@@ -3,7 +3,7 @@ import { mimeType } from "../Utils/file";
 import { Loading } from "./Loading";
 import { useDocumentTitle } from "./DocumentTitle";
 
-const GtpViewer = React.lazy(() => import("./GtpViewer"));
+const TabViewer = React.lazy(() => import("./TabViewer"));
 const PdfViewer = React.lazy(() => import("./PdfViewer"));
 const ArchiveViewer = React.lazy(() => import("./ArchiveViewer"));
 const ThreeViewer = React.lazy(() => import("./ThreeViewer"));
@@ -61,7 +61,7 @@ export function FileViewer(props: FileViewerProps) {
       viewer = <ThreeViewer file={file} format="3mf" />;
       break;
     case "application/x-gtp":
-      viewer = <GtpViewer file={file} />;
+      viewer = <TabViewer file={file} />;
       break;
     case "application/x-bittorrent":
       viewer = <TorrentViewer file={file} />;
