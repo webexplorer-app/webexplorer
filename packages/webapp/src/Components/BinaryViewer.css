@@ -1,9 +1,0 @@
-.binary-viewer {
-  padding: 0 1rem;
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-}
-
-.binary-viewer div {
-  text-align: center;
-}
