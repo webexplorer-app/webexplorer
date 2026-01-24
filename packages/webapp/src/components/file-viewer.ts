@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { mimeType } from '../Utils/file';
+import { mimeType } from '../common/file';
 
 // Import viewer components
 import './viewers/image-viewer';

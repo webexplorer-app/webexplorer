@@ -1,6 +1,6 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { t } from '../../Utils/Localization';
+import { t } from '../../common/Localization';
 import '../page-layout';
 import '../locale-selector';
 import '../theme-toggle';

@@ -2,6 +2,7 @@ import './index.css';
 import './components/app-root';
 import './components/pages/home-page';
 import './components/pages/viewer-page';
+import './components/pages/create-page';
 import './components/file-viewer';
 import './components/page-layout';
 import './components/drop-zone';

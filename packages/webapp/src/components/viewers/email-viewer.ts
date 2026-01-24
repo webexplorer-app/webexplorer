@@ -1,7 +1,7 @@
 import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { type MsgFile, parseMsgFile } from '@webexplorer/email';
-import { t } from '../../Utils/Localization';
+import { t } from '../../common/Localization';
 import { LocalizedLitElement } from '../localized-element';
 
 @customElement('email-viewer')

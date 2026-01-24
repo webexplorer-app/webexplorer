@@ -1,6 +1,6 @@
 import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { t } from '../Utils/Localization';
+import { t } from '../common/Localization';
 import { LocalizedLitElement } from './localized-element';
 
 @customElement('file-picker')

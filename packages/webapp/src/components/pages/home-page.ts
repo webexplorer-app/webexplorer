@@ -1,6 +1,6 @@
 import { html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { t } from '../../Utils/Localization';
+import { t } from '../../common/Localization';
 import '../page-layout';
 import '../locale-selector';
 import '../theme-toggle';
@@ -13,6 +13,26 @@ export class HomePage extends LocalizedLitElement {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+    }
+    .create-button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--accent, #0066cc);
+      border-radius: 4px;
+      background: var(--accent, #0066cc);
+      color: var(--text-inverse, #fff);
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: background-color 0.2s;
+    }
+    .create-button:hover {
+      background: var(--accent-hover, #0052a3);
+    }
+    .create-button svg {
+      width: 1rem;
+      height: 1rem;
     }
     .explorer {
       display: flex;
@@ -51,12 +71,25 @@ export class HomePage extends LocalizedLitElement {
     }));
   }
 
+  private handleCreateClick() {
+    this.dispatchEvent(new CustomEvent('navigate-create', {
+      bubbles: true,
+      composed: true
+    }));
+  }
+
   render() {
     return html`
       <page-layout className="page--home">
         <page-header>
           <page-toolbar>
-            <span slot="left"></span>
+            <button slot="left" class="create-button" @click=${this.handleCreateClick}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              ${t('create-new-file', 'Create New File')}
+            </button>
             <page-title slot="center" title="Web Explorer"></page-title>
             <span slot="right" class="toolbar-actions">
               <theme-toggle></theme-toggle>

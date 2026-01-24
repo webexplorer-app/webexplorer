@@ -43,3 +43,25 @@ attachments = Attachments
 no-file-selected = No File Selected
 back-to-home = Back to Home
 please-select-file = Please select a file to view
+
+# Create File Page
+create-new-file = Create New File
+file-type = File Type
+describe-file = Describe Your File
+prompt-placeholder = Describe what should be included in the file, the layout/structure, or any specific requirements...
+prompt-hint = Be as specific as possible about the content, structure, and formatting you want.
+create-file = Create File
+customize = Customize
+customize-placeholder = Enter additional instructions to modify the file...
+start-over = Start Over
+apply-changes = Apply Changes
+file-created = Your file has been created!
+create-another = Create Another
+customize-further = Want to customize it?
+try-again = Try Again
+connected = Connected
+disconnected = Disconnected
+starting-creation = Starting file creation...
+customizing-file = Customizing file...
+initializing = Connecting to server...
+connection-failed = Failed to connect to server

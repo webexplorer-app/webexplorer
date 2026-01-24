@@ -1,8 +1,8 @@
 import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { createFFmpegWorker } from '../../utils/ffmpeg-worker';
-import { readFile } from '../../Utils/file';
-import { t } from '../../Utils/Localization';
+import { createFFmpegWorker } from '../../common/ffmpeg-worker';
+import { readFile } from '../../common/file';
+import { t } from '../../common/Localization';
 import { LocalizedLitElement } from '../localized-element';
 
 @customElement('ffmpeg-viewer')

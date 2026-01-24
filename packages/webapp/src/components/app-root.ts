@@ -7,7 +7,7 @@ import {
   localizations, 
   type Locale, 
   locales, 
-} from '../Utils/Localization';
+} from '../common/Localization';
 
 const localeCookieName = 'Locale';
 
@@ -21,7 +21,7 @@ export class AppRoot extends LitElement {
   `;
 
   @state()
-  private currentRoute: 'home' | 'viewer' = 'home';
+  private currentRoute: 'home' | 'viewer' | 'create' = 'home';
 
   @state()
   private selectedFile: File | null = null;
@@ -73,14 +73,26 @@ export class AppRoot extends LitElement {
     const path = window.location.pathname;
     if (path === '/viewer' && this.selectedFile) {
       this.currentRoute = 'viewer';
+    } else if (path === '/create') {
+      this.currentRoute = 'create';
     } else {
       this.currentRoute = 'home';
     }
   }
 
-  public navigate(route: 'home' | 'viewer') {
+  public navigate(route: 'home' | 'viewer' | 'create') {
     this.currentRoute = route;
-    const path = route === 'home' ? '/' : '/viewer';
+    let path: string;
+    switch (route) {
+      case 'viewer':
+        path = '/viewer';
+        break;
+      case 'create':
+        path = '/create';
+        break;
+      default:
+        path = '/';
+    }
     window.history.pushState({}, '', path);
   }
 
@@ -94,6 +106,10 @@ export class AppRoot extends LitElement {
     this.navigate('home');
   }
 
+  private handleNavigateCreate() {
+    this.navigate('create');
+  }
+
   render() {
     if (this.currentRoute === 'viewer' && this.selectedFile) {
       return html`
@@ -104,9 +120,18 @@ export class AppRoot extends LitElement {
       `;
     }
 
+    if (this.currentRoute === 'create') {
+      return html`
+        <create-page
+          @back-to-home=${this.handleBackToHome}
+        ></create-page>
+      `;
+    }
+
     return html`
       <home-page
         @file-selected=${this.handleFileSelected}
+        @navigate-create=${this.handleNavigateCreate}
       ></home-page>
     `;
   }

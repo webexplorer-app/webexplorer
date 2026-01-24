@@ -43,3 +43,25 @@ attachments = 附件
 no-file-selected = 未选择文件
 back-to-home = 返回主页
 please-select-file = 请选择要查看的文件
+
+# 创建文件页面
+create-new-file = 创建新文件
+file-type = 文件类型
+describe-file = 描述您的文件
+prompt-placeholder = 描述文件应包含的内容、布局/结构或任何特定要求...
+prompt-hint = 请尽可能详细地描述您想要的内容、结构和格式。
+create-file = 创建文件
+customize = 自定义
+customize-placeholder = 输入额外的指令来修改文件...
+start-over = 重新开始
+apply-changes = 应用更改
+file-created = 您的文件已创建完成！
+create-another = 创建另一个
+customize-further = 想要自定义吗？
+try-again = 重试
+connected = 已连接
+disconnected = 未连接
+starting-creation = 正在开始创建文件...
+customizing-file = 正在自定义文件...
+initializing = 正在连接服务器...
+connection-failed = 连接服务器失败

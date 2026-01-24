@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { createArchiveWorker } from '../../utils/archive-worker';
+import { createArchiveWorker } from '../../common/archive-worker';
 import type { ArchiveEntry } from '@webexplorer/archive';
 import './folder-viewer';
 
