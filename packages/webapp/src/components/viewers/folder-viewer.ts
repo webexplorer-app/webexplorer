@@ -16,13 +16,14 @@ export class FolderViewer extends LitElement {
       display: block;
     }
     .folder-viewer {
-      border: 1px solid #ddd;
+      border: 1px solid var(--border, #ddd);
       border-radius: 4px;
+      background: var(--background, #fff);
     }
     .folder-empty {
       padding: 2rem;
       text-align: center;
-      color: #666;
+      color: var(--text-muted, #666);
     }
     .folder-list {
       list-style: none;
@@ -34,12 +35,13 @@ export class FolderViewer extends LitElement {
       align-items: center;
       justify-content: space-between;
       padding: 0.75rem 1rem;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--border-light, #eee);
       cursor: pointer;
       transition: background-color 0.1s;
+      color: var(--text, #333);
     }
     .folder-list-item:hover {
-      background-color: #f5f5f5;
+      background-color: var(--surface-hover, #f5f5f5);
     }
     .folder-list-item:last-child {
       border-bottom: none;
@@ -49,7 +51,7 @@ export class FolderViewer extends LitElement {
     }
     .folder-item-details {
       font-size: 0.75rem;
-      color: #666;
+      color: var(--text-muted, #666);
     }
   `;
 

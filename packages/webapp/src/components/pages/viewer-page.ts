@@ -3,28 +3,36 @@ import { customElement, property } from 'lit/decorators.js';
 import { t } from '../../Utils/Localization';
 import '../page-layout';
 import '../locale-selector';
+import '../theme-toggle';
 import { LocalizedLitElement } from '../localized-element';
 
 @customElement('viewer-page')
 export class ViewerPage extends LocalizedLitElement {
   static styles = css`
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
     .back-button {
       display: flex;
       align-items: center;
       gap: 0.5rem;
       padding: 0.5rem 1rem;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border, #ccc);
       border-radius: 4px;
-      background: white;
+      background: var(--surface, white);
+      color: var(--primary, #333);
       cursor: pointer;
       font-size: 0.875rem;
     }
     .back-button:hover {
-      background-color: #f0f0f0;
+      background-color: var(--border, #f0f0f0);
     }
     .back-button svg {
       width: 1rem;
       height: 1rem;
+      stroke: var(--primary, currentColor);
     }
   `;
 
@@ -66,7 +74,10 @@ export class ViewerPage extends LocalizedLitElement {
               ${t('back-to-home', 'Back to Home')}
             </button>
             <page-title slot="center" .title=${this.file.name}></page-title>
-            <locale-selector slot="right"></locale-selector>
+            <span slot="right" class="toolbar-actions">
+              <theme-toggle></theme-toggle>
+              <locale-selector></locale-selector>
+            </span>
           </page-toolbar>
         </page-header>
         <page-content>

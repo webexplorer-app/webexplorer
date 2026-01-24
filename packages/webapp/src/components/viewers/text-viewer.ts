@@ -11,7 +11,9 @@ export class TextViewer extends LitElement {
       padding: 0 1rem;
       word-wrap: break-word;
       white-space: pre-wrap;
-      font-family: monospace;
+      font-family: var(--font-mono, monospace);
+      color: var(--text, #333);
+      background: var(--code-background, #f8f8f8);
     }
   `;
 

@@ -12,11 +12,12 @@ export class WasmViewer extends LitElement {
     }
     .wasm-viewer {
       padding: 1rem;
-      font-family: monospace;
+      font-family: var(--font-mono, monospace);
       white-space: pre-wrap;
       word-wrap: break-word;
       font-size: 0.875rem;
-      background: #f5f5f5;
+      background: var(--code-background, #f5f5f5);
+      color: var(--code-text, #333);
       overflow-x: auto;
     }
   `;

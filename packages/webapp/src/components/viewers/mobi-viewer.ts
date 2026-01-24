@@ -43,8 +43,22 @@ export class MobiViewer extends LitElement {
         if (iframe && result) {
           const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
           if (iframeDoc) {
+            // Inject theme-aware styles into the content
+            const isDark = document.body.classList.contains('dark-mode');
+            const themeStyle = `
+              <style>
+                :root {
+                  color-scheme: ${isDark ? 'dark' : 'light'};
+                }
+                body {
+                  background: ${isDark ? '#1e1e1e' : '#ffffff'};
+                  color: ${isDark ? '#e0e0e0' : '#333333'};
+                }
+                a { color: ${isDark ? '#6eb5ff' : '#0078d4'}; }
+              </style>
+            `;
             iframeDoc.open();
-            iframeDoc.write(result.text);
+            iframeDoc.write(themeStyle + result.text);
             iframeDoc.close();
           }
         }

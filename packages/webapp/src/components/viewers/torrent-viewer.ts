@@ -27,12 +27,12 @@ export class TorrentViewer extends LocalizedLitElement {
       padding: 2rem;
     }
     .error {
-      color: #d32f2f;
+      color: var(--error, #d32f2f);
     }
     .torrent-file {
       margin-bottom: 1rem;
       padding: 1rem;
-      background: #f5f5f5;
+      background: var(--surface, #f5f5f5);
       border-radius: 4px;
     }
     .torrent-file-header {
@@ -44,21 +44,22 @@ export class TorrentViewer extends LocalizedLitElement {
     .torrent-file-header p {
       margin: 0;
       flex: 1;
+      color: var(--text, #333);
     }
     .torrent-file-header button,
     .torrent-file-header a {
       padding: 0.5rem 1rem;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border, #ccc);
       border-radius: 4px;
-      background: white;
+      background: var(--surface, white);
       cursor: pointer;
       text-decoration: none;
-      color: inherit;
+      color: var(--text, #333);
       font-size: 0.875rem;
     }
     .torrent-file-header button:hover,
     .torrent-file-header a:hover {
-      background: #e0e0e0;
+      background: var(--surface-hover, #e0e0e0);
     }
     .torrent-file-header button:disabled {
       opacity: 0.5;

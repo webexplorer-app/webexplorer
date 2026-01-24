@@ -21,7 +21,7 @@ export class FFmpegViewer extends LocalizedLitElement {
     .transcoding-message {
       padding: 1rem;
       text-align: center;
-      color: #666;
+      color: var(--text-muted, #666);
     }
   `;
 

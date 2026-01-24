@@ -31,7 +31,7 @@ export class ArchiveViewer extends LitElement {
       flex-wrap: wrap;
       gap: 0.25rem;
       padding: 0.5rem;
-      background: #f5f5f5;
+      background: var(--surface, #f5f5f5);
       border-radius: 4px;
     }
     .breadcrumb-item {
@@ -41,24 +41,24 @@ export class ArchiveViewer extends LitElement {
     .breadcrumb-button {
       background: none;
       border: none;
-      color: #0078d4;
+      color: var(--primary, #0078d4);
       cursor: pointer;
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
     }
     .breadcrumb-button:hover {
-      background: #e0e0e0;
+      background: var(--surface-hover, #e0e0e0);
     }
     .breadcrumb-divider {
-      color: #999;
+      color: var(--text-muted, #999);
       margin: 0 0.25rem;
     }
     .breadcrumb-current {
-      color: #333;
+      color: var(--text, #333);
       padding: 0.25rem 0.5rem;
     }
     .archive-error-message {
-      color: #d32f2f;
+      color: var(--error, #d32f2f);
       text-align: center;
       padding: 2rem;
     }

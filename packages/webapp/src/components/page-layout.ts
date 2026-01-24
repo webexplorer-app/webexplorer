@@ -29,8 +29,8 @@ export class PageHeader extends LitElement {
       display: block;
     }
     .page-header {
-      background-color: #f5f5f5;
-      border-bottom: 1px solid #ddd;
+      background-color: var(--surface, #f5f5f5);
+      border-bottom: 1px solid var(--border, #ddd);
       padding: 0.5rem 0;
     }
     .container {
@@ -91,6 +91,7 @@ export class PageTitle extends LitElement {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      color: var(--primary, #333);
     }
   `;
 

@@ -3,11 +3,17 @@ import { customElement } from 'lit/decorators.js';
 import { t } from '../../Utils/Localization';
 import '../page-layout';
 import '../locale-selector';
+import '../theme-toggle';
 import { LocalizedLitElement } from '../localized-element';
 
 @customElement('home-page')
 export class HomePage extends LocalizedLitElement {
   static styles = css`
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
     .explorer {
       display: flex;
       flex-direction: column;
@@ -18,6 +24,7 @@ export class HomePage extends LocalizedLitElement {
     }
     .supports h3 {
       margin-bottom: 1rem;
+      color: var(--primary, #333);
     }
     .supports table {
       width: 100%;
@@ -27,10 +34,11 @@ export class HomePage extends LocalizedLitElement {
     .supports td {
       padding: 0.75rem;
       text-align: left;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid var(--border, #ddd);
+      color: var(--primary, #333);
     }
     .supports th {
-      background-color: #f5f5f5;
+      background-color: var(--surface, #f5f5f5);
       font-weight: 600;
     }
   `;
@@ -50,7 +58,10 @@ export class HomePage extends LocalizedLitElement {
           <page-toolbar>
             <span slot="left"></span>
             <page-title slot="center" title="Web Explorer"></page-title>
-            <locale-selector slot="right"></locale-selector>
+            <span slot="right" class="toolbar-actions">
+              <theme-toggle></theme-toggle>
+              <locale-selector></locale-selector>
+            </span>
           </page-toolbar>
         </page-header>
         <page-content>

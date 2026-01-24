@@ -19,7 +19,8 @@ export class EmailViewer extends LocalizedLitElement {
     }
     td {
       padding: 0.5rem;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--border-light, #eee);
+      color: var(--text, #333);
     }
     td:first-child {
       font-weight: 600;
@@ -29,8 +30,9 @@ export class EmailViewer extends LocalizedLitElement {
       white-space: pre-wrap;
       word-wrap: break-word;
       padding: 1rem;
-      background: #f9f9f9;
+      background: var(--surface, #f9f9f9);
       border-radius: 4px;
+      color: var(--text, #333);
     }
     .attachments-list {
       list-style: none;
@@ -44,7 +46,7 @@ export class EmailViewer extends LocalizedLitElement {
       padding: 0.25rem 0;
     }
     .attachments-list a {
-      color: #0078d4;
+      color: var(--primary, #0078d4);
       text-decoration: none;
       display: flex;
       align-items: center;

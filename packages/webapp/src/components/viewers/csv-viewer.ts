@@ -19,14 +19,15 @@ export class CSVViewer extends LitElement {
     th, td {
       padding: 0.5rem;
       text-align: left;
-      border: 1px solid #ddd;
+      border: 1px solid var(--border, #ddd);
+      color: var(--text, #333);
     }
     th {
-      background-color: #f5f5f5;
+      background-color: var(--surface, #f5f5f5);
       font-weight: 600;
     }
     tr:hover {
-      background-color: #f9f9f9;
+      background-color: var(--surface-hover, #f9f9f9);
     }
   `;
 

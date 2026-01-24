@@ -11,18 +11,19 @@ export class LocaleSelector extends LocalizedLitElement {
     }
     select {
       padding: 0.5rem;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border, #ccc);
       border-radius: 4px;
       font-size: 0.875rem;
-      background: white;
+      background: var(--surface, white);
+      color: var(--primary, #333);
       cursor: pointer;
     }
     select:hover {
-      border-color: #999;
+      border-color: var(--secondary, #999);
     }
     select:focus {
       outline: none;
-      border-color: #666;
+      border-color: var(--primary, #666);
     }
   `;
 

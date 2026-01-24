@@ -20,18 +20,20 @@ export class FilePicker extends LocalizedLitElement {
       align-items: center;
       gap: 0.5rem;
       padding: 0.5rem 1rem;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border, #ccc);
       border-radius: 4px;
-      background: white;
+      background: var(--surface, white);
+      color: var(--primary, #333);
       cursor: pointer;
       font-size: 0.875rem;
     }
     .filepicker-button:hover {
-      background-color: #f0f0f0;
+      background-color: var(--border, #f0f0f0);
     }
     .filepicker-button svg {
       width: 1.25rem;
       height: 1.25rem;
+      stroke: var(--primary, currentColor);
     }
   `;
 

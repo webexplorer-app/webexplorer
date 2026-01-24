@@ -19,13 +19,14 @@ export class EPubViewer extends LitElement {
     .epub-controls button {
       padding: 0.5rem 1rem;
       margin-right: 0.5rem;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border, #ccc);
       border-radius: 4px;
-      background: white;
+      background: var(--surface, white);
+      color: var(--text, #333);
       cursor: pointer;
     }
     .epub-controls button:hover:not(:disabled) {
-      background: #f0f0f0;
+      background: var(--surface-hover, #f0f0f0);
     }
     .epub-controls button:disabled {
       opacity: 0.5;
@@ -89,7 +90,29 @@ export class EPubViewer extends LitElement {
 
     if (entry) {
       const textDecoder = new TextDecoder('utf-8');
-      this.doc = textDecoder.decode(entry.data);
+      const content = textDecoder.decode(entry.data);
+      // Inject theme-aware styles into the content
+      const isDark = document.body.classList.contains('dark-mode');
+      const themeStyle = `
+        <style>
+          :root {
+            color-scheme: ${isDark ? 'dark' : 'light'};
+          }
+          body {
+            background: ${isDark ? '#1e1e1e' : '#ffffff'};
+            color: ${isDark ? '#e0e0e0' : '#333333'};
+          }
+          a { color: ${isDark ? '#6eb5ff' : '#0078d4'}; }
+        </style>
+      `;
+      // Insert theme styles after <head> or at the beginning
+      if (content.includes('<head>')) {
+        this.doc = content.replace('<head>', '<head>' + themeStyle);
+      } else if (content.includes('<html>')) {
+        this.doc = content.replace('<html>', '<html><head>' + themeStyle + '</head>');
+      } else {
+        this.doc = themeStyle + content;
+      }
     }
   }
 

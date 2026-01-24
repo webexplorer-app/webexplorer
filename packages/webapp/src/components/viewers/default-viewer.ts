@@ -20,19 +20,26 @@ export class DefaultViewer extends LocalizedLitElement {
       flex-direction: row;
       align-items: center;
       padding: 1rem;
+      background: var(--background, #fff);
     }
     .default-viewer header h4 {
       flex: 1;
       margin: 0;
       padding: 0;
+      color: var(--text, #333);
     }
     .default-viewer header select {
       display: inline-block;
       margin-right: 1rem;
       padding: 0.5rem;
+      background: var(--surface, #f5f5f5);
+      color: var(--text, #333);
+      border: 1px solid var(--border, #ddd);
+      border-radius: 4px;
     }
     .text-center {
       text-align: center;
+      color: var(--text-muted, #666);
     }
   `;
 

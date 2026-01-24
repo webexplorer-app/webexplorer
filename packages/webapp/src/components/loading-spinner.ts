@@ -20,8 +20,8 @@ export class LoadingSpinner extends LocalizedLitElement {
     .loading-spinner {
       width: 40px;
       height: 40px;
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid #333;
+      border: 3px solid var(--border-light, #f3f3f3);
+      border-top: 3px solid var(--primary, #333);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -30,7 +30,7 @@ export class LoadingSpinner extends LocalizedLitElement {
       100% { transform: rotate(360deg); }
     }
     label {
-      color: #666;
+      color: var(--text-muted, #666);
       font-size: 0.875rem;
     }
   `;

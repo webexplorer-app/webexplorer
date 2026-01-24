@@ -12,11 +12,12 @@ export class BinaryViewer extends LitElement {
       display: flex;
       flex-wrap: wrap;
       gap: 0.25rem;
-      font-family: monospace;
+      font-family: var(--font-mono, monospace);
       font-size: 0.75rem;
+      color: var(--code-text, #333);
     }
     .binary-viewer div {
-      background: #f5f5f5;
+      background: var(--code-background, #f5f5f5);
       padding: 0.25rem 0.5rem;
       border-radius: 2px;
     }

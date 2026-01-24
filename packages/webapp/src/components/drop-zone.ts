@@ -18,7 +18,7 @@ export class DropZone extends LocalizedLitElement {
       width: 100%;
       max-width: 600px;
       min-height: 200px;
-      border: 2px dashed #ccc;
+      border: 2px dashed var(--border, #ccc);
       border-radius: 8px;
       display: flex;
       justify-content: center;
@@ -27,24 +27,24 @@ export class DropZone extends LocalizedLitElement {
       transition: border-color 0.2s, background-color 0.2s;
     }
     .dropzone-area:hover {
-      border-color: #999;
-      background-color: #f9f9f9;
+      border-color: var(--secondary, #999);
+      background-color: var(--surface, #f9f9f9);
     }
     .dropzone-area p {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 1rem;
-      color: #666;
+      color: var(--secondary, #666);
       font-size: 1rem;
     }
     .dropzone-icon {
       width: 48px;
       height: 48px;
-      color: #999;
+      color: var(--secondary, #999);
     }
     .dropzone-or {
-      color: #999;
+      color: var(--secondary, #999);
       font-size: 0.875rem;
     }
   `;
