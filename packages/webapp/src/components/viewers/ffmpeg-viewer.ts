@@ -1,11 +1,12 @@
-import { LitElement, html, css } from 'lit';
+import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { createFFmpegWorker } from '../../utils/ffmpeg-worker';
 import { readFile } from '../../Utils/file';
 import { t } from '../../Utils/Localization';
+import { LocalizedLitElement } from '../localized-element';
 
 @customElement('ffmpeg-viewer')
-export class FFmpegViewer extends LitElement {
+export class FFmpegViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;

@@ -87,6 +87,10 @@ export class PageTitle extends LitElement {
       padding: 0;
       font-size: 1.25rem;
       font-weight: 600;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   `;
 
@@ -98,11 +102,61 @@ export class PageTitle extends LitElement {
   }
 }
 
+@customElement('page-toolbar')
+export class PageToolbar extends LitElement {
+  static styles = css`
+    :host {
+      display: block;
+    }
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1rem;
+    }
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: flex-start;
+    }
+    .toolbar-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+    }
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: flex-end;
+    }
+  `;
+
+  render() {
+    return html`
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <slot name="left"></slot>
+        </div>
+        <div class="toolbar-center">
+          <slot name="center"></slot>
+        </div>
+        <div class="toolbar-right">
+          <slot name="right"></slot>
+        </div>
+      </div>
+    `;
+  }
+}
+
 declare global {
   interface HTMLElementTagNameMap {
     'page-layout': PageLayout;
     'page-header': PageHeader;
     'page-content': PageContent;
     'page-title': PageTitle;
+    'page-toolbar': PageToolbar;
   }
 }

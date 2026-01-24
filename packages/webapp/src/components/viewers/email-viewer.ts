@@ -1,10 +1,11 @@
-import { LitElement, html, css } from 'lit';
+import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { type MsgFile, parseMsgFile } from '@webexplorer/email';
 import { t } from '../../Utils/Localization';
+import { LocalizedLitElement } from '../localized-element';
 
 @customElement('email-viewer')
-export class EmailViewer extends LitElement {
+export class EmailViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;

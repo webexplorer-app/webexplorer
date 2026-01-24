@@ -1,9 +1,10 @@
-import { LitElement, html, css } from 'lit';
+import { html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { t } from '../Utils/Localization';
+import { LocalizedLitElement } from './localized-element';
 
 @customElement('drop-zone')
-export class DropZone extends LitElement {
+export class DropZone extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
@@ -42,6 +43,10 @@ export class DropZone extends LitElement {
       height: 48px;
       color: #999;
     }
+    .dropzone-or {
+      color: #999;
+      font-size: 0.875rem;
+    }
   `;
 
   private handleDragStart(e: DragEvent) {
@@ -57,6 +62,17 @@ export class DropZone extends LitElement {
   private handleDragEnd(e: DragEvent) {
     e.preventDefault();
     e.stopPropagation();
+  }
+
+  private handleFilesSelected(e: CustomEvent<FileList>) {
+    const files = e.detail;
+    if (files.length > 0) {
+      this.dispatchEvent(new CustomEvent('drop-file', {
+        detail: files[0],
+        bubbles: true,
+        composed: true
+      }));
+    }
   }
 
   private handleDrop(e: DragEvent) {
@@ -94,6 +110,8 @@ export class DropZone extends LitElement {
               <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
             </svg>
             ${t('drag-and-drop-file-here', 'Drag and drop file here')}
+            <span class="dropzone-or">${t('or', 'or')}</span>
+            <file-picker @files-selected=${this.handleFilesSelected}></file-picker>
           </p>
         </div>
       </div>

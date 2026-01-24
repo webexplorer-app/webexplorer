@@ -7,7 +7,6 @@ import {
   localizations, 
   type Locale, 
   locales, 
-  setLocale 
 } from '../Utils/Localization';
 
 const localeCookieName = 'Locale';
@@ -26,9 +25,6 @@ export class AppRoot extends LitElement {
 
   @state()
   private selectedFile: File | null = null;
-
-  @state()
-  private locale: Locale = 'en-US';
 
   constructor() {
     super();
@@ -50,24 +46,23 @@ export class AppRoot extends LitElement {
 
   private initLocale() {
     const savedLocale = Cookie.get(localeCookieName) as Locale;
+    let locale: Locale;
     if (savedLocale && locales.includes(savedLocale)) {
-      this.locale = savedLocale;
+      locale = savedLocale;
     } else {
       const negotiated = negotiateLanguages(
         navigator.languages,
         Object.keys(localizations),
         { defaultLocale: 'en-US' }
       ) as Locale[];
-      this.locale = negotiated[0] || 'en-US';
+      locale = negotiated[0] || 'en-US';
     }
-    initLocalization(this.locale);
+    initLocalization(locale);
   }
 
   private handleLocaleChanged(e: Event) {
     const customEvent = e as CustomEvent<{ locale: Locale }>;
-    this.locale = customEvent.detail.locale;
-    Cookie.set(localeCookieName, this.locale);
-    this.requestUpdate();
+    Cookie.set(localeCookieName, customEvent.detail.locale);
   }
 
   private handlePopState() {
@@ -104,18 +99,14 @@ export class AppRoot extends LitElement {
       return html`
         <viewer-page
           .file=${this.selectedFile}
-          .locale=${this.locale}
           @back-to-home=${this.handleBackToHome}
-          @locale-change=${(e: CustomEvent<Locale>) => setLocale(e.detail)}
         ></viewer-page>
       `;
     }
 
     return html`
       <home-page
-        .locale=${this.locale}
         @file-selected=${this.handleFileSelected}
-        @locale-change=${(e: CustomEvent<Locale>) => setLocale(e.detail)}
       ></home-page>
     `;
   }

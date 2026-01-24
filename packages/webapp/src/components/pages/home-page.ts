@@ -1,21 +1,13 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import { t, locales, type Locale } from '../../Utils/Localization';
+import { html, css } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import { t } from '../../Utils/Localization';
 import '../page-layout';
+import '../locale-selector';
+import { LocalizedLitElement } from '../localized-element';
 
 @customElement('home-page')
-export class HomePage extends LitElement {
+export class HomePage extends LocalizedLitElement {
   static styles = css`
-    .toolbar {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .locale-selector {
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
     .explorer {
       display: flex;
       flex-direction: column;
@@ -43,29 +35,6 @@ export class HomePage extends LitElement {
     }
   `;
 
-  @property({ type: String })
-  locale: Locale = 'en-US';
-
-  private handleLocaleChange(e: Event) {
-    const select = e.target as HTMLSelectElement;
-    this.dispatchEvent(new CustomEvent('locale-change', {
-      detail: select.value as Locale,
-      bubbles: true,
-      composed: true
-    }));
-  }
-
-  private handleFilesSelected(e: CustomEvent<FileList>) {
-    const files = e.detail;
-    if (files.length > 0) {
-      this.dispatchEvent(new CustomEvent('file-selected', {
-        detail: files[0],
-        bubbles: true,
-        composed: true
-      }));
-    }
-  }
-
   private handleDropFile(e: CustomEvent<File>) {
     this.dispatchEvent(new CustomEvent('file-selected', {
       detail: e.detail,
@@ -78,19 +47,11 @@ export class HomePage extends LitElement {
     return html`
       <page-layout className="page--home">
         <page-header>
-          <div class="toolbar">
-            <page-title title="Web Explorer"></page-title>
-            <select
-              class="locale-selector"
-              .value=${this.locale}
-              @change=${this.handleLocaleChange}
-            >
-              ${locales.map(loc => html`
-                <option value=${loc}>${t(loc)}</option>
-              `)}
-            </select>
-            <file-picker @files-selected=${this.handleFilesSelected}></file-picker>
-          </div>
+          <page-toolbar>
+            <span slot="left"></span>
+            <page-title slot="center" title="Web Explorer"></page-title>
+            <locale-selector slot="right"></locale-selector>
+          </page-toolbar>
         </page-header>
         <page-content>
           <div class="explorer">

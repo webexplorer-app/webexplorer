@@ -6,7 +6,7 @@ let workerInstance: comlink.Remote<FFmpegWorker> | null = null;
 export function getFFmpegWorker(): comlink.Remote<FFmpegWorker> {
   if (!workerInstance) {
     const worker = new Worker(
-      new URL('../../Worker/FFmpegWorker.ts', import.meta.url),
+      new URL('../worker/FFmpegWorker.ts', import.meta.url),
       { type: 'module' }
     );
     workerInstance = comlink.wrap<FFmpegWorker>(worker);
@@ -16,7 +16,7 @@ export function getFFmpegWorker(): comlink.Remote<FFmpegWorker> {
 
 export function createFFmpegWorker(): comlink.Remote<FFmpegWorker> {
   const worker = new Worker(
-    new URL('../../Worker/FFmpegWorker.ts', import.meta.url),
+    new URL('../worker/FFmpegWorker.ts', import.meta.url),
     { type: 'module' }
   );
   return comlink.wrap<FFmpegWorker>(worker);

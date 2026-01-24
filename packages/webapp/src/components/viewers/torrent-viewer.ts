@@ -1,9 +1,10 @@
-import { LitElement, html, css } from 'lit';
+import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import WebTorrent from 'webtorrent/dist/webtorrent.min';
 import type { Torrent, TorrentFile } from 'webtorrent';
 import { Buffer } from 'buffer';
 import { t } from '../../Utils/Localization';
+import { LocalizedLitElement } from '../localized-element';
 
 enum State {
   Initial,
@@ -13,7 +14,7 @@ enum State {
 }
 
 @customElement('torrent-viewer')
-export class TorrentViewer extends LitElement {
+export class TorrentViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;

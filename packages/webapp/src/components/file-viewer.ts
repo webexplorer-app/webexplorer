@@ -30,9 +30,20 @@ export class FileViewer extends LitElement {
   @state()
   private viewerType: string = 'default';
 
+  willUpdate(changedProperties: Map<string, unknown>) {
+    if (changedProperties.has('file')) {
+      // Reset viewer state when file changes
+      this.viewerLoaded = false;
+      this.viewerType = 'default';
+      
+      if (this.file) {
+        this.determineViewer();
+      }
+    }
+  }
+
   updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('file') && this.file) {
-      this.determineViewer();
       document.title = this.file.name;
     }
   }

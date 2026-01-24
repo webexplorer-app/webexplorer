@@ -1,9 +1,10 @@
-import { LitElement, html, css } from 'lit';
+import { html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { t } from '../Utils/Localization';
+import { LocalizedLitElement } from './localized-element';
 
 @customElement('loading-spinner')
-export class LoadingSpinner extends LitElement {
+export class LoadingSpinner extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;

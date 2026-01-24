@@ -1,6 +1,7 @@
-import { LitElement, html, css } from 'lit';
+import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { t } from '../../Utils/Localization';
+import { LocalizedLitElement } from '../localized-element';
 import './text-viewer';
 import './binary-viewer';
 
@@ -9,7 +10,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 type FallbackViewer = 'text' | 'binary';
 
 @customElement('default-viewer')
-export class DefaultViewer extends LitElement {
+export class DefaultViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;

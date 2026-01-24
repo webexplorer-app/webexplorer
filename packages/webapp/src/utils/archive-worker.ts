@@ -6,7 +6,7 @@ let workerInstance: comlink.Remote<ArchiveWorker> | null = null;
 export function getArchiveWorker(): comlink.Remote<ArchiveWorker> {
   if (!workerInstance) {
     const worker = new Worker(
-      new URL('../../Worker/ArchiveWorker.ts', import.meta.url),
+      new URL('../worker/ArchiveWorker.ts', import.meta.url),
       { type: 'module' }
     );
     workerInstance = comlink.wrap<ArchiveWorker>(worker);
@@ -16,7 +16,7 @@ export function getArchiveWorker(): comlink.Remote<ArchiveWorker> {
 
 export function createArchiveWorker(): comlink.Remote<ArchiveWorker> {
   const worker = new Worker(
-    new URL('../../Worker/ArchiveWorker.ts', import.meta.url),
+    new URL('../worker/ArchiveWorker.ts', import.meta.url),
     { type: 'module' }
   );
   return comlink.wrap<ArchiveWorker>(worker);

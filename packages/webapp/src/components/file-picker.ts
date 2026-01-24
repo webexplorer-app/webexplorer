@@ -1,9 +1,10 @@
-import { LitElement, html, css } from 'lit';
+import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { t } from '../Utils/Localization';
+import { LocalizedLitElement } from './localized-element';
 
 @customElement('file-picker')
-export class FilePicker extends LitElement {
+export class FilePicker extends LocalizedLitElement {
   static styles = css`
     :host {
       display: inline-block;

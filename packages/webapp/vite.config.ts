@@ -28,6 +28,10 @@ export default defineConfig({
     nodePolyfillsPluginOptions,
     alphaTab()
   ],
+  assetsInclude: ['**/*.wasm'],
+  optimizeDeps: {
+    exclude: ['@webexplorer/ffmpeg', '@webexplorer/archive', '@unionpdf/pdfium', 'wabt']
+  },
   server: {
     headers: {
       'Cross-Origin-Opener-Policy': 'same-origin',
