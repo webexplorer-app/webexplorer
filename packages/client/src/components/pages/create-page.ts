@@ -1,18 +1,40 @@
 import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { t, getCurrentLocale } from '../../common/Localization';
+import { t } from '../../common/Localization';
 import '../page-layout';
 import '../locale-selector';
 import '../theme-toggle';
 import { LocalizedLitElement } from '../localized-element';
 import {
-  getWebSocketService,
-  type ServerMessage,
-  type WebSocketService,
-  type FileTypeInfo
-} from '../../common/websocket-service';
+  getDocumentService,
+  generateRequestId,
+  type DocumentService,
+  type DocumentGenerationSession,
+  type AIProvider,
+  type DocumentRequest,
+  type ProgressMessage,
+  type ErrorMessage,
+  type CompleteMessage,
+} from '../../common/document-service';
+import type { Document, DocumentMode } from '@webexplorer/document';
 
 type CreationState = 'initializing' | 'input' | 'creating' | 'preview' | 'complete' | 'error';
+
+interface AIModelOption {
+  provider: AIProvider;
+  model: string;
+  label: string;
+}
+
+const AI_MODELS: AIModelOption[] = [
+  { provider: 'openai', model: 'gpt-4', label: 'GPT-4 (OpenAI)' },
+  { provider: 'openai', model: 'gpt-4-turbo', label: 'GPT-4 Turbo (OpenAI)' },
+  { provider: 'openai', model: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo (OpenAI)' },
+  { provider: 'anthropic', model: 'claude-3-opus-20240229', label: 'Claude 3 Opus (Anthropic)' },
+  { provider: 'anthropic', model: 'claude-3-sonnet-20240229', label: 'Claude 3 Sonnet (Anthropic)' },
+  { provider: 'ollama', model: 'llama2', label: 'Llama 2 (Local)' },
+  { provider: 'ollama', model: 'mistral', label: 'Mistral (Local)' },
+];
 
 @customElement('create-page')
 export class CreatePage extends LocalizedLitElement {
@@ -50,6 +72,13 @@ export class CreatePage extends LocalizedLitElement {
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
+    }
+    .form-row {
+      display: flex;
+      gap: 1rem;
+    }
+    .form-row .form-group {
+      flex: 1;
     }
     .form-group {
       display: flex;
@@ -138,6 +167,11 @@ export class CreatePage extends LocalizedLitElement {
       color: var(--text-muted, #666);
       font-size: 0.875rem;
     }
+    .progress-parts {
+      color: var(--text-muted, #666);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
     .preview-container {
       display: flex;
       flex-direction: column;
@@ -163,6 +197,10 @@ export class CreatePage extends LocalizedLitElement {
       max-height: 400px;
       overflow-y: auto;
       color: var(--code-text, #333);
+      margin: 0;
+    }
+    pre.preview-content {
+      border: 1px solid var(--border, #ddd);
     }
     .preview-actions {
       display: flex;
@@ -184,6 +222,10 @@ export class CreatePage extends LocalizedLitElement {
     .complete-message {
       font-size: 1.25rem;
       color: var(--text, #333);
+    }
+    .complete-info {
+      font-size: 0.875rem;
+      color: var(--text-muted, #666);
     }
     .complete-filename {
       font-weight: 600;
@@ -261,16 +303,15 @@ export class CreatePage extends LocalizedLitElement {
   private creationState: CreationState = 'initializing';
 
   @state()
-  private fileTypes: FileTypeInfo[] = [];
+  private selectedModel: AIModelOption = AI_MODELS[0];
 
   @state()
-  private selectedFileType = '';
+  private documentMode: 'structure' | 'content' = 'content';
 
   @state()
   private prompt = '';
 
-  @state()
-  private customizePrompt = '';
+
 
   @state()
   private progress = 0;
@@ -279,16 +320,13 @@ export class CreatePage extends LocalizedLitElement {
   private progressMessage = '';
 
   @state()
+  private partsReceived = 0;
+
+  @state()
+  private generatedDocument: Document<DocumentMode> | null = null;
+
+  @state()
   private previewContent = '';
-
-  @state()
-  private fileName = '';
-
-  @state()
-  private fileData = '';
-
-  @state()
-  private fileMimeType = '';
 
   @state()
   private errorMessage = '';
@@ -296,85 +334,39 @@ export class CreatePage extends LocalizedLitElement {
   @state()
   private wsConnected = false;
 
-  private wsService: WebSocketService | null = null;
-  private unsubscribeMessage: (() => void) | null = null;
+  private documentService: DocumentService | null = null;
+  private currentSession: DocumentGenerationSession | null = null;
   private unsubscribeConnection: (() => void) | null = null;
-  private sessionInitialized = false;
 
   connectedCallback() {
     super.connectedCallback();
-    this.initWebSocket();
+    this.initDocumentService();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    if (this.unsubscribeMessage) {
-      this.unsubscribeMessage();
-    }
     if (this.unsubscribeConnection) {
       this.unsubscribeConnection();
     }
-  }
-
-  private async initWebSocket() {
-    this.wsService = getWebSocketService();
-    
-    this.unsubscribeConnection = this.wsService.onConnectionChange((connected) => {
-      this.wsConnected = connected;
-      if (connected && !this.sessionInitialized) {
-        // Send metadata when connected
-        const locale = getCurrentLocale();
-        this.wsService?.sendInit(locale);
-      }
-    });
-
-    this.unsubscribeMessage = this.wsService.onMessage((message) => {
-      this.handleServerMessage(message);
-    });
-
-    try {
-      await this.wsService.connect();
-    } catch (error) {
-      console.error('Failed to connect to WebSocket:', error);
-      this.creationState = 'error';
-      this.errorMessage = t('connection-failed', 'Failed to connect to server');
+    if (this.currentSession) {
+      this.documentService?.cancelGeneration(this.currentSession.requestId);
     }
   }
 
-  private handleServerMessage(message: ServerMessage) {
-    switch (message.type) {
-      case 'init-success':
-        // Server acknowledged our metadata, now request file types
-        this.sessionInitialized = true;
-        this.wsService?.getFileTypes();
-        break;
-      case 'file-types':
-        // Server sent supported file types
-        this.fileTypes = message.data.fileTypes;
-        if (this.fileTypes.length > 0) {
-          this.selectedFileType = this.fileTypes[0].value;
-        }
-        this.creationState = 'input';
-        break;
-      case 'progress':
-        this.creationState = 'creating';
-        this.progress = message.data.percent;
-        this.progressMessage = message.data.message;
-        break;
-      case 'preview':
-        this.creationState = 'preview';
-        this.previewContent = message.data.content;
-        break;
-      case 'complete':
-        this.creationState = 'complete';
-        this.fileName = message.data.fileName;
-        this.fileData = message.data.fileData;
-        this.fileMimeType = message.data.mimeType;
-        break;
-      case 'error':
-        this.creationState = 'error';
-        this.errorMessage = message.data.message;
-        break;
+  private async initDocumentService() {
+    this.documentService = getDocumentService();
+    
+    this.unsubscribeConnection = this.documentService.onConnectionChange((connected) => {
+      this.wsConnected = connected;
+    });
+
+    try {
+      await this.documentService.connect();
+      this.creationState = 'input';
+    } catch (error) {
+      console.error('Failed to connect to document server:', error);
+      this.creationState = 'error';
+      this.errorMessage = t('connection-failed', 'Failed to connect to server');
     }
   }
 
@@ -385,9 +377,15 @@ export class CreatePage extends LocalizedLitElement {
     }));
   }
 
-  private handleFileTypeChange(e: Event) {
+  private handleModelChange(e: Event) {
     const select = e.target as HTMLSelectElement;
-    this.selectedFileType = select.value;
+    const index = parseInt(select.value, 10);
+    this.selectedModel = AI_MODELS[index];
+  }
+
+  private handleModeChange(e: Event) {
+    const select = e.target as HTMLSelectElement;
+    this.documentMode = select.value as 'structure' | 'content';
   }
 
   private handlePromptChange(e: Event) {
@@ -395,47 +393,111 @@ export class CreatePage extends LocalizedLitElement {
     this.prompt = textarea.value;
   }
 
-  private handleCustomizePromptChange(e: Event) {
-    const textarea = e.target as HTMLTextAreaElement;
-    this.customizePrompt = textarea.value;
-  }
+
 
   private handleSubmit() {
-    if (!this.wsService || !this.prompt.trim()) return;
+    if (!this.documentService || !this.prompt.trim()) return;
     
     this.creationState = 'creating';
     this.progress = 0;
-    this.progressMessage = t('starting-creation', 'Starting file creation...');
+    this.partsReceived = 0;
+    this.progressMessage = t('starting-creation', 'Starting document generation...');
     
-    this.wsService.createFile(this.selectedFileType, this.prompt);
+    const request: DocumentRequest = {
+      requestId: generateRequestId(),
+      prompt: this.prompt,
+      aiConfig: {
+        provider: this.selectedModel.provider,
+        model: this.selectedModel.model,
+      },
+      mode: this.documentMode,
+    };
+
+    this.currentSession = this.documentService.generateDocument(request, {
+      onProgress: (msg: ProgressMessage) => {
+        this.partsReceived = msg.partsGenerated;
+        this.progressMessage = msg.status;
+        // Estimate progress (cap at 90% until complete)
+        this.progress = Math.min(90, msg.partsGenerated * 10);
+      },
+      onPart: (_msg, partIndex) => {
+        this.partsReceived = partIndex + 1;
+        this.progressMessage = t('receiving-parts', `Receiving document parts (${this.partsReceived})...`);
+      },
+      onError: (msg: ErrorMessage) => {
+        this.creationState = 'error';
+        this.errorMessage = msg.message;
+      },
+      onComplete: (_msg: CompleteMessage, document) => {
+        this.progress = 100;
+        this.generatedDocument = document;
+        
+        if (document) {
+          this.previewContent = this.formatDocumentPreview(document);
+          this.creationState = 'complete';
+        } else {
+          this.creationState = 'error';
+          this.errorMessage = t('generation-failed', 'Failed to generate document');
+        }
+      },
+    });
   }
 
-  private handleCustomize() {
-    if (!this.wsService || !this.customizePrompt.trim()) return;
+  private formatDocumentPreview(doc: Document<DocumentMode>): string {
+    const lines: string[] = [];
+    lines.push(`Document: ${doc.metadata?.title || doc.id}`);
+    lines.push(`Mode: ${doc.mode}`);
+    lines.push(`Pages: ${doc.pages.length}`);
+    lines.push('');
     
-    this.creationState = 'creating';
-    this.progress = 0;
-    this.progressMessage = t('customizing-file', 'Customizing file...');
+    for (const page of doc.pages) {
+      lines.push(`  Page ${page.index}: ${page.title || page.id}`);
+      for (const section of page.sections) {
+        lines.push(`    Section ${section.index}`);
+        for (const row of section.rows) {
+          for (const column of row.columns) {
+            for (const cell of column.cells) {
+              if (doc.mode === 'content') {
+                const contentCell = cell as any;
+                if (contentCell.content) {
+                  const preview = String(contentCell.content.data).slice(0, 100);
+                  lines.push(`      Cell: [${contentCell.content.mimeType}] ${preview}...`);
+                }
+              } else {
+                const structCell = cell as any;
+                if (structCell.preview) {
+                  lines.push(`      Cell: [${structCell.preview.expectedMimeType}] ${structCell.preview.title}`);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     
-    this.wsService.customize(this.customizePrompt);
+    return lines.join('\n');
+  }
+
+  private handleCancel() {
+    if (this.currentSession && this.documentService) {
+      this.documentService.cancelGeneration(this.currentSession.requestId);
+      this.currentSession = null;
+      this.creationState = 'input';
+    }
   }
 
   private handleDownload() {
-    if (!this.fileData || !this.fileName) return;
+    if (!this.generatedDocument) return;
 
-    // Decode base64 and create blob
-    const binaryString = atob(this.fileData);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
-    }
-    const blob = new Blob([bytes], { type: this.fileMimeType });
+    // Serialize document to JSON
+    const json = JSON.stringify(this.generatedDocument, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
 
     // Create download link
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = this.fileName;
+    a.download = `${this.generatedDocument.id || 'document'}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -445,13 +507,13 @@ export class CreatePage extends LocalizedLitElement {
   private handleStartOver() {
     this.creationState = 'input';
     this.prompt = '';
-    this.customizePrompt = '';
     this.progress = 0;
+    this.partsReceived = 0;
     this.progressMessage = '';
     this.previewContent = '';
-    this.fileName = '';
-    this.fileData = '';
+    this.generatedDocument = null;
     this.errorMessage = '';
+    this.currentSession = null;
   }
 
   private renderInitializingState() {
@@ -464,30 +526,45 @@ export class CreatePage extends LocalizedLitElement {
   }
 
   private renderInputState() {
+    const selectedIndex = AI_MODELS.indexOf(this.selectedModel);
     return html`
       <div class="create-form">
-        <div class="form-group">
-          <label for="file-type">${t('file-type', 'File Type')}</label>
-          <select
-            id="file-type"
-            .value=${this.selectedFileType}
-            @change=${this.handleFileTypeChange}
-          >
-            ${this.fileTypes.map(type => html`
-              <option value=${type.value}>
-                ${type.label} (${type.extension})
-              </option>
-            `)}
-          </select>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ai-model">${t('ai-model', 'AI Model')}</label>
+            <select
+              id="ai-model"
+              .value=${String(selectedIndex)}
+              @change=${this.handleModelChange}
+            >
+              ${AI_MODELS.map((model, index) => html`
+                <option value=${index}>
+                  ${model.label}
+                </option>
+              `)}
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="doc-mode">${t('document-mode', 'Document Mode')}</label>
+            <select
+              id="doc-mode"
+              .value=${this.documentMode}
+              @change=${this.handleModeChange}
+            >
+              <option value="structure">${t('mode-structure', 'Structure (placeholders)')}</option>
+              <option value="content">${t('mode-content', 'Content (full data)')}</option>
+            </select>
+          </div>
         </div>
         
         <div class="form-group">
-          <label for="prompt">${t('describe-file', 'Describe Your File')}</label>
+          <label for="prompt">${t('describe-document', 'Describe Your Document')}</label>
           <textarea
             id="prompt"
             .value=${this.prompt}
             @input=${this.handlePromptChange}
-            placeholder=${t('prompt-placeholder', 'Describe what should be included in the file, the layout/structure, or any specific requirements...')}
+            placeholder=${t('prompt-placeholder', 'Describe what should be included in the document, the layout/structure, or any specific requirements...')}
           ></textarea>
           <p class="form-hint">
             ${t('prompt-hint', 'Be as specific as possible about the content, structure, and formatting you want.')}
@@ -498,9 +575,9 @@ export class CreatePage extends LocalizedLitElement {
           <button
             class="btn btn-primary"
             @click=${this.handleSubmit}
-            ?disabled=${!this.prompt.trim() || !this.wsConnected || this.fileTypes.length === 0}
+            ?disabled=${!this.prompt.trim() || !this.wsConnected}
           >
-            ${t('create-file', 'Create File')}
+            ${t('create-document', 'Create Document')}
           </button>
         </div>
       </div>
@@ -515,6 +592,10 @@ export class CreatePage extends LocalizedLitElement {
           <div class="progress-bar" style="width: ${this.progress}%"></div>
         </div>
         <p class="progress-message">${this.progressMessage}</p>
+        <p class="progress-parts">${t('parts-received', `Parts received: ${this.partsReceived}`)}</p>
+        <button class="btn btn-secondary" @click=${this.handleCancel}>
+          ${t('cancel', 'Cancel')}
+        </button>
       </div>
     `;
   }
@@ -523,31 +604,17 @@ export class CreatePage extends LocalizedLitElement {
     return html`
       <div class="preview-container">
         <div class="preview-header">
-          <h3>${t('preview', 'Preview')}</h3>
+          <h3>${t('document-preview', 'Document Preview')}</h3>
         </div>
-        <div class="preview-content">${this.previewContent}</div>
+        <pre class="preview-content">${this.previewContent}</pre>
         
-        <div class="customize-section">
-          <h4>${t('customize', 'Customize')}</h4>
-          <div class="form-group">
-            <textarea
-              .value=${this.customizePrompt}
-              @input=${this.handleCustomizePromptChange}
-              placeholder=${t('customize-placeholder', 'Enter additional instructions to modify the file...')}
-            ></textarea>
-          </div>
-          <div class="preview-actions">
-            <button class="btn btn-secondary" @click=${this.handleStartOver}>
-              ${t('start-over', 'Start Over')}
-            </button>
-            <button
-              class="btn btn-secondary"
-              @click=${this.handleCustomize}
-              ?disabled=${!this.customizePrompt.trim() || !this.wsConnected}
-            >
-              ${t('apply-changes', 'Apply Changes')}
-            </button>
-          </div>
+        <div class="preview-actions">
+          <button class="btn btn-secondary" @click=${this.handleStartOver}>
+            ${t('start-over', 'Start Over')}
+          </button>
+          <button class="btn btn-primary" @click=${this.handleDownload}>
+            ${t('download', 'Download')}
+          </button>
         </div>
       </div>
     `;
@@ -561,37 +628,23 @@ export class CreatePage extends LocalizedLitElement {
           <polyline points="22 4 12 14.01 9 11.01"/>
         </svg>
         <p class="complete-message">
-          ${t('file-created', 'Your file has been created!')}
+          ${t('document-created', 'Your document has been created!')}
         </p>
-        <p class="complete-filename">${this.fileName}</p>
+        ${this.generatedDocument ? html`
+          <p class="complete-info">
+            ${t('document-info', `Mode: ${this.generatedDocument.mode} | Pages: ${this.generatedDocument.pages.length}`)}
+          </p>
+        ` : ''}
+        
+        <pre class="preview-content">${this.previewContent}</pre>
         
         <div class="complete-actions">
           <button class="btn btn-secondary" @click=${this.handleStartOver}>
             ${t('create-another', 'Create Another')}
           </button>
           <button class="btn btn-primary" @click=${this.handleDownload}>
-            ${t('download', 'Download')}
+            ${t('download-json', 'Download JSON')}
           </button>
-        </div>
-
-        <div class="customize-section">
-          <h4>${t('customize-further', 'Want to customize it?')}</h4>
-          <div class="form-group">
-            <textarea
-              .value=${this.customizePrompt}
-              @input=${this.handleCustomizePromptChange}
-              placeholder=${t('customize-placeholder', 'Enter additional instructions to modify the file...')}
-            ></textarea>
-          </div>
-          <div class="form-actions">
-            <button
-              class="btn btn-secondary"
-              @click=${this.handleCustomize}
-              ?disabled=${!this.customizePrompt.trim() || !this.wsConnected}
-            >
-              ${t('apply-changes', 'Apply Changes')}
-            </button>
-          </div>
         </div>
       </div>
     `;
@@ -641,7 +694,7 @@ export class CreatePage extends LocalizedLitElement {
               </svg>
               ${t('back-to-home', 'Back to Home')}
             </button>
-            <page-title slot="center" title=${t('create-new-file', 'Create New File')}></page-title>
+            <page-title slot="center" title=${t('create-document', 'Create Document')}></page-title>
             <span slot="right" class="toolbar-actions">
               <span class="connection-status ${this.wsConnected ? 'connected' : 'disconnected'}">
                 <span class="status-dot ${this.wsConnected ? 'connected' : 'disconnected'}"></span>
