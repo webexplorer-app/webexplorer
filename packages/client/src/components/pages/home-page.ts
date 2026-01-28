@@ -4,6 +4,7 @@ import { t } from '../../common/Localization';
 import '../page-layout';
 import '../locale-selector';
 import '../theme-toggle';
+import '../file-picker';
 import { LocalizedLitElement } from '../localized-element';
 
 @customElement('home-page')
@@ -39,8 +40,38 @@ export class HomePage extends LocalizedLitElement {
       flex-direction: column;
       gap: 2rem;
     }
+    .file-input-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .file-input-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      max-width: 600px;
+      justify-content: center;
+    }
+    .separator {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      max-width: 600px;
+      color: var(--secondary, #999);
+      font-size: 0.875rem;
+    }
+    .separator::before,
+    .separator::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: var(--border, #ddd);
+    }
     .supports {
-      margin-top: 2rem;
+      margin-top: 1rem;
     }
     .supports h3 {
       margin-bottom: 1rem;
@@ -71,6 +102,17 @@ export class HomePage extends LocalizedLitElement {
     }));
   }
 
+  private handleFilesSelected(e: CustomEvent<FileList>) {
+    const files = e.detail;
+    if (files.length > 0) {
+      this.dispatchEvent(new CustomEvent('file-selected', {
+        detail: files[0],
+        bubbles: true,
+        composed: true
+      }));
+    }
+  }
+
   private handleCreateClick() {
     this.dispatchEvent(new CustomEvent('navigate-create', {
       bubbles: true,
@@ -99,7 +141,12 @@ export class HomePage extends LocalizedLitElement {
         </page-header>
         <page-content>
           <div class="explorer">
-              <drop-zone @drop-file=${this.handleDropFile}></drop-zone>
+              <div class="file-input-section">
+                <drop-zone @drop-file=${this.handleDropFile}></drop-zone>
+                <div class="file-input-row">
+                  <file-picker @files-selected=${this.handleFilesSelected}></file-picker>
+                </div>
+              </div>
               <div class="supports">
                 <h3>${t('supported-files', 'Supported Files')}</h3>
                 <table>
