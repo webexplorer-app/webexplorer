@@ -1,5 +1,5 @@
 {
-  "name": "@webexplorer/client",
+  "name": "@webexplorer/web",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -18,7 +18,6 @@
     "@unionpdf/pdfium": "^0.34.0",
     "@webexplorer/archive": "^0.1.0",
     "@webexplorer/common": "^0.1.0",
-    "@webexplorer/document": "*",
     "@webexplorer/email": "^0.1.0",
     "@webexplorer/epub": "^0.1.0",
     "@webexplorer/ffmpeg": "^0.1.0",
@@ -31,7 +30,6 @@
     "js-cookie": "^3.0.5",
     "lit": "^3.2.0",
     "mime": "^4.1.0",
-    "socket.io-client": "^4.7.4",
     "three": "^0.181.2",
     "wabt": "^1.0.39",
     "webtorrent": "^2.8.4"

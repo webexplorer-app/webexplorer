@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { mimeType } from '../common/file';
+import { getFileTypeByMime } from '../common/supported-types';
 
 // Import viewer components
 import './viewers/image-viewer';
@@ -9,6 +10,21 @@ import './viewers/audio-viewer';
 import './viewers/text-viewer';
 import './viewers/binary-viewer';
 import './viewers/default-viewer';
+
+// Viewer ID to viewer path mapping for lazy-loaded viewers
+const VIEWER_PATHS: Record<string, string> = {
+  'pdf-viewer': './viewers/pdf-viewer',
+  'epub-viewer': './viewers/epub-viewer',
+  'mobi-viewer': './viewers/mobi-viewer',
+  'archive-viewer': './viewers/archive-viewer',
+  'three-viewer': './viewers/three-viewer',
+  'tab-viewer': './viewers/tab-viewer',
+  'torrent-viewer': './viewers/torrent-viewer',
+  'csv-viewer': './viewers/csv-viewer',
+  'email-viewer': './viewers/email-viewer',
+  'wasm-viewer': './viewers/wasm-viewer',
+  'ffmpeg-viewer': './viewers/ffmpeg-viewer',
+};
 
 @customElement('file-viewer')
 export class FileViewer extends LitElement {
@@ -55,96 +71,36 @@ export class FileViewer extends LitElement {
     }
 
     const fileType = mimeType(this.file);
-    
-    switch (fileType) {
-      case 'application/pdf':
-        this.viewerType = 'pdf';
-        this.loadViewer('./viewers/pdf-viewer');
-        break;
-      case 'application/epub+zip':
-        this.viewerType = 'epub';
-        this.loadViewer('./viewers/epub-viewer');
-        break;
-      case 'application/x-azw3':
-      case 'application/x-mobipocket-ebook':
-        this.viewerType = 'mobi';
-        this.loadViewer('./viewers/mobi-viewer');
-        break;
-      case 'application/zip':
-      case 'application/x-tar':
-      case 'application/x-compressed':
-      case 'application/vnd.rar':
-      case 'application/x-zip-compressed':
-      case 'application/x-gzip':
-        this.viewerType = 'archive';
-        this.loadViewer('./viewers/archive-viewer');
-        break;
-      case 'model/stl':
-      case 'model/gltf-binary':
-      case 'model/gltf+json':
-      case 'model/obj':
-      case 'model/3mf':
-        this.viewerType = 'three';
-        this.loadViewer('./viewers/three-viewer');
-        break;
-      case 'application/x-gtp':
-        this.viewerType = 'tab';
-        this.loadViewer('./viewers/tab-viewer');
-        break;
-      case 'application/x-bittorrent':
-        this.viewerType = 'torrent';
-        this.loadViewer('./viewers/torrent-viewer');
-        break;
-      case 'video/mp4':
-      case 'video/webm':
-      case 'video/ogg':
-      case 'video/mov':
-      case 'video/quicktime':
-        this.viewerType = 'video';
-        this.viewerLoaded = true;
-        break;
-      case 'audio/mpeg':
-      case 'audio/flac':
-      case 'audio/aac':
-      case 'audio/ogg':
-      case 'audio/wav':
-      case 'audio/mp3':
-        this.viewerType = 'audio';
-        this.viewerLoaded = true;
-        break;
-      case 'image/png':
-      case 'image/jpeg':
-      case 'image/jpg':
-      case 'image/webp':
-      case 'image/apng':
-      case 'image/bmp':
-      case 'image/.avif':
-      case 'image/svg+xml':
-      case 'image/x-icon':
-      case 'image/tiff':
-        this.viewerType = 'image';
-        this.viewerLoaded = true;
-        break;
-      case 'text/csv':
-        this.viewerType = 'csv';
-        this.loadViewer('./viewers/csv-viewer');
-        break;
-      case 'application/vnd.ms-outlook':
-        this.viewerType = 'email';
-        this.loadViewer('./viewers/email-viewer');
-        break;
-      case 'application/wasm':
-        this.viewerType = 'wasm';
-        this.loadViewer('./viewers/wasm-viewer');
-        break;
-      default:
-        if (fileType?.startsWith('video/')) {
-          this.viewerType = 'ffmpeg';
-          this.loadViewer('./viewers/ffmpeg-viewer');
+    if (!fileType) {
+      this.viewerType = 'default';
+      return;
+    }
+
+    const supportedType = getFileTypeByMime(fileType);
+
+    if (supportedType) {
+      // Map supported type id to viewer type
+      this.viewerType = supportedType.id;
+      
+      if (supportedType.lazyLoad) {
+        const viewerPath = VIEWER_PATHS[supportedType.viewer];
+        if (viewerPath) {
+          this.loadViewer(viewerPath);
         } else {
+          console.error(`No viewer path found for: ${supportedType.viewer}`);
           this.viewerType = 'default';
           this.viewerLoaded = true;
         }
+      } else {
+        this.viewerLoaded = true;
+      }
+    } else if (fileType?.startsWith('video/')) {
+      // Fallback for unsupported video types - use ffmpeg
+      this.viewerType = 'ffmpeg';
+      this.loadViewer(VIEWER_PATHS['ffmpeg-viewer']);
+    } else {
+      this.viewerType = 'default';
+      this.viewerLoaded = true;
     }
   }
 
