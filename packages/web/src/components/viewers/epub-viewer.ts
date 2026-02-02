@@ -63,6 +63,9 @@ export class EPubViewer extends LitElement {
 
   private worker = createArchiveWorker();
   private themeChangeHandler: (() => void) | null = null;
+  private mutationObserver: MutationObserver | null = null;
+  // Cache blob URLs for images to avoid recreating them
+  private blobUrlCache: Map<string, string> = new Map();
 
   connectedCallback() {
     super.connectedCallback();
@@ -73,14 +76,22 @@ export class EPubViewer extends LitElement {
       }
     };
     // Use MutationObserver to detect class changes on body
-    const observer = new MutationObserver((mutations) => {
+    this.mutationObserver = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.attributeName === 'class') {
           this.themeChangeHandler?.();
         }
       });
     });
-    observer.observe(document.body, { attributes: true });
+    this.mutationObserver.observe(document.body, { attributes: true });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.mutationObserver?.disconnect();
+    // Revoke all blob URLs to free memory
+    this.blobUrlCache.forEach((url) => URL.revokeObjectURL(url));
+    this.blobUrlCache.clear();
   }
 
   updated(changedProperties: Map<string, unknown>) {
@@ -111,13 +122,21 @@ export class EPubViewer extends LitElement {
     const item = this.epub.manifest.items[itemRef.idRef];
     if (!item) return;
 
+    // Get the base path for resolving relative URLs
+    const chapterPath = this.epub.root + item.href;
+    const chapterDir = chapterPath.substring(0, chapterPath.lastIndexOf('/') + 1);
+
     const entry = this.entries.find((entry) => {
-      return entry.path === this.epub!.root + item.href;
+      return entry.path === chapterPath;
     });
 
     if (entry) {
       const textDecoder = new TextDecoder('utf-8');
-      const content = textDecoder.decode(entry.data);
+      let content = textDecoder.decode(entry.data);
+      
+      // Process and replace image sources with blob URLs
+      content = this.processMediaReferences(content, chapterDir);
+      
       // Inject theme-aware styles into the content
       const isDark = document.body.classList.contains('dark-mode');
       const themeStyle = `
@@ -128,6 +147,10 @@ export class EPubViewer extends LitElement {
           body {
             background: ${isDark ? '#1e1e1e' : '#ffffff'};
             color: ${isDark ? '#e0e0e0' : '#333333'};
+            padding: 1rem;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
           }
           a { color: ${isDark ? '#6eb5ff' : '#0078d4'}; }
           img { max-width: 100%; height: auto; }
@@ -142,6 +165,148 @@ export class EPubViewer extends LitElement {
         this.doc = themeStyle + content;
       }
     }
+  }
+
+  /**
+   * Process media references (images, CSS, etc.) in HTML content
+   * and replace relative paths with blob URLs from archive entries
+   */
+  private processMediaReferences(content: string, baseDir: string): string {
+    // Process img src attributes
+    content = this.replaceAttributeUrls(content, 'src', baseDir);
+    // Process CSS url() references and link href
+    content = this.replaceAttributeUrls(content, 'href', baseDir);
+    // Process srcset attributes
+    content = this.replaceAttributeUrls(content, 'srcset', baseDir);
+    // Process poster attributes (for video)
+    content = this.replaceAttributeUrls(content, 'poster', baseDir);
+    
+    return content;
+  }
+
+  /**
+   * Replace URLs in a specific attribute with blob URLs
+   */
+  private replaceAttributeUrls(content: string, attribute: string, baseDir: string): string {
+    // Match attribute="value" or attribute='value'
+    const regex = new RegExp(`${attribute}=["']([^"']+)["']`, 'gi');
+    
+    return content.replace(regex, (match, url) => {
+      // Skip absolute URLs, data URLs, and fragment-only URLs
+      if (url.startsWith('http://') || 
+          url.startsWith('https://') || 
+          url.startsWith('data:') ||
+          url.startsWith('#') ||
+          url.startsWith('mailto:')) {
+        return match;
+      }
+
+      // Handle srcset (comma-separated list of URLs with optional descriptors)
+      if (attribute === 'srcset') {
+        const sources = url.split(',').map((source: string) => {
+          const parts = source.trim().split(/\s+/);
+          const srcUrl = parts[0];
+          const descriptor = parts.slice(1).join(' ');
+          const blobUrl = this.getOrCreateBlobUrl(srcUrl, baseDir);
+          return blobUrl ? `${blobUrl} ${descriptor}`.trim() : source;
+        });
+        return `${attribute}="${sources.join(', ')}"`;
+      }
+
+      const blobUrl = this.getOrCreateBlobUrl(url, baseDir);
+      return blobUrl ? `${attribute}="${blobUrl}"` : match;
+    });
+  }
+
+  /**
+   * Get blob URL from cache or create a new one for the given path
+   */
+  private getOrCreateBlobUrl(relativePath: string, baseDir: string): string | null {
+    // Resolve the relative path to absolute path within the archive
+    const absolutePath = this.resolvePath(baseDir, relativePath);
+    
+    // Check cache first
+    if (this.blobUrlCache.has(absolutePath)) {
+      return this.blobUrlCache.get(absolutePath)!;
+    }
+
+    // Find the entry in the archive
+    const entry = this.entries.find(e => e.path === absolutePath);
+    if (!entry || !entry.data) {
+      return null;
+    }
+
+    // Determine MIME type from extension
+    const mimeType = this.getMimeType(absolutePath);
+    
+    // Create blob URL - use Uint8Array to ensure compatibility
+    const data = entry.data instanceof Uint8Array 
+      ? entry.data 
+      : new Uint8Array(entry.data);
+    const blob = new Blob([data], { type: mimeType });
+    const blobUrl = URL.createObjectURL(blob);
+    
+    // Cache it
+    this.blobUrlCache.set(absolutePath, blobUrl);
+    
+    return blobUrl;
+  }
+
+  /**
+   * Resolve a relative path against a base directory
+   */
+  private resolvePath(baseDir: string, relativePath: string): string {
+    // Handle URL fragments
+    const fragmentIndex = relativePath.indexOf('#');
+    const pathWithoutFragment = fragmentIndex >= 0 
+      ? relativePath.substring(0, fragmentIndex) 
+      : relativePath;
+    
+    if (!pathWithoutFragment) {
+      return baseDir;
+    }
+
+    // Split the paths
+    const baseParts = baseDir.split('/').filter(p => p);
+    const relativeParts = pathWithoutFragment.split('/');
+
+    for (const part of relativeParts) {
+      if (part === '..') {
+        baseParts.pop();
+      } else if (part !== '.' && part !== '') {
+        baseParts.push(part);
+      }
+    }
+
+    return baseParts.join('/');
+  }
+
+  /**
+   * Get MIME type from file extension
+   */
+  private getMimeType(path: string): string {
+    const ext = path.split('.').pop()?.toLowerCase();
+    const mimeTypes: Record<string, string> = {
+      // Images
+      'jpg': 'image/jpeg',
+      'jpeg': 'image/jpeg',
+      'png': 'image/png',
+      'gif': 'image/gif',
+      'svg': 'image/svg+xml',
+      'webp': 'image/webp',
+      // CSS
+      'css': 'text/css',
+      // Fonts
+      'ttf': 'font/ttf',
+      'otf': 'font/otf',
+      'woff': 'font/woff',
+      'woff2': 'font/woff2',
+      // Other
+      'xhtml': 'application/xhtml+xml',
+      'html': 'text/html',
+      'xml': 'application/xml',
+    };
+    return mimeTypes[ext || ''] || 'application/octet-stream';
   }
 
   private handlePrev() {
