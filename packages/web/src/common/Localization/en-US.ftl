@@ -1,6 +1,11 @@
 choose-file = Choose File
 zh-CN = 简体中文
 en-US = English
+ja-JP = 日本語
+ko-KR = 한국어
+es-ES = Español
+fr-FR = Français
+de-DE = Deutsch
 supported-files = Supported Files
 drag-and-drop-file-here = Drag and drop file here
 file = File
