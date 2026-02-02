@@ -15,10 +15,12 @@ export class EPubViewer extends LitElement {
     }
     .epub-controls {
       margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
     .epub-controls button {
       padding: 0.5rem 1rem;
-      margin-right: 0.5rem;
       border: 1px solid var(--border, #ccc);
       border-radius: 4px;
       background: var(--surface, white);
@@ -32,10 +34,15 @@ export class EPubViewer extends LitElement {
       opacity: 0.5;
       cursor: not-allowed;
     }
+    .epub-controls span {
+      color: var(--text-secondary, #666);
+      font-size: 0.875rem;
+    }
     .epub-content {
       width: 100%;
       height: calc(100vh - 10rem);
-      border: none;
+      border: 1px solid var(--border, #ddd);
+      border-radius: 4px;
     }
   `;
 
@@ -55,6 +62,26 @@ export class EPubViewer extends LitElement {
   private doc = '';
 
   private worker = createArchiveWorker();
+  private themeChangeHandler: (() => void) | null = null;
+
+  connectedCallback() {
+    super.connectedCallback();
+    // Listen for theme changes
+    this.themeChangeHandler = () => {
+      if (this.epub) {
+        this.loadCurrentChapter();
+      }
+    };
+    // Use MutationObserver to detect class changes on body
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          this.themeChangeHandler?.();
+        }
+      });
+    });
+    observer.observe(document.body, { attributes: true });
+  }
 
   updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('file') && this.file) {
@@ -103,6 +130,7 @@ export class EPubViewer extends LitElement {
             color: ${isDark ? '#e0e0e0' : '#333333'};
           }
           a { color: ${isDark ? '#6eb5ff' : '#0078d4'}; }
+          img { max-width: 100%; height: auto; }
         </style>
       `;
       // Insert theme styles after <head> or at the beginning
@@ -132,8 +160,11 @@ export class EPubViewer extends LitElement {
 
   render() {
     if (!this.epub) {
-      return html``;
+      return html`<loading-spinner></loading-spinner>`;
     }
+
+    const currentPage = this.index + 1;
+    const totalPages = this.epub.spine.itemRefs.length;
 
     return html`
       <div class="epub-viewer">
@@ -145,6 +176,7 @@ export class EPubViewer extends LitElement {
           >
             Prev
           </button>
+          <span>${currentPage} / ${totalPages}</span>
           <button
             type="button"
             ?disabled=${this.index === this.epub.spine.itemRefs.length - 1}

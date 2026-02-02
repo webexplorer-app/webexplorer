@@ -1,28 +1,50 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import { AlphaTabApi, ExporterSettings, ImporterSettings, LayoutMode, NotationSettings, PlayerSettings, RenderingResources, Settings, StaveProfile, SystemsLayoutMode } from '@coderline/alphatab';
+import { customElement, property, state } from 'lit/decorators.js';
+import { AlphaTabApi, LayoutMode, Settings, StaveProfile, SystemsLayoutMode } from '@coderline/alphatab';
 
 @customElement('tab-viewer')
 export class TabViewer extends LitElement {
   static styles = css`
     :host {
       display: block;
+      width: 100%;
+      height: 100%;
     }
     .tab-viewer {
       width: 100%;
-      height: calc(100vh - 150px);
+      height: 100%;
       overflow: auto;
+      background: var(--background, #fff);
     }
     .tab-container {
       width: 100%;
-      min-height: 100%;
+      min-height: 400px;
+    }
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      color: var(--text-muted, #666);
     }
   `;
 
   @property({ attribute: false })
   file: File | null = null;
 
+  @state()
+  private loading = false;
+
+  @state()
+  private error: string | null = null;
+
   private api: AlphaTabApi | null = null;
+  private containerRef: HTMLDivElement | null = null;
+
+  // Use light DOM to avoid Shadow DOM issues with AlphaTab
+  protected createRenderRoot() {
+    return this;
+  }
 
   disconnectedCallback() {
     super.disconnectedCallback();
@@ -31,6 +53,7 @@ export class TabViewer extends LitElement {
   }
 
   firstUpdated() {
+    this.injectStyles();
     this.initAlphaTab();
   }
 
@@ -40,65 +63,87 @@ export class TabViewer extends LitElement {
     }
   }
 
-  private initAlphaTab() {
-    const container = this.shadowRoot?.querySelector('.tab-container') as HTMLDivElement;
-    if (!container) return;
-
-    const settings: Settings = {
-      core: {
-        engine: 'svg',
-        logLevel: 1,
-        fontDirectory: '/vendor/assets/fonts/',
-        scriptFile: null,
-        smuflFontSources: null,
-        file: null,
-        tex: false,
-        tracks: null,
-        enableLazyLoading: false,
-        useWorkers: true,
-        includeNoteBounds: false
-      },
-      display: {
-        scale: 0.8,
-        stretchForce: 0,
-        layoutMode: LayoutMode.Page,
-        staveProfile: StaveProfile.Default,
-        barsPerRow: 0,
-        startBar: 0,
-        barCount: 0,
-        barCountPerPartial: 0,
-        justifyLastSystem: false,
-        resources: new RenderingResources,
-        padding: [],
-        firstSystemPaddingTop: 0,
-        systemPaddingTop: 0,
-        systemPaddingBottom: 0,
-        lastSystemPaddingBottom: 0,
-        systemLabelPaddingLeft: 0,
-        systemLabelPaddingRight: 0,
-        accoladeBarPaddingRight: 0,
-        notationStaffPaddingTop: 0,
-        notationStaffPaddingBottom: 0,
-        effectStaffPaddingTop: 0,
-        effectStaffPaddingBottom: 0,
-        firstStaffPaddingLeft: 0,
-        staffPaddingLeft: 0,
-        effectBandPaddingBottom: 0,
-        systemsLayoutMode: SystemsLayoutMode.Automatic
-      },
-      notation: new NotationSettings,
-      importer: new ImporterSettings,
-      player: new PlayerSettings,
-      exporter: new ExporterSettings,
-      setSongBookModeSettings: function (): void {
-        throw new Error('Function not implemented.');
-      },
-      fillFromJson: function (): void {
-        throw new Error('Function not implemented.');
+  private injectStyles() {
+    // Inject styles into light DOM since we're not using Shadow DOM
+    const style = document.createElement('style');
+    style.textContent = `
+      tab-viewer {
+        display: block;
+        width: 100%;
+        height: 100%;
       }
-    };
+      tab-viewer .tab-viewer {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background: var(--background, #fff);
+      }
+      tab-viewer .tab-container {
+        width: 100%;
+        min-height: 400px;
+        padding: 1rem;
+      }
+      tab-viewer .at-surface {
+        width: 100% !important;
+      }
+      tab-viewer .at-surface > div {
+        position: relative !important;
+        height: auto !important;
+      }
+      tab-viewer .at-surface svg {
+        display: block;
+      }
+      /* Dark mode support for AlphaTab SVG content */
+      .dark-mode tab-viewer .tab-container {
+        background: #fff;
+        border-radius: 8px;
+      }
+      tab-viewer .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        color: var(--text-muted, #666);
+      }
+      tab-viewer .error {
+        padding: 1rem;
+        color: var(--error, #dc3545);
+        text-align: center;
+      }
+    `;
+    this.appendChild(style);
+  }
 
-    this.api = new AlphaTabApi(container, settings);
+  private initAlphaTab() {
+    this.containerRef = this.querySelector('.tab-container') as HTMLDivElement;
+    if (!this.containerRef) return;
+
+    const settings: Settings = new Settings();
+    settings.core.engine = 'svg';
+    settings.core.logLevel = 1;
+    settings.core.fontDirectory = '/font/';
+    settings.core.useWorkers = true;
+    settings.display.scale = 1.0;
+    settings.display.layoutMode = LayoutMode.Page;
+    settings.display.staveProfile = StaveProfile.Default;
+    settings.display.systemsLayoutMode = SystemsLayoutMode.Automatic;
+
+    this.api = new AlphaTabApi(this.containerRef, settings);
+    
+    this.api.renderStarted.on(() => {
+      this.loading = true;
+      this.error = null;
+    });
+
+    this.api.renderFinished.on(() => {
+      this.loading = false;
+    });
+
+    this.api.error.on((error) => {
+      this.loading = false;
+      this.error = error.message || 'Failed to render tab';
+      console.error('AlphaTab error:', error);
+    });
 
     if (this.file) {
       this.loadFile();
@@ -108,11 +153,24 @@ export class TabViewer extends LitElement {
   private loadFile() {
     if (!this.file || !this.api) return;
 
+    this.loading = true;
+    this.error = null;
+
     const reader = new FileReader();
     reader.onload = (e) => {
       if (e.target?.result) {
-        this.api!.load(e.target.result as ArrayBuffer);
+        try {
+          this.api!.load(e.target.result as ArrayBuffer);
+        } catch (err) {
+          this.error = 'Failed to load guitar tab file';
+          this.loading = false;
+          console.error('AlphaTab load error:', err);
+        }
       }
+    };
+    reader.onerror = () => {
+      this.error = 'Failed to read file';
+      this.loading = false;
     };
     reader.readAsArrayBuffer(this.file);
   }
@@ -120,6 +178,8 @@ export class TabViewer extends LitElement {
   render() {
     return html`
       <div class="tab-viewer">
+        ${this.loading ? html`<div class="loading">Loading guitar tab...</div>` : null}
+        ${this.error ? html`<div class="error">${this.error}</div>` : null}
         <div class="tab-container"></div>
       </div>
     `;

@@ -14,7 +14,8 @@ export class MobiViewer extends LitElement {
     .mobi-iframe {
       width: 100%;
       height: calc(100vh - 150px);
-      border: none;
+      border: 1px solid var(--border, #ddd);
+      border-radius: 4px;
     }
   `;
 
@@ -24,9 +25,62 @@ export class MobiViewer extends LitElement {
   @state()
   private mobi: Mobi | null = null;
 
+  private mutationObserver: MutationObserver | null = null;
+
+  connectedCallback() {
+    super.connectedCallback();
+    // Listen for theme changes
+    this.mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class' && this.mobi) {
+          this.updateIframeTheme();
+        }
+      });
+    });
+    this.mutationObserver.observe(document.body, { attributes: true });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.mutationObserver?.disconnect();
+  }
+
   updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('file') && this.file) {
       this.loadMobi();
+    }
+  }
+
+  private getThemeStyles(): string {
+    const isDark = document.body.classList.contains('dark-mode');
+    return `
+      <style>
+        :root {
+          color-scheme: ${isDark ? 'dark' : 'light'};
+        }
+        body {
+          background: ${isDark ? '#1e1e1e' : '#ffffff'};
+          color: ${isDark ? '#e0e0e0' : '#333333'};
+          padding: 1rem;
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+          line-height: 1.6;
+        }
+        a { color: ${isDark ? '#6eb5ff' : '#0078d4'}; }
+        img { max-width: 100%; height: auto; }
+      </style>
+    `;
+  }
+
+  private updateIframeTheme() {
+    const iframe = this.shadowRoot?.querySelector('iframe');
+    if (iframe && this.mobi) {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (iframeDoc) {
+        iframeDoc.open();
+        iframeDoc.write(this.getThemeStyles() + this.mobi.text);
+        iframeDoc.close();
+      }
     }
   }
 
@@ -39,29 +93,7 @@ export class MobiViewer extends LitElement {
       this.mobi = result;
       
       this.updateComplete.then(() => {
-        const iframe = this.shadowRoot?.querySelector('iframe');
-        if (iframe && result) {
-          const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-          if (iframeDoc) {
-            // Inject theme-aware styles into the content
-            const isDark = document.body.classList.contains('dark-mode');
-            const themeStyle = `
-              <style>
-                :root {
-                  color-scheme: ${isDark ? 'dark' : 'light'};
-                }
-                body {
-                  background: ${isDark ? '#1e1e1e' : '#ffffff'};
-                  color: ${isDark ? '#e0e0e0' : '#333333'};
-                }
-                a { color: ${isDark ? '#6eb5ff' : '#0078d4'}; }
-              </style>
-            `;
-            iframeDoc.open();
-            iframeDoc.write(themeStyle + result.text);
-            iframeDoc.close();
-          }
-        }
+        this.updateIframeTheme();
       });
     };
     reader.readAsArrayBuffer(this.file);
@@ -69,7 +101,7 @@ export class MobiViewer extends LitElement {
 
   render() {
     if (!this.mobi) {
-      return html``;
+      return html`<loading-spinner></loading-spinner>`;
     }
 
     return html`

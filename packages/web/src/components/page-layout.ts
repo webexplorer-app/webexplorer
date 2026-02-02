@@ -27,6 +27,9 @@ export class PageHeader extends LitElement {
   static styles = css`
     :host {
       display: block;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     .page-header {
       background-color: var(--surface, #f5f5f5);
