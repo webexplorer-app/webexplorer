@@ -1,11 +1,13 @@
-import { LitElement, html, css } from 'lit';
+import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { createArchiveWorker } from '../../common/archive-worker';
 import { parse, type EPub } from '@webexplorer/epub';
 import type { ArchiveEntry } from '@webexplorer/archive';
+import { t } from '../../common/Localization';
+import { LocalizedLitElement } from '../localized-element';
 
 @customElement('epub-viewer')
-export class EPubViewer extends LitElement {
+export class EPubViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
@@ -339,7 +341,7 @@ export class EPubViewer extends LitElement {
             ?disabled=${this.index === 0}
             @click=${this.handlePrev}
           >
-            Prev
+            ${t('prev', 'Prev')}
           </button>
           <span>${currentPage} / ${totalPages}</span>
           <button
@@ -347,7 +349,7 @@ export class EPubViewer extends LitElement {
             ?disabled=${this.index === this.epub.spine.itemRefs.length - 1}
             @click=${this.handleNext}
           >
-            Next
+            ${t('next', 'Next')}
           </button>
         </div>
         <div>

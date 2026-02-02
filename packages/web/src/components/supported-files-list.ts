@@ -1,7 +1,8 @@
-import { LitElement, html, css } from 'lit';
+import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { t } from '../common/Localization';
 import { SUPPORTED_FILE_TYPES, type SupportedFileType } from '../common/supported-types.js';
+import { LocalizedLitElement } from './localized-element';
 
 /**
  * Component that displays a list of supported file types
@@ -9,7 +10,7 @@ import { SUPPORTED_FILE_TYPES, type SupportedFileType } from '../common/supporte
  * @element supported-files-list
  */
 @customElement('supported-files-list')
-export class SupportedFilesList extends LitElement {
+export class SupportedFilesList extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
