@@ -85,7 +85,7 @@ export class HomePage extends LocalizedLitElement {
         <page-header>
           <page-toolbar>
             <span slot="left"></span>
-            <page-title slot="center" title="Web Explorer"></page-title>
+            <page-title slot="center" title="Web Explorer" showIcon></page-title>
             <span slot="right" class="toolbar-actions">
               <theme-toggle></theme-toggle>
               <locale-selector></locale-selector>

@@ -71,6 +71,10 @@ export class SupportedFilesList extends LocalizedLitElement {
 
     /* Icon colors - consistent with folder-viewer */
     .icon-pdf { color: #f44336; }
+    .icon-word { color: #2b579a; }
+    .icon-excel { color: #217346; }
+    .icon-powerpoint { color: #d24726; }
+    .icon-rtf { color: #6b7280; }
     .icon-epub, .icon-mobi, .icon-azw3 { color: #009688; }
     .icon-archive { color: #8d6e63; }
     .icon-image { color: #e91e63; }
@@ -82,6 +86,7 @@ export class SupportedFilesList extends LocalizedLitElement {
     .icon-wasm { color: #795548; }
     .icon-tab { color: #ff5722; }
     .icon-email { color: #2196f3; }
+    .icon-code { color: #607d8b; }
 
     .extension {
       font-family: var(--font-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace);
@@ -128,6 +133,22 @@ export class SupportedFilesList extends LocalizedLitElement {
         return html`<span class="${iconClass}">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z"/></svg>
         </span>`;
+      case 'word':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 9h-2v5.5L9 13H7.5l2.5 6h2l2.5-6H13L11 16.5V11zm5 10H6V4h7v5h5v12z"/></svg>
+        </span>`;
+      case 'excel':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm1 16h-2v-2h2v2zm0-4h-2v-2h2v2zm-4 4H9v-2h2v2zm0-4H9v-2h2v2zm7 4h-2v-2h2v2zm0-4h-2v-2h2v2zM13 9V3.5L18.5 9H13z"/></svg>
+        </span>`;
+      case 'powerpoint':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-3 15H9v-5h2c1.1 0 2-.9 2-2s-.9-2-2-2H7.5v9H11zm2-10V3.5L18.5 9H13zm-2 3h-1v2h1c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
+        </span>`;
+      case 'rtf':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 12h8v2H8zm0 4h8v2H8zm0-8h3v2H8z"/></svg>
+        </span>`;
       case 'epub':
       case 'mobi':
       case 'azw3':
@@ -173,6 +194,10 @@ export class SupportedFilesList extends LocalizedLitElement {
       case 'email':
         return html`<span class="${iconClass}">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </span>`;
+      case 'code':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
         </span>`;
       default:
         return html`<span class="${iconClass}">

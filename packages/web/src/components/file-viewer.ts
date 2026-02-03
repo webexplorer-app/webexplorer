@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { mimeType } from '../common/file';
-import { getFileTypeByMime } from '../common/supported-types';
+import { getFileTypeByMime, getFileTypeByExtension } from '../common/supported-types';
 
 // Import viewer components
 import './viewers/image-viewer';
@@ -14,6 +14,10 @@ import './viewers/default-viewer';
 // Viewer ID to viewer path mapping for lazy-loaded viewers
 const VIEWER_PATHS: Record<string, string> = {
   'pdf-viewer': './viewers/pdf-viewer',
+  'word-viewer': './viewers/word-viewer',
+  'excel-viewer': './viewers/excel-viewer',
+  'powerpoint-viewer': './viewers/powerpoint-viewer',
+  'rtf-viewer': './viewers/rtf-viewer',
   'epub-viewer': './viewers/epub-viewer',
   'mobi-viewer': './viewers/mobi-viewer',
   'archive-viewer': './viewers/archive-viewer',
@@ -24,6 +28,7 @@ const VIEWER_PATHS: Record<string, string> = {
   'email-viewer': './viewers/email-viewer',
   'wasm-viewer': './viewers/wasm-viewer',
   'ffmpeg-viewer': './viewers/ffmpeg-viewer',
+  'code-viewer': './viewers/code-viewer',
 };
 
 @customElement('file-viewer')
@@ -70,13 +75,20 @@ export class FileViewer extends LitElement {
       return;
     }
 
-    const fileType = mimeType(this.file);
-    if (!fileType) {
-      this.viewerType = 'default';
-      return;
+    // Try to match by file extension first (more reliable for some file types like RTF)
+    const fileName = this.file.name;
+    const lastDot = fileName.lastIndexOf('.');
+    const extension = lastDot >= 0 ? fileName.substring(lastDot + 1) : '';
+    
+    let supportedType = getFileTypeByExtension(extension);
+    
+    // If no match by extension, try MIME type
+    if (!supportedType) {
+      const fileType = mimeType(this.file);
+      if (fileType) {
+        supportedType = getFileTypeByMime(fileType);
+      }
     }
-
-    const supportedType = getFileTypeByMime(fileType);
 
     if (supportedType) {
       // Map supported type id to viewer type
@@ -94,13 +106,16 @@ export class FileViewer extends LitElement {
       } else {
         this.viewerLoaded = true;
       }
-    } else if (fileType?.startsWith('video/')) {
-      // Fallback for unsupported video types - use ffmpeg
-      this.viewerType = 'ffmpeg';
-      this.loadViewer(VIEWER_PATHS['ffmpeg-viewer']);
     } else {
-      this.viewerType = 'default';
-      this.viewerLoaded = true;
+      // Check for unsupported video types - use ffmpeg
+      const fileType = mimeType(this.file);
+      if (fileType?.startsWith('video/')) {
+        this.viewerType = 'ffmpeg';
+        this.loadViewer(VIEWER_PATHS['ffmpeg-viewer']);
+      } else {
+        this.viewerType = 'default';
+        this.viewerLoaded = true;
+      }
     }
   }
 
@@ -142,6 +157,14 @@ export class FileViewer extends LitElement {
     switch (this.viewerType) {
       case 'pdf':
         return html`<pdf-viewer .file=${file}></pdf-viewer>`;
+      case 'word':
+        return html`<word-viewer .file=${file}></word-viewer>`;
+      case 'excel':
+        return html`<excel-viewer .file=${file}></excel-viewer>`;
+      case 'powerpoint':
+        return html`<powerpoint-viewer .file=${file}></powerpoint-viewer>`;
+      case 'rtf':
+        return html`<rtf-viewer .file=${file}></rtf-viewer>`;
       case 'epub':
         return html`<epub-viewer .file=${file}></epub-viewer>`;
       case 'mobi':
@@ -168,6 +191,8 @@ export class FileViewer extends LitElement {
         return html`<wasm-viewer .file=${file}></wasm-viewer>`;
       case 'ffmpeg':
         return html`<ffmpeg-viewer .file=${file}></ffmpeg-viewer>`;
+      case 'code':
+        return html`<code-viewer .file=${file}></code-viewer>`;
       default:
         return html`<default-viewer .file=${file}></default-viewer>`;
     }
