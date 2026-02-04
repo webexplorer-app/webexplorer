@@ -1,6 +1,6 @@
 import { html, css } from 'lit';
 import type { PropertyValues } from 'lit';
-import { customElement, property, state, query } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { LocalizedLitElement } from '../localized-element';
 import { t } from '../../common/Localization';
 
@@ -226,9 +226,6 @@ export class CodeViewer extends LocalizedLitElement {
   @state()
   private wordWrap = false;
 
-  @query('.editor-container')
-  private editorContainer!: HTMLDivElement;
-
   private editorView: EditorView | null = null;
 
   disconnectedCallback() {
@@ -262,6 +259,7 @@ export class CodeViewer extends LocalizedLitElement {
     this.error = null;
     this.content = '';
     this.lineCount = 0;
+    this.destroyEditor();
 
     try {
       // Check file size - limit to 5MB for performance
@@ -274,14 +272,16 @@ export class CodeViewer extends LocalizedLitElement {
 
       this.lineCount = this.content.split('\n').length;
       this.language = this.detectLanguage(this.file.name);
-      
-      // Wait for render then create editor
-      await this.updateComplete;
-      this.createEditor();
     } catch (e) {
       this.error = e instanceof Error ? e.message : 'Failed to load file';
     } finally {
       this.loading = false;
+      // Wait for the container to be rendered, then create editor
+      await this.updateComplete;
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        this.createEditor();
+      });
     }
   }
 
@@ -297,7 +297,12 @@ export class CodeViewer extends LocalizedLitElement {
   private createEditor() {
     this.destroyEditor();
 
-    if (!this.editorContainer) return;
+    // Query the container from shadow DOM
+    const container = this.shadowRoot?.querySelector('.editor-container') as HTMLDivElement;
+    if (!container) {
+      console.error('Editor container not found');
+      return;
+    }
 
     const extensions: Extension[] = [
       lineNumbers(),
@@ -327,7 +332,7 @@ export class CodeViewer extends LocalizedLitElement {
 
     this.editorView = new EditorView({
       state,
-      parent: this.editorContainer,
+      parent: container,
     });
   }
 

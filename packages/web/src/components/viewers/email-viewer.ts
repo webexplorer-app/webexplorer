@@ -30,7 +30,7 @@ export class EmailViewer extends LocalizedLitElement {
       white-space: pre-wrap;
       word-wrap: break-word;
       padding: 1rem;
-      background: var(--surface, #f9f9f9);
+      border: 1px solid var(--border-light, #eee);
       border-radius: 4px;
       color: var(--text, #333);
     }

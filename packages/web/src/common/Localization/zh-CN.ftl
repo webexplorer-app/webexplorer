@@ -149,3 +149,6 @@ open-source-credits = 开源致谢
 credits-intro = Web Explorer 站在巨人的肩膀上构建。我们感谢所有使这个应用成为可能的开源项目。
 credits-footer = 使用开源软件用 ❤️ 制作
 contact = 联系我们
+unsupported-file = 不支持的文件类型
+unsupported-file-message = 此文件类型目前不受支持。如果您希望我们添加对此格式的支持，请告诉我们！
+request-support = 请求支持

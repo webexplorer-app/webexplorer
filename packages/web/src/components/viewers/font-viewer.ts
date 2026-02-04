@@ -13,7 +13,6 @@ export class FontViewer extends LocalizedLitElement {
       margin: 1rem;
     }
     .font-container {
-      background: var(--background, white);
       border: 1px solid var(--border, #ddd);
       border-radius: 4px;
       padding: 2rem;

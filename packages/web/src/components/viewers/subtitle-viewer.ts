@@ -20,7 +20,6 @@ export class SubtitleViewer extends LocalizedLitElement {
       margin: 1rem;
     }
     .subtitle-container {
-      background: var(--background, white);
       border: 1px solid var(--border, #ddd);
       border-radius: 4px;
       overflow: auto;

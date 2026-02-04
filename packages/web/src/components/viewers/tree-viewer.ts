@@ -19,7 +19,6 @@ export class TreeViewer extends LocalizedLitElement {
       display: block;
       height: 100%;
       overflow: auto;
-      background: var(--surface, #fff);
     }
 
     .container {

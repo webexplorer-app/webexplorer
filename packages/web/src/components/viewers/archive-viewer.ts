@@ -31,7 +31,7 @@ export class ArchiveViewer extends LitElement {
       flex-wrap: wrap;
       gap: 0.25rem;
       padding: 0.5rem;
-      background: var(--surface, #f5f5f5);
+      border: 1px solid var(--border, #ddd);
       border-radius: 4px;
     }
     .breadcrumb-item {

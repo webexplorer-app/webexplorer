@@ -26,7 +26,6 @@ export class CertificateViewer extends LocalizedLitElement {
     :host {
       display: block;
       height: 100%;
-      background: var(--surface, #fff);
       overflow: auto;
     }
 

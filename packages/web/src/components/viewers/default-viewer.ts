@@ -1,92 +1,118 @@
 import { html, css } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { t } from '../../common/Localization';
 import { LocalizedLitElement } from '../localized-element';
-import './text-viewer';
-import './binary-viewer';
-
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
-
-type FallbackViewer = 'text' | 'binary';
 
 @customElement('default-viewer')
 export class DefaultViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
+      height: 100%;
     }
-    .default-viewer header {
+
+    .container {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: center;
-      padding: 1rem;
-      background: var(--background, #fff);
-    }
-    .default-viewer header h4 {
-      flex: 1;
-      margin: 0;
-      padding: 0;
-      color: var(--text, #333);
-    }
-    .default-viewer header select {
-      display: inline-block;
-      margin-right: 1rem;
-      padding: 0.5rem;
-      background: var(--surface, #f5f5f5);
-      color: var(--text, #333);
-      border: 1px solid var(--border, #ddd);
-      border-radius: 4px;
-    }
-    .text-center {
+      justify-content: center;
+      height: 100%;
+      padding: 2rem;
       text-align: center;
-      color: var(--text-muted, #666);
+    }
+
+    .icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.6;
+    }
+
+    .title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text, #1f2937);
+      margin: 0 0 0.5rem 0;
+    }
+
+    .message {
+      font-size: 1rem;
+      color: var(--text-muted, #6b7280);
+      margin: 0 0 0.5rem 0;
+      max-width: 400px;
+    }
+
+    .file-info {
+      font-size: 0.875rem;
+      color: var(--text-muted, #9ca3af);
+      margin: 0 0 2rem 0;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 6px;
+      font-family: var(--font-mono, monospace);
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary, #3b82f6);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+
+    .contact-btn:hover {
+      background: var(--primary-hover, #2563eb);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-btn:active {
+      transform: translateY(0);
+    }
+
+    .contact-icon {
+      font-size: 1.125rem;
     }
   `;
 
   @property({ attribute: false })
   file: File | null = null;
 
-  @state()
-  private fallbackViewer: FallbackViewer = 'text';
-
-  private handleViewerChange(e: Event) {
-    const select = e.target as HTMLSelectElement;
-    this.fallbackViewer = select.value as FallbackViewer;
+  private getFileExtension(): string {
+    if (!this.file) return '';
+    const name = this.file.name;
+    const lastDot = name.lastIndexOf('.');
+    return lastDot >= 0 ? name.substring(lastDot) : '';
   }
 
   render() {
     if (!this.file) return html``;
 
-    let viewer;
-    if (this.file.size > MAX_FILE_SIZE) {
-      viewer = html`
-        <div>
-          <p class="text-center">${t('file-is-too-large', 'File is too large')}</p>
-          <p class="text-center">${this.file.type}</p>
-        </div>
-      `;
-    } else {
-      switch (this.fallbackViewer) {
-        case 'binary':
-          viewer = html`<binary-viewer .file=${this.file}></binary-viewer>`;
-          break;
-        case 'text':
-        default:
-          viewer = html`<text-viewer .file=${this.file}></text-viewer>`;
-          break;
-      }
-    }
+    const extension = this.getFileExtension();
+    const mimeType = this.file.type || 'unknown';
 
     return html`
-      <div class="default-viewer">
-        <header>
-          <h4>${t('default-viewer', 'Default Viewer')}</h4>
-          <select .value=${this.fallbackViewer} @change=${this.handleViewerChange}>
-            <option value="text">${t('text', 'Text')}</option>
-            <option value="binary">${t('binary', 'Binary')}</option>
-          </select>
-        </header>
-        <section>${viewer}</section>
+      <div class="container">
+        <div class="icon">📄</div>
+        <h2 class="title">${t('unsupported-file', 'Unsupported File Type')}</h2>
+        <p class="message">
+          ${t('unsupported-file-message', 'This file type is not currently supported. If you would like us to add support for this format, please let us know!')}
+        </p>
+        <p class="file-info">
+          ${extension} · ${mimeType}
+        </p>
+        <a 
+          class="contact-btn" 
+          href="mailto:jichang_dev@outlook.com?subject=File%20Support%20Request%3A%20${encodeURIComponent(extension)}&body=Hi%2C%0A%0AI%20would%20like%20to%20request%20support%20for%20the%20following%20file%20type%3A%0A%0AExtension%3A%20${encodeURIComponent(extension)}%0AMIME%20Type%3A%20${encodeURIComponent(mimeType)}%0A%0AThank%20you!"
+        >
+          <span class="contact-icon">✉️</span>
+          ${t('request-support', 'Request Support')}
+        </a>
       </div>
     `;
   }

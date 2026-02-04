@@ -127,3 +127,6 @@ open-source-credits = 오픈소스 크레딧
 credits-intro = Web Explorer는 거인의 어깨 위에 구축되었습니다. 이 애플리케이션을 가능하게 해준 모든 오픈소스 프로젝트에 감사드립니다.
 credits-footer = 오픈소스 소프트웨어로 ❤️를 담아 제작
 contact = 문의하기
+unsupported-file = 지원되지 않는 파일 형식
+unsupported-file-message = 이 파일 형식은 현재 지원되지 않습니다. 이 형식의 지원을 원하시면 알려주세요!
+request-support = 지원 요청

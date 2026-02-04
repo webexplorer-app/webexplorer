@@ -43,7 +43,6 @@ export class ICalViewer extends LocalizedLitElement {
     }
 
     .container {
-      background: var(--surface, #fff);
       border-radius: 8px;
       overflow: hidden;
     }

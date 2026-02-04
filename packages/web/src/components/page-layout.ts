@@ -119,16 +119,7 @@ export class PageTitle extends LitElement {
     return html`
       <div class="title-container">
         ${this.showIcon ? html`
-          <svg class="title-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none">
-            <path d="M7 4 L19 4 L25 10 L25 27 C25 28.1 24.1 29 23 29 L9 29 C7.9 29 7 28.1 7 27 L7 6 C7 4.9 7.9 4 9 4 Z" fill="#FFFFFF" stroke="#0066CC" stroke-width="1.5"/>
-            <path d="M19 4 L19 10 L25 10 Z" fill="#E6F0FA" stroke="#0066CC" stroke-width="1"/>
-            <line x1="11" y1="13" x2="18" y2="13" stroke="#0066CC" stroke-width="1.2" stroke-linecap="round" opacity="0.35"/>
-            <line x1="11" y1="16" x2="15" y2="16" stroke="#0066CC" stroke-width="1.2" stroke-linecap="round" opacity="0.35"/>
-            <circle cx="19" cy="21" r="5" fill="#FFFFFF" stroke="#0066CC" stroke-width="1.5"/>
-            <line x1="23" y1="25" x2="27" y2="29" stroke="#0066CC" stroke-width="2" stroke-linecap="round"/>
-            <ellipse cx="19" cy="21" rx="2.5" ry="1.5" fill="#0066CC"/>
-            <circle cx="19" cy="21" r="0.8" fill="#FFFFFF"/>
-          </svg>
+          <img class="title-icon" src="/favicon.svg" alt="Web Explorer" />
         ` : null}
         <h4>${this.title}</h4>
       </div>

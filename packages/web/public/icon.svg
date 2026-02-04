@@ -1,35 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
-  <!-- Document shape -->
-  <path d="M120 56 L312 56 L392 136 L392 440 C392 457.7 377.7 472 360 472 L136 472 C118.3 472 104 457.7 104 440 L104 88 C104 70.3 118.3 56 136 56 Z" 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background rounded square -->
+  <rect x="32" y="32" width="448" height="448" rx="96" fill="#3b82f6"/>
+  <!-- WE text -->
+  <text x="256" y="320" 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="224" 
+        font-weight="700" 
         fill="#FFFFFF" 
-        stroke="#0066CC" 
-        stroke-width="20"/>
-  
-  <!-- Folded corner -->
-  <path d="M312 56 L312 136 L392 136 Z" 
-        fill="#E6F0FA" 
-        stroke="#0066CC" 
-        stroke-width="14"
-        stroke-linejoin="round"/>
-  
-  <!-- Document lines -->
-  <line x1="168" y1="200" x2="280" y2="200" stroke="#0066CC" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
-  <line x1="168" y1="252" x2="240" y2="252" stroke="#0066CC" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
-  
-  <!-- Magnifying glass circle -->
-  <circle cx="300" cy="340" r="76" 
-          fill="#FFFFFF"
-          stroke="#0066CC" 
-          stroke-width="20"/>
-  
-  <!-- Magnifying glass handle -->
-  <line x1="354" y1="394" x2="432" y2="472" 
-        stroke="#0066CC" 
-        stroke-width="28" 
-        stroke-linecap="round"/>
-  
-  <!-- Eye in magnifying glass -->
-  <ellipse cx="300" cy="340" rx="38" ry="24" fill="#0066CC"/>
-  <circle cx="300" cy="340" r="13" fill="#FFFFFF"/>
-  <circle cx="304" cy="337" r="5" fill="#003366"/>
+        text-anchor="middle">WE</text>
 </svg>
