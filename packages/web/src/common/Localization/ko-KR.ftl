@@ -126,3 +126,4 @@ please-select-file = 볼 파일을 선택하세요
 open-source-credits = 오픈소스 크레딧
 credits-intro = Web Explorer는 거인의 어깨 위에 구축되었습니다. 이 애플리케이션을 가능하게 해준 모든 오픈소스 프로젝트에 감사드립니다.
 credits-footer = 오픈소스 소프트웨어로 ❤️를 담아 제작
+contact = 문의하기

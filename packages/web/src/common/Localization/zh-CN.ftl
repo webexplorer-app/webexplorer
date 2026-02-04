@@ -148,3 +148,4 @@ connection-failed = 连接服务器失败
 open-source-credits = 开源致谢
 credits-intro = Web Explorer 站在巨人的肩膀上构建。我们感谢所有使这个应用成为可能的开源项目。
 credits-footer = 使用开源软件用 ❤️ 制作
+contact = 联系我们

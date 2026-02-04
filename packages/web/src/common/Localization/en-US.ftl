@@ -148,3 +148,4 @@ connection-failed = Failed to connect to server
 open-source-credits = Open Source Credits
 credits-intro = Web Explorer is built on the shoulders of giants. We are grateful to all the open source projects that make this application possible.
 credits-footer = Made with ❤️ using open source software
+contact = Contact

@@ -42,6 +42,39 @@ export class HomePage extends LocalizedLitElement {
     .credits-btn:active {
       transform: scale(0.95);
     }
+
+    .contact-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-muted, #6b7280);
+      font-size: 1.25rem;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .contact-btn:hover {
+      background: var(--hover, #f3f4f6);
+      color: var(--primary, #3b82f6);
+      transform: scale(1.05);
+    }
+
+    .contact-btn:active {
+      transform: scale(0.95);
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
     .explorer {
       display: flex;
       flex-direction: column;
@@ -113,7 +146,7 @@ export class HomePage extends LocalizedLitElement {
       <page-layout className="page--home">
         <page-header>
           <page-toolbar>
-            <span slot="left">
+            <span slot="left" class="toolbar-left">
               <button 
                 class="credits-btn" 
                 @click=${() => this.showCredits = true}
@@ -121,6 +154,13 @@ export class HomePage extends LocalizedLitElement {
               >
                 ❤️
               </button>
+              <a 
+                class="contact-btn" 
+                href="mailto:jichang_dev@outlook.com"
+                title=${t('contact', 'Contact')}
+              >
+                ✉️
+              </a>
             </span>
             <page-title slot="center" title="Web Explorer" showIcon></page-title>
             <span slot="right" class="toolbar-actions">

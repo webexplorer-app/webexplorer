@@ -126,3 +126,4 @@ please-select-file = 表示するファイルを選択してください
 open-source-credits = オープンソースクレジット
 credits-intro = Web Explorerは巨人の肩の上に構築されています。このアプリケーションを可能にしてくれたすべてのオープンソースプロジェクトに感謝します。
 credits-footer = オープンソースソフトウェアで ❤️ を込めて作成
+contact = お問い合わせ

@@ -3,7 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { mimeType } from '../common/file';
 import { getFileTypeByMime, getFileTypeByExtension } from '../common/supported-types';
 
-// Import viewer components
+// Import viewer components that are always loaded (small/common)
 import './viewers/image-viewer';
 import './viewers/video-viewer';
 import './viewers/audio-viewer';
@@ -11,37 +11,37 @@ import './viewers/text-viewer';
 import './viewers/binary-viewer';
 import './viewers/default-viewer';
 
-// Viewer ID to viewer path mapping for lazy-loaded viewers
-const VIEWER_PATHS: Record<string, string> = {
-  'pdf-viewer': './viewers/pdf-viewer',
-  'word-viewer': './viewers/word-viewer',
-  'excel-viewer': './viewers/excel-viewer',
-  'powerpoint-viewer': './viewers/powerpoint-viewer',
-  'rtf-viewer': './viewers/rtf-viewer',
-  'opendocument-viewer': './viewers/opendocument-viewer',
-  'epub-viewer': './viewers/epub-viewer',
-  'mobi-viewer': './viewers/mobi-viewer',
-  'archive-viewer': './viewers/archive-viewer',
-  'three-viewer': './viewers/three-viewer',
-  'tab-viewer': './viewers/tab-viewer',
-  'torrent-viewer': './viewers/torrent-viewer',
-  'csv-viewer': './viewers/csv-viewer',
-  'sqlite-viewer': './viewers/sqlite-viewer',
-  'email-viewer': './viewers/email-viewer',
-  'wasm-viewer': './viewers/wasm-viewer',
-  'ffmpeg-viewer': './viewers/ffmpeg-viewer',
-  'code-viewer': './viewers/code-viewer',
-  'markdown-viewer': './viewers/markdown-viewer',
-  'font-viewer': './viewers/font-viewer',
-  'subtitle-viewer': './viewers/subtitle-viewer',
-  'ical-viewer': './viewers/ical-viewer',
-  'comic-viewer': './viewers/comic-viewer',
-  'tree-viewer': './viewers/tree-viewer',
-  'log-viewer': './viewers/log-viewer',
-  'config-viewer': './viewers/config-viewer',
-  'hex-viewer': './viewers/hex-viewer',
-  'diff-viewer': './viewers/diff-viewer',
-  'certificate-viewer': './viewers/certificate-viewer',
+// Lazy load function map - explicit imports for Vite code splitting
+const VIEWER_LOADERS: Record<string, () => Promise<unknown>> = {
+  'pdf-viewer': () => import('./viewers/pdf-viewer'),
+  'word-viewer': () => import('./viewers/word-viewer'),
+  'excel-viewer': () => import('./viewers/excel-viewer'),
+  'powerpoint-viewer': () => import('./viewers/powerpoint-viewer'),
+  'rtf-viewer': () => import('./viewers/rtf-viewer'),
+  'opendocument-viewer': () => import('./viewers/opendocument-viewer'),
+  'epub-viewer': () => import('./viewers/epub-viewer'),
+  'mobi-viewer': () => import('./viewers/mobi-viewer'),
+  'archive-viewer': () => import('./viewers/archive-viewer'),
+  'three-viewer': () => import('./viewers/three-viewer'),
+  'tab-viewer': () => import('./viewers/tab-viewer'),
+  'torrent-viewer': () => import('./viewers/torrent-viewer'),
+  'csv-viewer': () => import('./viewers/csv-viewer'),
+  'sqlite-viewer': () => import('./viewers/sqlite-viewer'),
+  'email-viewer': () => import('./viewers/email-viewer'),
+  'wasm-viewer': () => import('./viewers/wasm-viewer'),
+  'ffmpeg-viewer': () => import('./viewers/ffmpeg-viewer'),
+  'code-viewer': () => import('./viewers/code-viewer'),
+  'markdown-viewer': () => import('./viewers/markdown-viewer'),
+  'font-viewer': () => import('./viewers/font-viewer'),
+  'subtitle-viewer': () => import('./viewers/subtitle-viewer'),
+  'ical-viewer': () => import('./viewers/ical-viewer'),
+  'comic-viewer': () => import('./viewers/comic-viewer'),
+  'tree-viewer': () => import('./viewers/tree-viewer'),
+  'log-viewer': () => import('./viewers/log-viewer'),
+  'config-viewer': () => import('./viewers/config-viewer'),
+  'hex-viewer': () => import('./viewers/hex-viewer'),
+  'diff-viewer': () => import('./viewers/diff-viewer'),
+  'certificate-viewer': () => import('./viewers/certificate-viewer'),
 };
 
 @customElement('file-viewer')
@@ -108,11 +108,11 @@ export class FileViewer extends LitElement {
       this.viewerType = supportedType.id;
       
       if (supportedType.lazyLoad) {
-        const viewerPath = VIEWER_PATHS[supportedType.viewer];
-        if (viewerPath) {
-          this.loadViewer(viewerPath);
+        const viewerLoader = VIEWER_LOADERS[supportedType.viewer];
+        if (viewerLoader) {
+          this.loadViewer(viewerLoader);
         } else {
-          console.error(`No viewer path found for: ${supportedType.viewer}`);
+          console.error(`No viewer loader found for: ${supportedType.viewer}`);
           this.viewerType = 'default';
           this.viewerLoaded = true;
         }
@@ -124,7 +124,7 @@ export class FileViewer extends LitElement {
       const fileType = mimeType(this.file);
       if (fileType?.startsWith('video/')) {
         this.viewerType = 'ffmpeg';
-        this.loadViewer(VIEWER_PATHS['ffmpeg-viewer']);
+        this.loadViewer(VIEWER_LOADERS['ffmpeg-viewer']);
       } else {
         this.viewerType = 'default';
         this.viewerLoaded = true;
@@ -132,9 +132,9 @@ export class FileViewer extends LitElement {
     }
   }
 
-  private async loadViewer(path: string) {
+  private async loadViewer(loader: () => Promise<unknown>) {
     try {
-      await import(path);
+      await loader();
       this.viewerLoaded = true;
     } catch (e) {
       console.error('Failed to load viewer:', e);

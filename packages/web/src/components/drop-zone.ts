@@ -8,6 +8,7 @@ export class DropZone extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
+      width: 100%;
     }
     .dropzone {
       display: flex;
@@ -15,8 +16,7 @@ export class DropZone extends LocalizedLitElement {
       align-items: center;
     }
     .dropzone-area {
-      width: 60rem;
-      max-width: 100%;
+      width: min(60rem, 100%);
       min-height: 150px;
       border: 2px dashed var(--border, #ccc);
       border-radius: 8px;

@@ -126,3 +126,4 @@ please-select-file = Por favor seleccione un archivo para ver
 open-source-credits = Créditos de Código Abierto
 credits-intro = Web Explorer está construido sobre los hombros de gigantes. Agradecemos a todos los proyectos de código abierto que hacen posible esta aplicación.
 credits-footer = Hecho con ❤️ usando software de código abierto
+contact = Contacto
