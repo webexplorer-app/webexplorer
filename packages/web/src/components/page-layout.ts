@@ -34,11 +34,11 @@ export class PageHeader extends LitElement {
     .page-header {
       background-color: var(--surface, #f5f5f5);
       border-bottom: 1px solid var(--border, #ddd);
-      padding: 0.5rem 0;
+      padding: var(--size-2, 0.5rem) 0;
     }
     .container {
       margin: 0 auto;
-      padding: 0 1rem;
+      padding: 0 var(--size-4, 1rem);
     }
   `;
 
@@ -60,11 +60,11 @@ export class PageContent extends LitElement {
       display: block;
     }
     .page-content {
-      padding: 1rem 0;
+      padding: var(--size-4, 1rem) 0;
     }
     .container {
       margin: 0 auto;
-      padding: 0 1rem;
+      padding: 0 var(--size-4, 1rem);
     }
   `;
 
@@ -89,7 +89,7 @@ export class PageTitle extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: var(--size-2, 0.5rem);
     }
     .title-icon {
       width: 1.5rem;
@@ -99,8 +99,8 @@ export class PageTitle extends LitElement {
     h4 {
       margin: 0;
       padding: 0;
-      font-size: 1.25rem;
-      font-weight: 600;
+      font-size: var(--font-size-3, 1.25rem);
+      font-weight: var(--font-weight-6, 600);
       text-align: center;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -137,12 +137,12 @@ export class PageToolbar extends LitElement {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 1rem;
+      gap: var(--size-4, 1rem);
     }
     .toolbar-left {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: var(--size-2, 0.5rem);
       justify-content: flex-start;
     }
     .toolbar-center {
@@ -154,7 +154,7 @@ export class PageToolbar extends LitElement {
     .toolbar-right {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: var(--size-2, 0.5rem);
       justify-content: flex-end;
     }
   `;

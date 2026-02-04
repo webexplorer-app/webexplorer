@@ -19,7 +19,7 @@ export class DropZone extends LocalizedLitElement {
       width: min(60rem, 100%);
       min-height: 150px;
       border: 2px dashed var(--border, #ccc);
-      border-radius: 8px;
+      border-radius: var(--radius-3, 8px);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -29,19 +29,19 @@ export class DropZone extends LocalizedLitElement {
       border-color: var(--accent, #0066cc);
       background-color: var(--accent-light, rgba(0, 102, 204, 0.05));
     }
-    .dropzone-area p {
+    .dropzone-content {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.75rem;
-      color: var(--secondary, #666);
+      gap: var(--size-3, 0.75rem);
+      color: var(--text-secondary, #666);
       font-size: 1rem;
       pointer-events: none;
     }
     .dropzone-icon {
       width: 48px;
       height: 48px;
-      color: var(--secondary, #999);
+      color: var(--text-muted, #999);
     }
   `;
 
@@ -97,7 +97,7 @@ export class DropZone extends LocalizedLitElement {
           @dragleave=${this.handleDragLeave}
           @drop=${this.handleDrop}
         >
-          <p>
+          <p class="dropzone-content">
             <svg class="dropzone-icon" viewBox="0 0 24 24" fill="currentColor">
               <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
             </svg>

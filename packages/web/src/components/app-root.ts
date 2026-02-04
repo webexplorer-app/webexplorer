@@ -87,11 +87,13 @@ export class AppRoot extends LitElement {
   private handleFileSelected(e: CustomEvent<File>) {
     this.selectedFile = e.detail;
     this.navigate('viewer');
+    window.scrollTo(0, 0);
   }
 
   private handleBackToHome() {
     this.selectedFile = null;
     this.navigate('home');
+    window.scrollTo(0, 0);
   }
 
   render() {

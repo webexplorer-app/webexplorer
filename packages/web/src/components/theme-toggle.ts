@@ -15,14 +15,15 @@ export class ThemeToggle extends LitElement {
       height: 2.5rem;
       padding: 0;
       border: 1px solid var(--border, #ccc);
-      border-radius: 4px;
-      background: var(--surface, white);
+      border-radius: var(--radius-2, 4px);
+      background: var(--surface, #f5f5f5);
       color: var(--primary, #333);
       cursor: pointer;
       font-size: 1.25rem;
+      transition: background-color 0.15s ease;
     }
     button:hover {
-      background-color: var(--border, #f0f0f0);
+      background-color: var(--surface-hover, #e8e8e8);
     }
   `;
 
@@ -57,7 +58,10 @@ export class ThemeToggle extends LitElement {
 
   render() {
     return html`
-      <button @click=${this.toggleTheme} title="${this.isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}">
+      <button 
+        @click=${this.toggleTheme} 
+        title="${this.isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}"
+      >
         ${this.isDarkMode ? '☀️' : '🌙'}
       </button>
     `;

@@ -12,110 +12,63 @@ import { LocalizedLitElement } from '../localized-element';
 @customElement('home-page')
 export class HomePage extends LocalizedLitElement {
   static styles = css`
+    :host {
+      display: block;
+    }
     .toolbar-actions {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: var(--size-2, 0.5rem);
     }
-
-    .credits-btn {
+    .icon-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
+      width: 2.25rem;
+      height: 2.25rem;
       border: none;
       background: transparent;
-      border-radius: 8px;
-      cursor: pointer;
-      color: var(--text-muted, #6b7280);
-      font-size: 1.25rem;
-      transition: all 0.15s ease;
-    }
-
-    .credits-btn:hover {
-      background: var(--hover, #f3f4f6);
-      color: var(--primary, #3b82f6);
-      transform: scale(1.05);
-    }
-
-    .credits-btn:active {
-      transform: scale(0.95);
-    }
-
-    .contact-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      border: none;
-      background: transparent;
-      border-radius: 8px;
+      border-radius: var(--radius-2, 8px);
       cursor: pointer;
       color: var(--text-muted, #6b7280);
       font-size: 1.25rem;
       text-decoration: none;
       transition: all 0.15s ease;
     }
-
-    .contact-btn:hover {
-      background: var(--hover, #f3f4f6);
-      color: var(--primary, #3b82f6);
+    .icon-btn:hover {
+      background: var(--surface-hover, #f3f4f6);
+      color: var(--accent, #3b82f6);
       transform: scale(1.05);
     }
-
-    .contact-btn:active {
+    .icon-btn:active {
       transform: scale(0.95);
     }
-
-    .toolbar-left {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
     .explorer {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: var(--size-8, 2rem);
     }
     .file-input-section {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.5rem;
+      gap: var(--size-6, 1.5rem);
     }
     .file-input-row {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: var(--size-4, 1rem);
       width: 100%;
       max-width: 600px;
       justify-content: center;
     }
-    .separator {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      width: 100%;
-      max-width: 600px;
-      color: var(--secondary, #999);
-      font-size: 0.875rem;
-    }
-    .separator::before,
-    .separator::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background-color: var(--border, #ddd);
-    }
     .supports {
-      margin-top: 1rem;
+      margin-top: var(--size-4, 1rem);
     }
     .supports h3 {
-      margin-bottom: 1rem;
+      margin-bottom: var(--size-4, 1rem);
       color: var(--primary, #333);
+      font-weight: var(--font-weight-6, 600);
     }
   `;
 
@@ -146,16 +99,16 @@ export class HomePage extends LocalizedLitElement {
       <page-layout className="page--home">
         <page-header>
           <page-toolbar>
-            <span slot="left" class="toolbar-left">
+            <span slot="left" class="toolbar-actions">
               <button 
-                class="credits-btn" 
+                class="icon-btn" 
                 @click=${() => this.showCredits = true}
                 title=${t('open-source-credits', 'Open Source Credits')}
               >
                 ❤️
               </button>
               <a 
-                class="contact-btn" 
+                class="icon-btn"
                 href="mailto:jichang_dev@outlook.com"
                 title=${t('contact', 'Contact')}
               >
@@ -171,17 +124,17 @@ export class HomePage extends LocalizedLitElement {
         </page-header>
         <page-content>
           <div class="explorer">
-              <div class="file-input-section">
-                <drop-zone @drop-file=${this.handleDropFile}></drop-zone>
-                <div class="file-input-row">
-                  <file-picker @files-selected=${this.handleFilesSelected}></file-picker>
-                </div>
-              </div>
-              <div class="supports">
-                <h3>${t('supported-files', 'Supported Files')}</h3>
-                <supported-files-list></supported-files-list>
+            <div class="file-input-section">
+              <drop-zone @drop-file=${this.handleDropFile}></drop-zone>
+              <div class="file-input-row">
+                <file-picker @files-selected=${this.handleFilesSelected}></file-picker>
               </div>
             </div>
+            <div class="supports">
+              <h3>${t('supported-files', 'Supported Files')}</h3>
+              <supported-files-list></supported-files-list>
+            </div>
+          </div>
         </page-content>
       </page-layout>
       <credits-dialog 

@@ -34,6 +34,13 @@ const OPEN_SOURCE_PROJECTS: OpenSourceProject[] = [
     icon: '📘',
     category: 'framework',
   },
+  {
+    name: 'Open Props',
+    description: 'Supercharged CSS variables',
+    url: 'https://open-props.style',
+    icon: '🎨',
+    category: 'framework',
+  },
 
   // Editor
   {
@@ -156,7 +163,7 @@ export class CreditsDialog extends LocalizedLitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1rem;
+      padding: var(--size-4, 1rem);
       animation: fadeIn 0.2s ease;
     }
 
@@ -167,8 +174,8 @@ export class CreditsDialog extends LocalizedLitElement {
 
     .dialog {
       background: var(--surface, #fff);
-      border-radius: 12px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border-radius: var(--radius-3, 12px);
+      box-shadow: var(--shadow-lg, 0 25px 50px -12px rgba(0, 0, 0, 0.25));
       max-width: 600px;
       width: 100%;
       max-height: 80vh;
@@ -192,22 +199,18 @@ export class CreditsDialog extends LocalizedLitElement {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.25rem 1.5rem;
+      padding: var(--size-4, 1rem) var(--size-6, 1.5rem);
       border-bottom: 1px solid var(--border, #e5e7eb);
     }
 
     .dialog-title {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: var(--size-3, 0.75rem);
       margin: 0;
-      font-size: 1.25rem;
-      font-weight: 600;
+      font-size: var(--font-size-3, 1.25rem);
+      font-weight: var(--font-weight-6, 600);
       color: var(--text, #1f2937);
-    }
-
-    .dialog-title-icon {
-      font-size: 1.5rem;
     }
 
     .close-btn {
@@ -218,7 +221,7 @@ export class CreditsDialog extends LocalizedLitElement {
       height: 32px;
       border: none;
       background: transparent;
-      border-radius: 6px;
+      border-radius: var(--radius-2, 6px);
       cursor: pointer;
       color: var(--text-muted, #6b7280);
       font-size: 1.25rem;
@@ -226,28 +229,28 @@ export class CreditsDialog extends LocalizedLitElement {
     }
 
     .close-btn:hover {
-      background: var(--hover, #f3f4f6);
+      background: var(--surface-hover, #f3f4f6);
       color: var(--text, #1f2937);
     }
 
     .dialog-body {
       flex: 1;
       overflow-y: auto;
-      padding: 1.5rem;
+      padding: var(--size-6, 1.5rem);
     }
 
     .intro {
-      margin-bottom: 1.5rem;
-      padding: 1rem;
-      background: var(--surface-alt, #f9fafb);
-      border-radius: 8px;
+      margin-bottom: var(--size-6, 1.5rem);
+      padding: var(--size-4, 1rem);
+      background: var(--surface, #f9fafb);
+      border-radius: var(--radius-2, 8px);
       color: var(--text-muted, #6b7280);
-      font-size: 0.875rem;
+      font-size: var(--font-size-0, 0.875rem);
       line-height: 1.6;
     }
 
     .category {
-      margin-bottom: 1.5rem;
+      margin-bottom: var(--size-6, 1.5rem);
     }
 
     .category:last-child {
@@ -255,40 +258,30 @@ export class CreditsDialog extends LocalizedLitElement {
     }
 
     .category-title {
-      font-size: 0.75rem;
-      font-weight: 600;
+      font-size: var(--font-size-00, 0.75rem);
+      font-weight: var(--font-weight-6, 600);
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--text-muted, #6b7280);
-      margin-bottom: 0.75rem;
-      padding-bottom: 0.5rem;
+      margin-bottom: var(--size-3, 0.75rem);
+      padding-bottom: var(--size-2, 0.5rem);
       border-bottom: 1px solid var(--border, #e5e7eb);
     }
 
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 0.75rem;
+      gap: var(--size-3, 0.75rem);
     }
 
     .project-card {
       display: flex;
       align-items: flex-start;
-      gap: 0.75rem;
-      padding: 0.875rem;
-      background: var(--surface, #fff);
+      gap: var(--size-3, 0.75rem);
+      padding: var(--size-3, 0.875rem);
+      background: var(--background, #fff);
       border: 1px solid var(--border, #e5e7eb);
-      border-radius: 8px;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.15s ease;
-    }
-
-    .project-card:hover {
-      border-color: var(--primary, #3b82f6);
-      background: var(--surface-alt, #f9fafb);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border-radius: var(--radius-2, 8px);
     }
 
     .project-icon {
@@ -303,48 +296,35 @@ export class CreditsDialog extends LocalizedLitElement {
     }
 
     .project-name {
-      font-weight: 600;
-      font-size: 0.875rem;
-      color: var(--text, #1f2937);
-      margin-bottom: 0.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.375rem;
+      font-weight: var(--font-weight-6, 600);
+      font-size: var(--font-size-0, 0.875rem);
+      color: var(--text-link, #0066cc);
+      margin-bottom: var(--size-1, 0.25rem);
+      text-decoration: none;
+    }
+
+    .project-name:hover {
+      color: var(--text-link-hover, #004499);
+      text-decoration: underline;
     }
 
     .project-name::after {
-      content: '↗';
+      content: ' ↗';
       font-size: 0.75rem;
-      color: var(--text-muted, #6b7280);
-      opacity: 0;
-      transition: opacity 0.15s ease;
-    }
-
-    .project-card:hover .project-name::after {
-      opacity: 1;
     }
 
     .project-description {
-      font-size: 0.75rem;
+      font-size: var(--font-size-00, 0.75rem);
       color: var(--text-muted, #6b7280);
       line-height: 1.4;
     }
 
     .dialog-footer {
-      padding: 1rem 1.5rem;
+      padding: var(--size-4, 1rem) var(--size-6, 1.5rem);
       border-top: 1px solid var(--border, #e5e7eb);
       text-align: center;
       color: var(--text-muted, #6b7280);
-      font-size: 0.75rem;
-    }
-
-    .dialog-footer a {
-      color: var(--primary, #3b82f6);
-      text-decoration: none;
-    }
-
-    .dialog-footer a:hover {
-      text-decoration: underline;
+      font-size: var(--font-size-00, 0.75rem);
     }
   `;
 
@@ -384,18 +364,18 @@ export class CreditsDialog extends LocalizedLitElement {
         <div class="category-title">${CATEGORY_LABELS[category] || category}</div>
         <div class="projects-grid">
           ${projects.map(project => html`
-            <a 
-              class="project-card" 
-              href=${project.url} 
-              target="_blank" 
-              rel="noopener noreferrer"
-            >
+            <div class="project-card">
               <span class="project-icon">${project.icon}</span>
               <div class="project-info">
-                <div class="project-name">${project.name}</div>
+                <a 
+                  class="project-name"
+                  href=${project.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >${project.name}</a>
                 <div class="project-description">${project.description}</div>
               </div>
-            </a>
+            </div>
           `)}
         </div>
       </div>
@@ -417,7 +397,7 @@ export class CreditsDialog extends LocalizedLitElement {
         <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
           <div class="dialog-header">
             <h2 class="dialog-title" id="dialog-title">
-              <span class="dialog-title-icon">❤️</span>
+              <span>❤️</span>
               ${t('open-source-credits', 'Open Source Credits')}
             </h2>
             <button class="close-btn" @click=${this.close} aria-label="Close">×</button>

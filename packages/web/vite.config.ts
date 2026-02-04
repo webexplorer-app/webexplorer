@@ -26,7 +26,7 @@ const nodePolyfillsPluginOptions = nodePolyfills({
 export default defineConfig({
   plugins: [
     nodePolyfillsPluginOptions,
-    alphaTab()
+    alphaTab(),
   ],
   assetsInclude: ['**/*.wasm'],
   optimizeDeps: {
