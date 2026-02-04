@@ -18,6 +18,7 @@ const VIEWER_PATHS: Record<string, string> = {
   'excel-viewer': './viewers/excel-viewer',
   'powerpoint-viewer': './viewers/powerpoint-viewer',
   'rtf-viewer': './viewers/rtf-viewer',
+  'opendocument-viewer': './viewers/opendocument-viewer',
   'epub-viewer': './viewers/epub-viewer',
   'mobi-viewer': './viewers/mobi-viewer',
   'archive-viewer': './viewers/archive-viewer',
@@ -25,10 +26,22 @@ const VIEWER_PATHS: Record<string, string> = {
   'tab-viewer': './viewers/tab-viewer',
   'torrent-viewer': './viewers/torrent-viewer',
   'csv-viewer': './viewers/csv-viewer',
+  'sqlite-viewer': './viewers/sqlite-viewer',
   'email-viewer': './viewers/email-viewer',
   'wasm-viewer': './viewers/wasm-viewer',
   'ffmpeg-viewer': './viewers/ffmpeg-viewer',
   'code-viewer': './viewers/code-viewer',
+  'markdown-viewer': './viewers/markdown-viewer',
+  'font-viewer': './viewers/font-viewer',
+  'subtitle-viewer': './viewers/subtitle-viewer',
+  'ical-viewer': './viewers/ical-viewer',
+  'comic-viewer': './viewers/comic-viewer',
+  'tree-viewer': './viewers/tree-viewer',
+  'log-viewer': './viewers/log-viewer',
+  'config-viewer': './viewers/config-viewer',
+  'hex-viewer': './viewers/hex-viewer',
+  'diff-viewer': './viewers/diff-viewer',
+  'certificate-viewer': './viewers/certificate-viewer',
 };
 
 @customElement('file-viewer')
@@ -165,6 +178,8 @@ export class FileViewer extends LitElement {
         return html`<powerpoint-viewer .file=${file}></powerpoint-viewer>`;
       case 'rtf':
         return html`<rtf-viewer .file=${file}></rtf-viewer>`;
+      case 'opendocument':
+        return html`<opendocument-viewer .file=${file}></opendocument-viewer>`;
       case 'epub':
         return html`<epub-viewer .file=${file}></epub-viewer>`;
       case 'mobi':
@@ -185,6 +200,8 @@ export class FileViewer extends LitElement {
         return html`<image-viewer .file=${file}></image-viewer>`;
       case 'csv':
         return html`<csv-viewer .file=${file}></csv-viewer>`;
+      case 'sqlite':
+        return html`<sqlite-viewer .file=${file}></sqlite-viewer>`;
       case 'email':
         return html`<email-viewer .file=${file}></email-viewer>`;
       case 'wasm':
@@ -193,6 +210,28 @@ export class FileViewer extends LitElement {
         return html`<ffmpeg-viewer .file=${file}></ffmpeg-viewer>`;
       case 'code':
         return html`<code-viewer .file=${file}></code-viewer>`;
+      case 'markdown':
+        return html`<markdown-viewer .file=${file}></markdown-viewer>`;
+      case 'font':
+        return html`<font-viewer .file=${file}></font-viewer>`;
+      case 'subtitle':
+        return html`<subtitle-viewer .file=${file}></subtitle-viewer>`;
+      case 'ical':
+        return html`<ical-viewer .file=${file}></ical-viewer>`;
+      case 'comic':
+        return html`<comic-viewer .file=${file}></comic-viewer>`;
+      case 'tree':
+        return html`<tree-viewer .file=${file}></tree-viewer>`;
+      case 'log':
+        return html`<log-viewer .file=${file}></log-viewer>`;
+      case 'config':
+        return html`<config-viewer .file=${file}></config-viewer>`;
+      case 'hex':
+        return html`<hex-viewer .file=${file}></hex-viewer>`;
+      case 'diff':
+        return html`<diff-viewer .file=${file}></diff-viewer>`;
+      case 'certificate':
+        return html`<certificate-viewer .file=${file}></certificate-viewer>`;
       default:
         return html`<default-viewer .file=${file}></default-viewer>`;
     }

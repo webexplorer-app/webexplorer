@@ -1,11 +1,12 @@
 import { html, css } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import { t } from '../../common/Localization';
 import '../page-layout';
 import '../locale-selector';
 import '../theme-toggle';
 import '../file-picker';
 import '../supported-files-list';
+import '../credits-dialog';
 import { LocalizedLitElement } from '../localized-element';
 
 @customElement('home-page')
@@ -15,6 +16,31 @@ export class HomePage extends LocalizedLitElement {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+    }
+
+    .credits-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-muted, #6b7280);
+      font-size: 1.25rem;
+      transition: all 0.15s ease;
+    }
+
+    .credits-btn:hover {
+      background: var(--hover, #f3f4f6);
+      color: var(--primary, #3b82f6);
+      transform: scale(1.05);
+    }
+
+    .credits-btn:active {
+      transform: scale(0.95);
     }
     .explorer {
       display: flex;
@@ -60,6 +86,9 @@ export class HomePage extends LocalizedLitElement {
     }
   `;
 
+  @state()
+  private showCredits = false;
+
   private handleDropFile(e: CustomEvent<File>) {
     this.dispatchEvent(new CustomEvent('file-selected', {
       detail: e.detail,
@@ -84,7 +113,15 @@ export class HomePage extends LocalizedLitElement {
       <page-layout className="page--home">
         <page-header>
           <page-toolbar>
-            <span slot="left"></span>
+            <span slot="left">
+              <button 
+                class="credits-btn" 
+                @click=${() => this.showCredits = true}
+                title=${t('open-source-credits', 'Open Source Credits')}
+              >
+                ❤️
+              </button>
+            </span>
             <page-title slot="center" title="Web Explorer" showIcon></page-title>
             <span slot="right" class="toolbar-actions">
               <theme-toggle></theme-toggle>
@@ -107,6 +144,10 @@ export class HomePage extends LocalizedLitElement {
             </div>
         </page-content>
       </page-layout>
+      <credits-dialog 
+        ?open=${this.showCredits} 
+        @close=${() => this.showCredits = false}
+      ></credits-dialog>
     `;
   }
 }

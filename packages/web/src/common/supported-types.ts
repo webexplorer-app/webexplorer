@@ -97,6 +97,21 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
     lazyLoad: true,
     category: 'document',
   },
+  {
+    id: 'opendocument',
+    nameKey: 'opendocument-file',
+    defaultName: 'OpenDocument File',
+    extensions: ['odt', 'ods', 'odp', 'odg'],
+    mimeTypes: [
+      'application/vnd.oasis.opendocument.text',
+      'application/vnd.oasis.opendocument.spreadsheet',
+      'application/vnd.oasis.opendocument.presentation',
+      'application/vnd.oasis.opendocument.graphics',
+    ],
+    viewer: 'opendocument-viewer',
+    lazyLoad: true,
+    category: 'document',
+  },
   
   // Ebooks
   {
@@ -174,6 +189,26 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
     category: 'media',
   },
   
+  // Fonts
+  {
+    id: 'font',
+    nameKey: 'font-file',
+    defaultName: 'Font File',
+    extensions: ['ttf', 'otf', 'woff', 'woff2', 'eot'],
+    mimeTypes: [
+      'font/ttf',
+      'font/otf',
+      'font/woff',
+      'font/woff2',
+      'application/vnd.ms-fontobject',
+      'application/x-font-ttf',
+      'application/x-font-otf',
+    ],
+    viewer: 'font-viewer',
+    lazyLoad: true,
+    category: 'other',
+  },
+  
   // Media - Audio
   {
     id: 'audio',
@@ -241,6 +276,19 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
     category: 'data',
   },
   {
+    id: 'sqlite',
+    nameKey: 'sqlite-file',
+    defaultName: 'SQLite Database',
+    extensions: ['sqlite', 'sqlite3', 'db', 'db3'],
+    mimeTypes: [
+      'application/x-sqlite3',
+      'application/vnd.sqlite3',
+    ],
+    viewer: 'sqlite-viewer',
+    lazyLoad: true,
+    category: 'data',
+  },
+  {
     id: 'torrent',
     nameKey: 'torrent-file',
     defaultName: 'Torrent File',
@@ -287,19 +335,177 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
     category: 'other',
   },
   
+  // Calendar/Contacts
+  {
+    id: 'ical',
+    nameKey: 'ical-file',
+    defaultName: 'Calendar/Contact File',
+    extensions: ['ics', 'vcf', 'vcard'],
+    mimeTypes: [
+      'text/calendar',
+      'text/x-vcalendar',
+      'text/vcard',
+      'text/x-vcard',
+    ],
+    viewer: 'ical-viewer',
+    lazyLoad: true,
+    category: 'data',
+  },
+  
+  // Comic Books
+  {
+    id: 'comic',
+    nameKey: 'comic-file',
+    defaultName: 'Comic Book Archive',
+    extensions: ['cbz', 'cbr'],
+    mimeTypes: [
+      'application/vnd.comicbook+zip',
+      'application/vnd.comicbook-rar',
+      'application/x-cbz',
+      'application/x-cbr',
+    ],
+    viewer: 'comic-viewer',
+    lazyLoad: true,
+    category: 'ebook',
+  },
+  
+  // Log Files
+  {
+    id: 'log',
+    nameKey: 'log-file',
+    defaultName: 'Log File',
+    extensions: ['log', 'logs'],
+    mimeTypes: [
+      'text/x-log',
+      'application/x-log',
+    ],
+    viewer: 'log-viewer',
+    lazyLoad: true,
+    category: 'data',
+  },
+  
+  // Configuration Files
+  {
+    id: 'config',
+    nameKey: 'config-file',
+    defaultName: 'Configuration File',
+    extensions: ['ini', 'cfg', 'conf', 'properties', 'env', 'toml'],
+    mimeTypes: [
+      'text/x-ini',
+      'application/x-wine-extension-ini',
+      'text/x-properties',
+      'application/toml',
+    ],
+    viewer: 'config-viewer',
+    lazyLoad: true,
+    category: 'data',
+  },
+  
+  // Binary/Hex Viewer
+  {
+    id: 'hex',
+    nameKey: 'hex-file',
+    defaultName: 'Binary File',
+    extensions: ['bin', 'dat', 'rom', 'img', 'iso', 'exe', 'dll', 'so', 'dylib'],
+    mimeTypes: [
+      'application/octet-stream',
+      'application/x-executable',
+      'application/x-sharedlib',
+      'application/x-iso9660-image',
+    ],
+    viewer: 'hex-viewer',
+    lazyLoad: true,
+    category: 'other',
+  },
+  
+  // Diff/Patch Files
+  {
+    id: 'diff',
+    nameKey: 'diff-file',
+    defaultName: 'Diff/Patch File',
+    extensions: ['diff', 'patch'],
+    mimeTypes: [
+      'text/x-diff',
+      'text/x-patch',
+    ],
+    viewer: 'diff-viewer',
+    lazyLoad: true,
+    category: 'code',
+  },
+  
+  // Certificate Files
+  {
+    id: 'certificate',
+    nameKey: 'certificate-file',
+    defaultName: 'Certificate File',
+    extensions: ['pem', 'crt', 'cer', 'key', 'pub', 'csr'],
+    mimeTypes: [
+      'application/x-pem-file',
+      'application/x-x509-ca-cert',
+      'application/pkix-cert',
+      'application/x-pkcs12',
+    ],
+    viewer: 'certificate-viewer',
+    lazyLoad: true,
+    category: 'other',
+  },
+  
+  // Structured Data (JSON/XML tree view)
+  {
+    id: 'tree',
+    nameKey: 'tree-file',
+    defaultName: 'Structured Data File',
+    extensions: ['json', 'jsonc', 'json5', 'xml', 'plist', 'svg'],
+    mimeTypes: [
+      'application/json',
+      'text/xml',
+      'application/xml',
+      'image/svg+xml',
+      'application/plist+xml',
+    ],
+    viewer: 'tree-viewer',
+    lazyLoad: true,
+    category: 'data',
+  },
+  
   // Code/Source Files
+  {
+    id: 'markdown',
+    nameKey: 'markdown-file',
+    defaultName: 'Markdown Document',
+    extensions: ['md', 'markdown', 'mdx'],
+    mimeTypes: ['text/markdown', 'text/x-markdown'],
+    viewer: 'markdown-viewer',
+    lazyLoad: true,
+    category: 'document',
+  },
+  {
+    id: 'subtitle',
+    nameKey: 'subtitle-file',
+    defaultName: 'Subtitle File',
+    extensions: ['srt', 'vtt', 'ass', 'ssa'],
+    mimeTypes: [
+      'application/x-subrip',
+      'text/vtt',
+      'text/x-ssa',
+      'text/x-ass',
+    ],
+    viewer: 'subtitle-viewer',
+    lazyLoad: true,
+    category: 'media',
+  },
   {
     id: 'code',
     nameKey: 'code-file',
     defaultName: 'Source Code',
     extensions: [
+      // JavaScript/TypeScript
       'js', 'mjs', 'cjs', 'jsx',
       'ts', 'tsx', 'mts', 'cts',
-      'json', 'jsonc',
+      // Web
       'html', 'htm',
       'css', 'scss', 'sass', 'less',
-      'md', 'markdown', 'mdx',
-      'xml', 'yaml', 'yml', 'toml', 'ini', 'conf', 'cfg',
+      // Programming languages
       'py', 'pyw',
       'java',
       'c', 'h', 'cpp', 'cc', 'cxx', 'hpp', 'hxx',
@@ -314,26 +520,22 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
       'r',
       'lua',
       'pl', 'pm',
+      // Shell/Scripts
       'sh', 'bash', 'zsh', 'fish',
       'ps1', 'psm1',
       'bat', 'cmd',
+      // Query languages
       'sql',
       'graphql', 'gql',
-      'txt', 'text', 'log',
+      // Plain text (but not log, ini, json, xml which have specialized viewers)
+      'txt', 'text',
     ],
     mimeTypes: [
       'text/javascript',
       'application/javascript',
       'text/typescript',
-      'application/json',
       'text/html',
       'text/css',
-      'text/markdown',
-      'text/x-markdown',
-      'text/xml',
-      'application/xml',
-      'text/yaml',
-      'text/x-yaml',
       'text/x-python',
       'text/x-java-source',
       'text/x-c',
