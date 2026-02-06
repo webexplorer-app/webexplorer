@@ -2,23 +2,17 @@ import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { t } from '../../common/Localization';
 import '../page-layout';
-import '../locale-selector';
-import '../theme-toggle';
 import { LocalizedLitElement } from '../localized-element';
 
 @customElement('viewer-page')
 export class ViewerPage extends LocalizedLitElement {
   static styles = css`
-    .toolbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
     .back-button {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.5rem 1rem;
+      height: 2.25rem;
+      padding: 0 1rem;
       border: 1px solid var(--border, #ccc);
       border-radius: 4px;
       background: var(--surface, white);
@@ -45,9 +39,12 @@ export class ViewerPage extends LocalizedLitElement {
       border-radius: var(--radius-2, 8px);
       cursor: pointer;
       color: var(--text-muted, #6b7280);
-      font-size: 1.25rem;
       text-decoration: none;
       transition: all 0.15s ease;
+    }
+    .feedback-btn svg {
+      width: 1.25rem;
+      height: 1.25rem;
     }
     .feedback-btn:hover {
       background: var(--surface-hover, #f3f4f6);
@@ -97,17 +94,14 @@ export class ViewerPage extends LocalizedLitElement {
               ${t('back-to-home', 'Back to Home')}
             </button>
             <page-title slot="center" .title=${this.file.name}></page-title>
-            <span slot="right" class="toolbar-actions">
-              <a 
-                class="feedback-btn"
-                href="mailto:jichang_dev@outlook.com?subject=Web Explorer Feedback"
-                title=${t('feedback', 'Feedback')}
-              >
-                💬
-              </a>
-              <theme-toggle></theme-toggle>
-              <locale-selector></locale-selector>
-            </span>
+            <a 
+              slot="right"
+              class="feedback-btn"
+              href="mailto:jichang_dev@outlook.com?subject=Web Explorer Feedback"
+              title=${t('feedback', 'Feedback')}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </a>
           </page-toolbar>
         </page-header>
         <page-content>

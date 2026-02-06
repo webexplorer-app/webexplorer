@@ -31,9 +31,12 @@ export class HomePage extends LocalizedLitElement {
       border-radius: var(--radius-2, 8px);
       cursor: pointer;
       color: var(--text-muted, #6b7280);
-      font-size: 1.25rem;
       text-decoration: none;
       transition: all 0.15s ease;
+    }
+    .icon-btn svg {
+      width: 1.25rem;
+      height: 1.25rem;
     }
     .icon-btn:hover {
       background: var(--surface-hover, #f3f4f6);
@@ -100,25 +103,25 @@ export class HomePage extends LocalizedLitElement {
         <page-header>
           <page-toolbar>
             <span slot="left" class="toolbar-actions">
-              <button 
-                class="icon-btn" 
-                @click=${() => this.showCredits = true}
-                title=${t('open-source-credits', 'Open Source Credits')}
-              >
-                ❤️
-              </button>
+              <locale-selector></locale-selector>
+            </span>
+            <page-title slot="center" title="Web Explorer" showIcon></page-title>
+            <span slot="right" class="toolbar-actions">
               <a 
                 class="icon-btn"
                 href="mailto:jichang_dev@outlook.com"
                 title=${t('contact', 'Contact')}
               >
-                ✉️
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
               </a>
-            </span>
-            <page-title slot="center" title="Web Explorer" showIcon></page-title>
-            <span slot="right" class="toolbar-actions">
+              <button 
+                class="icon-btn" 
+                @click=${() => this.showCredits = true}
+                title=${t('open-source-credits', 'Open Source Credits')}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
               <theme-toggle></theme-toggle>
-              <locale-selector></locale-selector>
             </span>
           </page-toolbar>
         </page-header>

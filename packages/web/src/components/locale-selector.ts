@@ -10,7 +10,8 @@ export class LocaleSelector extends LocalizedLitElement {
       display: inline-block;
     }
     select {
-      padding: 0.5rem;
+      height: 2.25rem;
+      padding: 0 0.5rem;
       border: 1px solid var(--border, #ccc);
       border-radius: 4px;
       font-size: 0.875rem;

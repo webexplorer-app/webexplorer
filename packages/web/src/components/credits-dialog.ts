@@ -7,7 +7,6 @@ interface OpenSourceProject {
   name: string;
   description: string;
   url: string;
-  icon: string;
   category: 'framework' | 'media' | 'document' | 'utility' | 'editor';
 }
 
@@ -17,28 +16,24 @@ const OPEN_SOURCE_PROJECTS: OpenSourceProject[] = [
     name: 'Lit',
     description: 'Simple, fast web components',
     url: 'https://lit.dev',
-    icon: '🔥',
     category: 'framework',
   },
   {
     name: 'Vite',
     description: 'Next generation frontend tooling',
     url: 'https://vitejs.dev',
-    icon: '⚡',
     category: 'framework',
   },
   {
     name: 'TypeScript',
     description: 'JavaScript with syntax for types',
     url: 'https://www.typescriptlang.org',
-    icon: '📘',
     category: 'framework',
   },
   {
     name: 'Open Props',
     description: 'Supercharged CSS variables',
     url: 'https://open-props.style',
-    icon: '🎨',
     category: 'framework',
   },
 
@@ -47,7 +42,6 @@ const OPEN_SOURCE_PROJECTS: OpenSourceProject[] = [
     name: 'CodeMirror',
     description: 'Extensible code editor component',
     url: 'https://codemirror.net',
-    icon: '📝',
     category: 'editor',
   },
 
@@ -56,21 +50,18 @@ const OPEN_SOURCE_PROJECTS: OpenSourceProject[] = [
     name: 'Three.js',
     description: '3D library for WebGL',
     url: 'https://threejs.org',
-    icon: '🎮',
     category: 'media',
   },
   {
     name: 'FFmpeg.wasm',
     description: 'FFmpeg compiled to WebAssembly',
     url: 'https://ffmpegwasm.netlify.app',
-    icon: '🎬',
     category: 'media',
   },
   {
     name: 'alphaTab',
     description: 'Music notation rendering',
     url: 'https://www.alphatab.net',
-    icon: '🎵',
     category: 'media',
   },
 
@@ -79,14 +70,12 @@ const OPEN_SOURCE_PROJECTS: OpenSourceProject[] = [
     name: 'UnionPDF',
     description: 'PDF rendering engine',
     url: 'https://github.com/nickyvanurk/unionpdf',
-    icon: '📄',
     category: 'document',
   },
   {
     name: 'libarchive.js',
     description: 'Archive extraction in browser',
     url: 'https://github.com/nickyvanurk/libarchive.js',
-    icon: '📦',
     category: 'document',
   },
 
@@ -95,42 +84,36 @@ const OPEN_SOURCE_PROJECTS: OpenSourceProject[] = [
     name: 'Comlink',
     description: 'Web Workers made easy',
     url: 'https://github.com/GoogleChromeLabs/comlink',
-    icon: '🔗',
     category: 'utility',
   },
   {
     name: 'WebTorrent',
     description: 'Streaming torrent client for web',
     url: 'https://webtorrent.io',
-    icon: '🌊',
     category: 'utility',
   },
   {
     name: 'Fluent',
     description: 'Localization system by Mozilla',
     url: 'https://projectfluent.org',
-    icon: '🌐',
     category: 'utility',
   },
   {
     name: 'wabt',
     description: 'WebAssembly binary toolkit',
     url: 'https://github.com/WebAssembly/wabt',
-    icon: '🔧',
     category: 'utility',
   },
   {
     name: 'csv-parse',
     description: 'CSV parsing library',
     url: 'https://csv.js.org',
-    icon: '📊',
     category: 'utility',
   },
   {
     name: 'mime',
     description: 'MIME type detection',
     url: 'https://github.com/broofa/mime',
-    icon: '🏷️',
     category: 'utility',
   },
 ];
@@ -213,6 +196,12 @@ export class CreditsDialog extends LocalizedLitElement {
       color: var(--text, #1f2937);
     }
 
+    .title-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      flex-shrink: 0;
+    }
+
     .close-btn {
       display: flex;
       align-items: center;
@@ -275,24 +264,10 @@ export class CreditsDialog extends LocalizedLitElement {
     }
 
     .project-card {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--size-3, 0.75rem);
       padding: var(--size-3, 0.875rem);
       background: var(--background, #fff);
       border: 1px solid var(--border, #e5e7eb);
       border-radius: var(--radius-2, 8px);
-    }
-
-    .project-icon {
-      font-size: 1.5rem;
-      line-height: 1;
-      flex-shrink: 0;
-    }
-
-    .project-info {
-      flex: 1;
-      min-width: 0;
     }
 
     .project-name {
@@ -365,16 +340,13 @@ export class CreditsDialog extends LocalizedLitElement {
         <div class="projects-grid">
           ${projects.map(project => html`
             <div class="project-card">
-              <span class="project-icon">${project.icon}</span>
-              <div class="project-info">
-                <a 
-                  class="project-name"
-                  href=${project.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >${project.name}</a>
-                <div class="project-description">${project.description}</div>
-              </div>
+              <a 
+                class="project-name"
+                href=${project.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >${project.name}</a>
+              <div class="project-description">${project.description}</div>
             </div>
           `)}
         </div>
@@ -397,7 +369,7 @@ export class CreditsDialog extends LocalizedLitElement {
         <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
           <div class="dialog-header">
             <h2 class="dialog-title" id="dialog-title">
-              <span>❤️</span>
+              <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
               ${t('open-source-credits', 'Open Source Credits')}
             </h2>
             <button class="close-btn" @click=${this.close} aria-label="Close">×</button>
@@ -409,7 +381,7 @@ export class CreditsDialog extends LocalizedLitElement {
             ${groupedProjects.map(g => this.renderCategory(g.category, g.projects))}
           </div>
           <div class="dialog-footer">
-            ${t('credits-footer', 'Made with ❤️ using open source software')}
+            ${t('credits-footer', 'Made with love using open source software')}
           </div>
         </div>
       </div>
