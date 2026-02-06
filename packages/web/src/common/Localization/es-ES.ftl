@@ -127,6 +127,7 @@ open-source-credits = Créditos de Código Abierto
 credits-intro = Web Explorer está construido sobre los hombros de gigantes. Agradecemos a todos los proyectos de código abierto que hacen posible esta aplicación.
 credits-footer = Hecho con ❤️ usando software de código abierto
 contact = Contacto
+feedback = Comentarios
 unsupported-file = Tipo de Archivo No Soportado
 unsupported-file-message = Este tipo de archivo no está soportado actualmente. Si desea que agreguemos soporte para este formato, ¡háganoslo saber!
 request-support = Solicitar Soporte

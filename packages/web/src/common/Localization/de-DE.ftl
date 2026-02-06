@@ -127,6 +127,7 @@ open-source-credits = Open-Source-Credits
 credits-intro = Web Explorer steht auf den Schultern von Riesen. Wir danken allen Open-Source-Projekten, die diese Anwendung möglich machen.
 credits-footer = Mit ❤️ unter Verwendung von Open-Source-Software erstellt
 contact = Kontakt
+feedback = Feedback
 unsupported-file = Nicht Unterstützter Dateityp
 unsupported-file-message = Dieser Dateityp wird derzeit nicht unterstützt. Wenn Sie möchten, dass wir Unterstützung für dieses Format hinzufügen, lassen Sie es uns wissen!
 request-support = Support Anfragen

@@ -34,6 +34,29 @@ export class ViewerPage extends LocalizedLitElement {
       height: 1rem;
       stroke: var(--primary, currentColor);
     }
+    .feedback-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-2, 8px);
+      cursor: pointer;
+      color: var(--text-muted, #6b7280);
+      font-size: 1.25rem;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .feedback-btn:hover {
+      background: var(--surface-hover, #f3f4f6);
+      color: var(--accent, #3b82f6);
+      transform: scale(1.05);
+    }
+    .feedback-btn:active {
+      transform: scale(0.95);
+    }
   `;
 
   @property({ attribute: false })
@@ -75,6 +98,13 @@ export class ViewerPage extends LocalizedLitElement {
             </button>
             <page-title slot="center" .title=${this.file.name}></page-title>
             <span slot="right" class="toolbar-actions">
+              <a 
+                class="feedback-btn"
+                href="mailto:jichang_dev@outlook.com?subject=Web Explorer Feedback"
+                title=${t('feedback', 'Feedback')}
+              >
+                💬
+              </a>
               <theme-toggle></theme-toggle>
               <locale-selector></locale-selector>
             </span>
