@@ -24,7 +24,7 @@ export class ThreeViewer extends LitElement {
     }
     .three-viewer {
       width: 100%;
-      height: calc(100vh - 150px);
+      min-height: 70vh;
     }
     .canvas-container {
       width: 100%;

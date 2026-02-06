@@ -12,7 +12,6 @@ export class VideoViewer extends LitElement {
     }
     video {
       width: 100%;
-      max-height: calc(100vh - 150px);
     }
   `;
 

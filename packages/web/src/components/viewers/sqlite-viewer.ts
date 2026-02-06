@@ -31,8 +31,6 @@ export class SqliteViewer extends LocalizedLitElement {
       border: 1px solid var(--border, #ddd);
       border-radius: 4px;
       background: var(--surface-alt, #f5f5f5);
-      max-height: calc(100vh - 8rem);
-      overflow-y: auto;
     }
     .table-list-header {
       padding: 0.75rem 1rem;
@@ -87,8 +85,7 @@ export class SqliteViewer extends LocalizedLitElement {
       color: var(--text-secondary, #666);
     }
     .table-container {
-      overflow: auto;
-      max-height: calc(100vh - 14rem);
+      overflow-x: auto;
     }
     table {
       width: 100%;

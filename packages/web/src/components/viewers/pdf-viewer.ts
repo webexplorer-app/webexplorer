@@ -9,7 +9,7 @@ export class PdfViewer extends LitElement {
     }
     .pdf-viewer {
       width: 100%;
-      height: calc(100vh - 150px);
+      min-height: 80vh;
       position: relative;
     }
     .pdf-iframe {

@@ -102,7 +102,6 @@ export class CodeViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
-      height: 100%;
       background: var(--code-bg, #282c34);
       color: var(--code-text, #abb2bf);
     }
@@ -110,7 +109,6 @@ export class CodeViewer extends LocalizedLitElement {
     .container {
       display: flex;
       flex-direction: column;
-      height: 100%;
     }
 
     .toolbar {
@@ -148,17 +146,15 @@ export class CodeViewer extends LocalizedLitElement {
 
     .editor-container {
       flex: 1;
-      overflow: hidden;
     }
 
     .cm-editor {
-      height: 100%;
       font-family: var(--font-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace);
       font-size: 0.875rem;
     }
 
     .cm-editor .cm-scroller {
-      overflow: auto;
+      overflow-x: auto;
     }
 
     .cm-editor.cm-focused {

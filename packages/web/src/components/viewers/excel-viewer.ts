@@ -45,8 +45,7 @@ export class ExcelViewer extends LocalizedLitElement {
       border-color: var(--primary, #0066CC);
     }
     .table-container {
-      overflow: auto;
-      max-height: calc(100vh - 12rem);
+      overflow-x: auto;
       border: 1px solid var(--border, #ddd);
       border-top: none;
     }

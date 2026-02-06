@@ -23,8 +23,7 @@ export class RtfViewer extends LocalizedLitElement {
       border: 1px solid var(--border, #ddd);
       border-radius: 4px;
       padding: 2rem;
-      overflow: auto;
-      max-height: calc(100vh - 8rem);
+      overflow-x: auto;
       color: #000;
     }
     .rtf-container img {

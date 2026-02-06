@@ -21,12 +21,10 @@ export class ConfigViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
-      height: 100%;
     }
 
     .container {
       display: flex;
-      height: 100%;
     }
 
     .sidebar {

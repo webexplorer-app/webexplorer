@@ -13,7 +13,7 @@ export class MobiViewer extends LitElement {
     }
     .mobi-iframe {
       width: 100%;
-      height: calc(100vh - 150px);
+      min-height: 600px;
       border: 1px solid var(--border, #ddd);
       border-radius: 4px;
     }

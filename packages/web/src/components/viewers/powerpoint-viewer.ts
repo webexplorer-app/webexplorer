@@ -57,8 +57,6 @@ export class PowerPointViewer extends LocalizedLitElement {
     .slide-list {
       width: 150px;
       flex-shrink: 0;
-      overflow-y: auto;
-      max-height: calc(100vh - 12rem);
       border: 1px solid var(--border, #ddd);
       border-radius: 4px;
       background: var(--surface-alt, #f5f5f5);

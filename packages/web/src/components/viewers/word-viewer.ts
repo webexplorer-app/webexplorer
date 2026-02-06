@@ -16,8 +16,7 @@ export class WordViewer extends LocalizedLitElement {
       background: white;
       border: 1px solid var(--border, #ddd);
       border-radius: 4px;
-      overflow: auto;
-      max-height: calc(100vh - 8rem);
+      overflow-x: auto;
     }
     /* Override docx-preview styles for better appearance */
     .word-container :global(.docx-wrapper) {

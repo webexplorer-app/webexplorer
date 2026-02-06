@@ -8,7 +8,6 @@ export class DefaultViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
-      height: 100%;
     }
 
     .container {
@@ -16,7 +15,7 @@ export class DefaultViewer extends LocalizedLitElement {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100%;
+      min-height: 400px;
       padding: 2rem;
       text-align: center;
     }

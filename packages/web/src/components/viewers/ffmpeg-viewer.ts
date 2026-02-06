@@ -16,7 +16,6 @@ export class FFmpegViewer extends LocalizedLitElement {
     }
     video {
       width: 100%;
-      max-height: calc(100vh - 200px);
     }
     .transcoding-message {
       padding: 1rem;

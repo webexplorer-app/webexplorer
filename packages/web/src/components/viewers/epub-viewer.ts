@@ -42,7 +42,7 @@ export class EPubViewer extends LocalizedLitElement {
     }
     .epub-content {
       width: 100%;
-      height: calc(100vh - 10rem);
+      min-height: 400px;
       border: 1px solid var(--border, #ddd);
       border-radius: 4px;
     }

@@ -15,7 +15,6 @@ export class ImageViewer extends LitElement {
     }
     img {
       max-width: 100%;
-      max-height: calc(100vh - 150px);
       object-fit: contain;
     }
   `;

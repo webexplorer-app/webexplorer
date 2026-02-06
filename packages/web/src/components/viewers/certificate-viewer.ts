@@ -25,8 +25,6 @@ export class CertificateViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
-      height: 100%;
-      overflow: auto;
     }
 
     .container {

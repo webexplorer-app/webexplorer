@@ -8,7 +8,6 @@ export class HexViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
-      height: 100%;
       background: var(--hex-bg, #1e1e1e);
       color: var(--hex-text, #d4d4d4);
       font-family: var(--font-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace);
@@ -18,7 +17,6 @@ export class HexViewer extends LocalizedLitElement {
     .container {
       display: flex;
       flex-direction: column;
-      height: 100%;
     }
 
     .toolbar {
@@ -64,7 +62,7 @@ export class HexViewer extends LocalizedLitElement {
 
     .hex-content {
       flex: 1;
-      overflow: auto;
+      overflow-x: auto;
       padding: 0;
     }
 

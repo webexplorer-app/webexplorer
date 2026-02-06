@@ -15,7 +15,6 @@ export class LogViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
-      height: 100%;
       background: var(--log-bg, #1e1e1e);
       color: var(--log-text, #d4d4d4);
       font-family: var(--font-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace);
@@ -25,7 +24,6 @@ export class LogViewer extends LocalizedLitElement {
     .container {
       display: flex;
       flex-direction: column;
-      height: 100%;
     }
 
     .toolbar {
@@ -117,7 +115,7 @@ export class LogViewer extends LocalizedLitElement {
 
     .log-content {
       flex: 1;
-      overflow: auto;
+      overflow-x: auto;
       padding: 0;
     }
 

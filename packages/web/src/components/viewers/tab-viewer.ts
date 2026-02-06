@@ -8,12 +8,9 @@ export class TabViewer extends LitElement {
     :host {
       display: block;
       width: 100%;
-      height: 100%;
     }
     .tab-viewer {
       width: 100%;
-      height: 100%;
-      overflow: auto;
       background: var(--background, #fff);
     }
     .tab-container {
@@ -70,21 +67,19 @@ export class TabViewer extends LitElement {
       tab-viewer {
         display: block;
         width: 100%;
-        height: 100%;
       }
       tab-viewer .tab-viewer {
         width: 100%;
-        height: 100%;
-        overflow: auto;
         background: var(--background, #fff);
       }
       tab-viewer .tab-container {
         width: 100%;
         min-height: 400px;
-        padding: 1rem;
+        box-sizing: border-box;
       }
       tab-viewer .at-surface {
         width: 100% !important;
+        max-width: 100% !important;
       }
       tab-viewer .at-surface > div {
         position: relative !important;
@@ -92,6 +87,8 @@ export class TabViewer extends LitElement {
       }
       tab-viewer .at-surface svg {
         display: block;
+        width: 100% !important;
+        height: auto !important;
       }
       /* Dark mode support for AlphaTab SVG content */
       .dark-mode tab-viewer .tab-container {

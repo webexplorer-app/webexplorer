@@ -17,14 +17,12 @@ export class ComicViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
-      height: 100%;
       background: var(--surface-dark, #1a1a1a);
     }
 
     .container {
       display: flex;
       flex-direction: column;
-      height: 100%;
     }
 
     .toolbar {
@@ -86,7 +84,6 @@ export class ComicViewer extends LocalizedLitElement {
 
     .viewer {
       flex: 1;
-      overflow: auto;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -109,7 +106,6 @@ export class ComicViewer extends LocalizedLitElement {
     }
 
     .page-image {
-      max-height: calc(100vh - 120px);
       max-width: 100%;
       object-fit: contain;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
