@@ -4,7 +4,7 @@ import './components/pages/home-page';
 import './components/pages/viewer-page';
 import './components/file-viewer';
 import './components/page-layout';
-import './components/drop-zone';
+import './components/input-zone';
 import './components/file-picker';
 import './components/loading-spinner';
 

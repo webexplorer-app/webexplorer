@@ -11,7 +11,6 @@ export class MarkdownViewer extends LocalizedLitElement {
       display: block;
     }
     .markdown-viewer {
-      margin: 1rem;
     }
     .markdown-container {
       border: 1px solid var(--border, #ddd);

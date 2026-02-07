@@ -20,7 +20,6 @@ export class ArchiveViewer extends LitElement {
       display: block;
     }
     .archive-viewer {
-      padding: 1rem;
     }
     .archive-navigation {
       margin-bottom: 1rem;

@@ -8,7 +8,6 @@ export class TextViewer extends LitElement {
       display: block;
     }
     .text-viewer {
-      padding: 0 1rem;
       word-wrap: break-word;
       white-space: pre-wrap;
       font-family: var(--font-mono, monospace);

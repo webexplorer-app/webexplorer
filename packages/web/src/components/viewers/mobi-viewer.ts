@@ -9,11 +9,9 @@ export class MobiViewer extends LitElement {
       display: block;
     }
     .mobi-viewer {
-      padding: 1rem;
     }
     .mobi-iframe {
       width: 100%;
-      min-height: 600px;
       border: 1px solid var(--border, #ddd);
       border-radius: 4px;
     }
@@ -58,11 +56,15 @@ export class MobiViewer extends LitElement {
         :root {
           color-scheme: ${isDark ? 'dark' : 'light'};
         }
+        html, body {
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+        }
         body {
           background: ${isDark ? '#1e1e1e' : '#ffffff'};
           color: ${isDark ? '#e0e0e0' : '#333333'};
           padding: 1rem;
-          margin: 0;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           line-height: 1.6;
         }
@@ -70,6 +72,18 @@ export class MobiViewer extends LitElement {
         img { max-width: 100%; height: auto; }
       </style>
     `;
+  }
+
+  private resizeIframe() {
+    const iframe = this.shadowRoot?.querySelector('iframe');
+    if (iframe) {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (iframeDoc?.body) {
+        // Get the full content height
+        const height = iframeDoc.body.scrollHeight;
+        iframe.style.height = `${height}px`;
+      }
+    }
   }
 
   private updateIframeTheme() {
@@ -80,6 +94,8 @@ export class MobiViewer extends LitElement {
         iframeDoc.open();
         iframeDoc.write(this.getThemeStyles() + this.mobi.text);
         iframeDoc.close();
+        // Resize after content is written
+        requestAnimationFrame(() => this.resizeIframe());
       }
     }
   }

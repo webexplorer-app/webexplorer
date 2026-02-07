@@ -8,7 +8,6 @@ export class VideoViewer extends LitElement {
       display: block;
     }
     .video-viewer {
-      padding: 1rem;
     }
     video {
       width: 100%;

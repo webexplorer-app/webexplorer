@@ -8,7 +8,6 @@ export class AudioViewer extends LitElement {
       display: block;
     }
     .audio-viewer {
-      padding: 1rem;
     }
     audio {
       width: 100%;

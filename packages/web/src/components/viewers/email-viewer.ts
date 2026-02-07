@@ -11,7 +11,6 @@ export class EmailViewer extends LocalizedLitElement {
       display: block;
     }
     .email-viewer {
-      padding: 1rem;
     }
     table {
       width: 100%;

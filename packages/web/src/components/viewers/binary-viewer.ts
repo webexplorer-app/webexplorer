@@ -8,7 +8,6 @@ export class BinaryViewer extends LitElement {
       display: block;
     }
     .binary-viewer {
-      padding: 1rem;
       display: flex;
       flex-wrap: wrap;
       gap: 0.25rem;

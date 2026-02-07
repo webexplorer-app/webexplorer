@@ -153,3 +153,33 @@ feedback = Feedback
 unsupported-file = Unsupported File Type
 unsupported-file-message = This file type is not currently supported. If you would like us to add support for this format, please let us know!
 request-support = Request Support
+
+# Input Zone
+drop-or-paste = Drop file or paste content
+drop-paste-hint = Drag and drop a file, or press Ctrl+V to paste
+
+# Theme Toggle
+switch-to-light = Switch to light mode
+switch-to-dark = Switch to dark mode
+
+# Fiddler Viewer
+fiddler-file = Fiddler Session Archive
+sessions = sessions
+method = Method
+url = URL
+status = Status
+request = Request
+response = Response
+timers = Timers
+headers = Headers
+body = Body
+no-sessions = No HTTP sessions found
+select-session = Select a session to view details
+
+# Clipboard Viewer
+clipboard-file = Clipboard Data
+formats-available = format(s) available
+html-source = HTML Source
+failed-to-parse-clipboard = Failed to parse clipboard data
+no-data = No data
+clear = Clear

@@ -11,7 +11,6 @@ export class ImageViewer extends LitElement {
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 1rem;
     }
     img {
       max-width: 100%;

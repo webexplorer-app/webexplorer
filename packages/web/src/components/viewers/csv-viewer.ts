@@ -9,7 +9,6 @@ export class CSVViewer extends LitElement {
       display: block;
     }
     .csv-viewer {
-      padding: 1rem;
       overflow-x: auto;
     }
     table {

@@ -12,7 +12,6 @@ export class OpenDocumentViewer extends LocalizedLitElement {
       display: block;
     }
     .odf-viewer {
-      margin: 1rem;
     }
     .odf-container {
       background: white;

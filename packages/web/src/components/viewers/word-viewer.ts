@@ -10,7 +10,6 @@ export class WordViewer extends LocalizedLitElement {
       display: block;
     }
     .word-viewer {
-      margin: 1rem;
     }
     .word-container {
       background: white;

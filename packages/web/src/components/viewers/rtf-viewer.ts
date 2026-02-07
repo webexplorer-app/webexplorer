@@ -16,7 +16,6 @@ export class RtfViewer extends LocalizedLitElement {
       display: block;
     }
     .rtf-viewer {
-      margin: 1rem;
     }
     .rtf-container {
       background: white;

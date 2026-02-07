@@ -11,7 +11,6 @@ export class WasmViewer extends LitElement {
       display: block;
     }
     .wasm-viewer {
-      padding: 1rem;
       font-family: var(--font-mono, monospace);
       white-space: pre-wrap;
       word-wrap: break-word;

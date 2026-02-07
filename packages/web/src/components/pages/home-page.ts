@@ -7,6 +7,7 @@ import '../theme-toggle';
 import '../file-picker';
 import '../supported-files-list';
 import '../credits-dialog';
+import '../input-zone';
 import { LocalizedLitElement } from '../localized-element';
 
 @customElement('home-page')
@@ -56,6 +57,7 @@ export class HomePage extends LocalizedLitElement {
       flex-direction: column;
       align-items: center;
       gap: var(--size-6, 1.5rem);
+      width: 100%;
     }
     .file-input-row {
       display: flex;
@@ -78,7 +80,7 @@ export class HomePage extends LocalizedLitElement {
   @state()
   private showCredits = false;
 
-  private handleDropFile(e: CustomEvent<File>) {
+  private handleFileInput(e: CustomEvent<File>) {
     this.dispatchEvent(new CustomEvent('file-selected', {
       detail: e.detail,
       bubbles: true,
@@ -128,7 +130,7 @@ export class HomePage extends LocalizedLitElement {
         <page-content>
           <div class="explorer">
             <div class="file-input-section">
-              <drop-zone @drop-file=${this.handleDropFile}></drop-zone>
+              <input-zone @file-input=${this.handleFileInput}></input-zone>
               <div class="file-input-row">
                 <file-picker @files-selected=${this.handleFilesSelected}></file-picker>
               </div>

@@ -131,3 +131,33 @@ feedback = Retour d'information
 unsupported-file = Type de Fichier Non Supporté
 unsupported-file-message = Ce type de fichier n'est pas supporté actuellement. Si vous souhaitez que nous ajoutions le support de ce format, faites-le nous savoir !
 request-support = Demander le Support
+
+# Zone d'entrée
+drop-or-paste = Déposez un fichier ou collez du contenu
+drop-paste-hint = Glissez-déposez un fichier, ou appuyez sur Ctrl+V pour coller
+
+# Changement de thème
+switch-to-light = Passer au mode clair
+switch-to-dark = Passer au mode sombre
+
+# Visionneuse Fiddler
+fiddler-file = Archive de Session Fiddler
+sessions = sessions
+method = Méthode
+url = URL
+status = Statut
+request = Requête
+response = Réponse
+timers = Minuteries
+headers = En-têtes
+body = Corps
+no-sessions = Aucune session HTTP trouvée
+select-session = Sélectionnez une session pour voir les détails
+
+# Visionneuse du Presse-papiers
+clipboard-file = Données du Presse-papiers
+formats-available = format(s) disponible(s)
+html-source = Code HTML
+failed-to-parse-clipboard = Échec de l'analyse des données du presse-papiers
+no-data = Aucune donnée
+clear = Effacer

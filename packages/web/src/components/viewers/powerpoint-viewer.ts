@@ -19,7 +19,6 @@ export class PowerPointViewer extends LocalizedLitElement {
       display: block;
     }
     .pptx-viewer {
-      margin: 1rem;
     }
     .controls {
       display: flex;

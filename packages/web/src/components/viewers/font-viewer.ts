@@ -10,7 +10,6 @@ export class FontViewer extends LocalizedLitElement {
       display: block;
     }
     .font-viewer {
-      margin: 1rem;
     }
     .font-container {
       border: 1px solid var(--border, #ddd);

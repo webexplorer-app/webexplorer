@@ -37,7 +37,6 @@ export class ICalViewer extends LocalizedLitElement {
   static styles = css`
     :host {
       display: block;
-      padding: 1rem;
       max-width: 900px;
       margin: 0 auto;
     }

@@ -12,7 +12,6 @@ export class FFmpegViewer extends LocalizedLitElement {
       display: block;
     }
     .ffmpeg-viewer {
-      padding: 2px 1rem;
     }
     video {
       width: 100%;

@@ -450,6 +450,34 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
     category: 'other',
   },
   
+  // Fiddler HTTP Session Archive
+  {
+    id: 'fiddler',
+    nameKey: 'fiddler-file',
+    defaultName: 'Fiddler Session Archive',
+    extensions: ['saz'],
+    mimeTypes: [
+      'application/x-fiddler-session-archive',
+    ],
+    viewer: 'fiddler-viewer',
+    lazyLoad: true,
+    category: 'data',
+  },
+  
+  // Clipboard Data
+  {
+    id: 'clipboard',
+    nameKey: 'clipboard-file',
+    defaultName: 'Clipboard Data',
+    extensions: ['clipboard'],
+    mimeTypes: [
+      'application/x-clipboard',
+    ],
+    viewer: 'clipboard-viewer',
+    lazyLoad: true,
+    category: 'other',
+  },
+  
   // Structured Data (JSON/XML tree view)
   {
     id: 'tree',

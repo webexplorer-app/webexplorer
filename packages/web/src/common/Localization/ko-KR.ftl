@@ -131,3 +131,33 @@ feedback = 피드백
 unsupported-file = 지원되지 않는 파일 형식
 unsupported-file-message = 이 파일 형식은 현재 지원되지 않습니다. 이 형식의 지원을 원하시면 알려주세요!
 request-support = 지원 요청
+
+# 입력 영역
+drop-or-paste = 파일을 놓거나 콘텐츠 붙여넣기
+drop-paste-hint = 파일을 드래그 앤 드롭하거나 Ctrl+V로 붙여넣기
+
+# 테마 전환
+switch-to-light = 라이트 모드로 전환
+switch-to-dark = 다크 모드로 전환
+
+# Fiddler 뷰어
+fiddler-file = Fiddler 세션 아카이브
+sessions = 세션
+method = 메서드
+url = URL
+status = 상태
+request = 요청
+response = 응답
+timers = 타이머
+headers = 헤더
+body = 본문
+no-sessions = HTTP 세션을 찾을 수 없습니다
+select-session = 세부 정보를 보려면 세션을 선택하세요
+
+# 클립보드 뷰어
+clipboard-file = 클립보드 데이터
+formats-available = 형식 사용 가능
+html-source = HTML 소스
+failed-to-parse-clipboard = 클립보드 데이터 구문 분석 실패
+no-data = 데이터 없음
+clear = 지우기

@@ -19,7 +19,6 @@ export class SqliteViewer extends LocalizedLitElement {
       display: block;
     }
     .sqlite-viewer {
-      margin: 1rem;
     }
     .sqlite-container {
       display: flex;

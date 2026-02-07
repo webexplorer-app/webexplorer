@@ -17,7 +17,6 @@ export class SubtitleViewer extends LocalizedLitElement {
       display: block;
     }
     .subtitle-viewer {
-      margin: 1rem;
     }
     .subtitle-container {
       border: 1px solid var(--border, #ddd);

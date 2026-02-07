@@ -131,3 +131,33 @@ feedback = フィードバック
 unsupported-file = サポートされていないファイル形式
 unsupported-file-message = このファイル形式は現在サポートされていません。この形式のサポートをご希望の場合はお知らせください！
 request-support = サポートをリクエスト
+
+# 入力ゾーン
+drop-or-paste = ファイルをドロップまたはコンテンツを貼り付け
+drop-paste-hint = ファイルをドラッグ＆ドロップするか、Ctrl+Vで貼り付け
+
+# テーマ切り替え
+switch-to-light = ライトモードに切り替え
+switch-to-dark = ダークモードに切り替え
+
+# Fiddlerビューア
+fiddler-file = Fiddlerセッションアーカイブ
+sessions = セッション
+method = メソッド
+url = URL
+status = ステータス
+request = リクエスト
+response = レスポンス
+timers = タイマー
+headers = ヘッダー
+body = ボディ
+no-sessions = HTTPセッションが見つかりません
+select-session = 詳細を表示するセッションを選択
+
+# クリップボードビューア
+clipboard-file = クリップボードデータ
+formats-available = 形式が利用可能
+html-source = HTMLソース
+failed-to-parse-clipboard = クリップボードデータの解析に失敗しました
+no-data = データなし
+clear = クリア

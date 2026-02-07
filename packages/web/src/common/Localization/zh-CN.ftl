@@ -153,3 +153,33 @@ contact = 联系我们
 unsupported-file = 不支持的文件类型
 unsupported-file-message = 此文件类型目前不受支持。如果您希望我们添加对此格式的支持，请告诉我们！
 request-support = 请求支持
+
+# 输入区域
+drop-or-paste = 拖放文件或粘贴内容
+drop-paste-hint = 拖放文件到此处，或按 Ctrl+V 粘贴
+
+# 主题切换
+switch-to-light = 切换到浅色模式
+switch-to-dark = 切换到深色模式
+
+# Fiddler 查看器
+fiddler-file = Fiddler 会话存档
+sessions = 个会话
+method = 方法
+url = URL
+status = 状态
+request = 请求
+response = 响应
+timers = 计时器
+headers = 请求头
+body = 正文
+no-sessions = 未找到 HTTP 会话
+select-session = 选择会话以查看详情
+
+# 剪贴板查看器
+clipboard-file = 剪贴板数据
+formats-available = 种格式可用
+html-source = HTML 源码
+failed-to-parse-clipboard = 解析剪贴板数据失败
+no-data = 无数据
+clear = 清除

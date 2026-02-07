@@ -20,7 +20,6 @@ export class TorrentViewer extends LocalizedLitElement {
       display: block;
     }
     .torrent-viewer {
-      padding: 1rem;
     }
     .loading, .error {
       text-align: center;

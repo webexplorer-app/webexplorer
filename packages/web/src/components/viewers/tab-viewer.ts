@@ -103,7 +103,6 @@ export class TabViewer extends LitElement {
         color: var(--text-muted, #666);
       }
       tab-viewer .error {
-        padding: 1rem;
         color: var(--error, #dc3545);
         text-align: center;
       }

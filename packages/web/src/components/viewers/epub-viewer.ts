@@ -13,7 +13,6 @@ export class EPubViewer extends LocalizedLitElement {
       display: block;
     }
     .epub-viewer {
-      margin: 1rem;
     }
     .epub-controls {
       margin-bottom: 1rem;
@@ -42,7 +41,6 @@ export class EPubViewer extends LocalizedLitElement {
     }
     .epub-content {
       width: 100%;
-      min-height: 400px;
       border: 1px solid var(--border, #ddd);
       border-radius: 4px;
     }
@@ -146,11 +144,15 @@ export class EPubViewer extends LocalizedLitElement {
           :root {
             color-scheme: ${isDark ? 'dark' : 'light'};
           }
+          html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+          }
           body {
             background: ${isDark ? '#1e1e1e' : '#ffffff'};
             color: ${isDark ? '#e0e0e0' : '#333333'};
             padding: 1rem;
-            margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             line-height: 1.6;
           }
@@ -325,6 +327,18 @@ export class EPubViewer extends LocalizedLitElement {
     }
   }
 
+  private handleIframeLoad(e: Event) {
+    const iframe = e.target as HTMLIFrameElement;
+    if (iframe) {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (iframeDoc?.body) {
+        // Get the full content height and set iframe height
+        const height = iframeDoc.body.scrollHeight;
+        iframe.style.height = `${height}px`;
+      }
+    }
+  }
+
   render() {
     if (!this.epub) {
       return html`<loading-spinner></loading-spinner>`;
@@ -357,6 +371,7 @@ export class EPubViewer extends LocalizedLitElement {
             title=${this.epub.metadata.title}
             srcdoc=${this.doc}
             class="epub-content"
+            @load=${this.handleIframeLoad}
           ></iframe>
         </div>
       </div>

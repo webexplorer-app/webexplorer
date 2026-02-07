@@ -16,7 +16,6 @@ export class ExcelViewer extends LocalizedLitElement {
       display: block;
     }
     .excel-viewer {
-      margin: 1rem;
     }
     .sheet-tabs {
       display: flex;

@@ -131,3 +131,33 @@ feedback = Feedback
 unsupported-file = Nicht Unterstützter Dateityp
 unsupported-file-message = Dieser Dateityp wird derzeit nicht unterstützt. Wenn Sie möchten, dass wir Unterstützung für dieses Format hinzufügen, lassen Sie es uns wissen!
 request-support = Support Anfragen
+
+# Eingabebereich
+drop-or-paste = Datei ablegen oder Inhalt einfügen
+drop-paste-hint = Ziehen Sie eine Datei hierher, oder drücken Sie Strg+V zum Einfügen
+
+# Theme-Umschalter
+switch-to-light = Zum hellen Modus wechseln
+switch-to-dark = Zum dunklen Modus wechseln
+
+# Fiddler-Viewer
+fiddler-file = Fiddler-Sitzungsarchiv
+sessions = Sitzungen
+method = Methode
+url = URL
+status = Status
+request = Anfrage
+response = Antwort
+timers = Timer
+headers = Header
+body = Inhalt
+no-sessions = Keine HTTP-Sitzungen gefunden
+select-session = Sitzung auswählen, um Details anzuzeigen
+
+# Zwischenablage-Viewer
+clipboard-file = Zwischenablage-Daten
+formats-available = Format(e) verfügbar
+html-source = HTML-Quellcode
+failed-to-parse-clipboard = Fehler beim Parsen der Zwischenablage-Daten
+no-data = Keine Daten
+clear = Löschen
