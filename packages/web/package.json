@@ -31,6 +31,7 @@
     "@fluent/langneg": "^0.7.0",
     "@unionpdf/engines": "^0.34.0",
     "@unionpdf/pdfium": "^0.34.0",
+    "@unionpdf/webcomponents": "^0.34.0",
     "@webexplorer/archive": "^0.1.0",
     "@webexplorer/common": "^0.1.0",
     "@webexplorer/email": "^0.1.0",

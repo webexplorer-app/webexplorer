@@ -90,8 +90,20 @@ export default defineConfig({
     }),
   ],
   assetsInclude: ['**/*.wasm'],
+  worker: {
+    format: 'es',
+    plugins: () => [
+      nodePolyfills({
+        include: ['process'],
+        globals: {
+          process: true,
+        },
+        protocolImports: true,
+      }),
+    ],
+  },
   optimizeDeps: {
-    exclude: ['@webexplorer/ffmpeg', '@webexplorer/archive', '@unionpdf/pdfium', 'wabt']
+    exclude: ['@webexplorer/ffmpeg', '@webexplorer/archive', 'wabt']
   },
   server: {
     headers: {

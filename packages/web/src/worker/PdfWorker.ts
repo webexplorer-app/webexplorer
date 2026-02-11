@@ -5,7 +5,8 @@ async function init() {
   const response = await fetch(pdfiumWasm);
   const wasmBinary = await response.arrayBuffer();
   const runner = new PdfiumEngineRunner(wasmBinary);
-  runner.prepare();
+  await runner.prepare();
+  runner.listen();
 }
 
 init();
