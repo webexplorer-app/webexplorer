@@ -26,22 +26,29 @@ export class AppRoot extends LitElement {
   @state()
   private selectedFile: File | null = null;
 
+  @state()
+  private darkMode = false;
+
   constructor() {
     super();
     this.initLocale();
     this.handlePopState = this.handlePopState.bind(this);
+    this.handleThemeChanged = this.handleThemeChanged.bind(this);
   }
 
   connectedCallback() {
     super.connectedCallback();
+    this.darkMode = document.body.classList.contains('dark-mode');
     window.addEventListener('popstate', this.handlePopState);
     window.addEventListener('locale-changed', this.handleLocaleChanged.bind(this));
+    window.addEventListener('theme-changed', this.handleThemeChanged);
     this.updateRouteFromPath();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener('popstate', this.handlePopState);
+    window.removeEventListener('theme-changed', this.handleThemeChanged);
   }
 
   private initLocale() {
@@ -67,6 +74,11 @@ export class AppRoot extends LitElement {
 
   private handlePopState() {
     this.updateRouteFromPath();
+  }
+
+  private handleThemeChanged(e: Event) {
+    const customEvent = e as CustomEvent<{ dark: boolean }>;
+    this.darkMode = customEvent.detail.dark;
   }
 
   private updateRouteFromPath() {
@@ -101,6 +113,7 @@ export class AppRoot extends LitElement {
       return html`
         <viewer-page
           .file=${this.selectedFile}
+          .darkMode=${this.darkMode}
           @back-to-home=${this.handleBackToHome}
         ></viewer-page>
       `;

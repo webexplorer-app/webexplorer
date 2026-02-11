@@ -60,6 +60,9 @@ export class FileViewer extends LitElement {
   @property({ attribute: false })
   file: File | null = null;
 
+  @property({ type: Boolean })
+  darkMode = false;
+
   @state()
   private viewerLoaded = false;
 
@@ -191,7 +194,7 @@ export class FileViewer extends LitElement {
       case 'three':
         return html`<three-viewer .file=${file} .format=${this.getThreeFormat()}></three-viewer>`;
       case 'tab':
-        return html`<tab-viewer .file=${file}></tab-viewer>`;
+        return html`<tab-viewer .file=${file} .darkMode=${this.darkMode}></tab-viewer>`;
       case 'torrent':
         return html`<torrent-viewer .file=${file}></torrent-viewer>`;
       case 'video':

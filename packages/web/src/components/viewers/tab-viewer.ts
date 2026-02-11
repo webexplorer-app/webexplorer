@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { AlphaTabApi, LayoutMode, Settings, StaveProfile, SystemsLayoutMode } from '@coderline/alphatab';
+import { AlphaTabApi, LayoutMode, Settings, StaveProfile, SystemsLayoutMode, model } from '@coderline/alphatab';
 
 @customElement('tab-viewer')
 export class TabViewer extends LitElement {
@@ -28,6 +28,9 @@ export class TabViewer extends LitElement {
 
   @property({ attribute: false })
   file: File | null = null;
+
+  @property({ type: Boolean })
+  darkMode = false;
 
   @state()
   private loading = false;
@@ -57,6 +60,11 @@ export class TabViewer extends LitElement {
   updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('file') && this.file && this.api) {
       this.loadFile();
+    }
+    if (changedProperties.has('darkMode') && this.api) {
+      this.applyThemeColors(this.api.settings);
+      this.api.updateSettings();
+      this.api.render();
     }
   }
 
@@ -92,8 +100,7 @@ export class TabViewer extends LitElement {
       }
       /* Dark mode support for AlphaTab SVG content */
       .dark-mode tab-viewer .tab-container {
-        background: #fff;
-        border-radius: 8px;
+        background: var(--background, #121212);
       }
       tab-viewer .loading {
         display: flex;
@@ -110,6 +117,34 @@ export class TabViewer extends LitElement {
     this.appendChild(style);
   }
 
+  private isDarkMode(): boolean {
+    return this.darkMode;
+  }
+
+  private applyThemeColors(settings: Settings) {
+    const res = settings.display.resources;
+    if (this.isDarkMode()) {
+      // In dark mode, use white/light colors since the background is dark.
+      // AlphaTab's SVG renderer skips the fill attribute when color is
+      // exactly #000000, but white (#ffffff) always gets an explicit fill.
+      const white = new model.Color(255, 255, 255, 255);
+      res.mainGlyphColor = white;
+      res.secondaryGlyphColor = new model.Color(255, 255, 255, 170);
+      res.scoreInfoColor = white;
+      res.barNumberColor = new model.Color(255, 120, 120, 255);
+      res.barSeparatorColor = new model.Color(200, 200, 200, 255);
+      res.staffLineColor = new model.Color(100, 100, 100, 255);
+    } else {
+      // Light mode: default AlphaTab colors
+      res.mainGlyphColor = new model.Color(0, 0, 0, 255);
+      res.secondaryGlyphColor = new model.Color(0, 0, 0, 100);
+      res.scoreInfoColor = new model.Color(0, 0, 0, 255);
+      res.barNumberColor = new model.Color(200, 0, 0, 255);
+      res.barSeparatorColor = new model.Color(34, 34, 17, 255);
+      res.staffLineColor = new model.Color(165, 165, 165, 255);
+    }
+  }
+
   private initAlphaTab() {
     this.containerRef = this.querySelector('.tab-container') as HTMLDivElement;
     if (!this.containerRef) return;
@@ -123,6 +158,8 @@ export class TabViewer extends LitElement {
     settings.display.layoutMode = LayoutMode.Page;
     settings.display.staveProfile = StaveProfile.Default;
     settings.display.systemsLayoutMode = SystemsLayoutMode.Automatic;
+
+    this.applyThemeColors(settings);
 
     this.api = new AlphaTabApi(this.containerRef, settings);
     

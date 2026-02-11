@@ -84,12 +84,15 @@ export class PageTitle extends LitElement {
   static styles = css`
     :host {
       display: block;
+      min-width: 0;
+      overflow: hidden;
     }
     .title-container {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: var(--size-2, 0.5rem);
+      min-width: 0;
     }
     .title-icon {
       width: 1.5rem;

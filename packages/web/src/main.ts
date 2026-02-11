@@ -7,6 +7,10 @@ import './components/page-layout';
 import './components/input-zone';
 import './components/file-picker';
 import './components/loading-spinner';
+import { registerSW } from 'virtual:pwa-register';
+
+// Register service worker for offline support
+registerSW({ immediate: true });
 
 // Register the app
 const app = document.createElement('app-root');

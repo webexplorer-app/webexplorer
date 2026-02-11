@@ -122,6 +122,9 @@ subject = Subject
 attachments = Attachments
 no-file-selected = No File Selected
 back-to-home = Back to Home
+back = Back
+menu = Menu
+switch-theme = Theme
 please-select-file = Please select a file to view
 
 # Create File Page

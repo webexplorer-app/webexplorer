@@ -59,6 +59,9 @@ export class ViewerPage extends LocalizedLitElement {
   @property({ attribute: false })
   file: File | null = null;
 
+  @property({ type: Boolean })
+  darkMode = false;
+
   connectedCallback() {
     super.connectedCallback();
     if (this.file) {
@@ -91,7 +94,7 @@ export class ViewerPage extends LocalizedLitElement {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M19 12H5M12 19l-7-7 7-7"/>
               </svg>
-              ${t('back-to-home', 'Back to Home')}
+              ${t('back', 'Back')}
             </button>
             <page-title slot="center" .title=${this.file.name}></page-title>
             <a 
@@ -105,7 +108,7 @@ export class ViewerPage extends LocalizedLitElement {
           </page-toolbar>
         </page-header>
         <page-content>
-          <file-viewer .file=${this.file}></file-viewer>
+          <file-viewer .file=${this.file} .darkMode=${this.darkMode}></file-viewer>
         </page-content>
       </page-layout>
     `;

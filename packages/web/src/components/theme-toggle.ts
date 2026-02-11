@@ -46,6 +46,18 @@ export class ThemeToggle extends LocalizedLitElement {
       this.isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     this.applyTheme();
+    this._onThemeChanged = this._onThemeChanged.bind(this);
+    window.addEventListener('theme-changed', this._onThemeChanged);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('theme-changed', this._onThemeChanged);
+  }
+
+  private _onThemeChanged(e: Event) {
+    const detail = (e as CustomEvent<{ dark: boolean }>).detail;
+    this.isDarkMode = detail.dark;
   }
 
   private applyTheme() {
@@ -60,6 +72,7 @@ export class ThemeToggle extends LocalizedLitElement {
     this.isDarkMode = !this.isDarkMode;
     localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
     this.applyTheme();
+    window.dispatchEvent(new CustomEvent('theme-changed', { detail: { dark: this.isDarkMode } }));
   }
 
   render() {

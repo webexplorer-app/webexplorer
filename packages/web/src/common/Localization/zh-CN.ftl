@@ -122,6 +122,9 @@ subject = 主题
 attachments = 附件
 no-file-selected = 未选择文件
 back-to-home = 返回主页
+back = 返回
+menu = 菜单
+switch-theme = 主题
 feedback = 反馈
 please-select-file = 请选择要查看的文件
 
