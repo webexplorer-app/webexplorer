@@ -138,6 +138,7 @@ request-support = Solicitar Soporte
 # Zona de entrada
 drop-or-paste = Soltar archivo o pegar contenido
 drop-paste-hint = Arrastra y suelta un archivo, o presiona Ctrl+V para pegar
+privacy-notice = Su archivo no se sube. Todo el procesamiento se realiza localmente en su navegador.
 
 # Cambio de tema
 switch-to-light = Cambiar a modo claro

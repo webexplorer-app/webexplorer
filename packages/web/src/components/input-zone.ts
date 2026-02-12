@@ -97,6 +97,12 @@ export class InputZone extends LocalizedLitElement {
       font-size: 0.875rem;
       color: var(--text-muted, #666);
     }
+
+    .privacy-notice {
+      font-size: 0.75rem;
+      color: var(--text-muted, #999);
+      margin-top: 0.5rem;
+    }
   `;
 
   @state()
@@ -299,6 +305,7 @@ export class InputZone extends LocalizedLitElement {
             <div class="input-text">
               <span class="input-primary">${t('drop-or-paste', 'Drop file or paste content')}</span>
               <span class="input-secondary">${t('drop-paste-hint', 'Drag and drop a file, or press Ctrl+V to paste')}</span>
+              <span class="privacy-notice">${t('privacy-notice', 'Your file is not uploaded. All processing happens locally in your browser.')}</span>
             </div>
           </div>
         </div>

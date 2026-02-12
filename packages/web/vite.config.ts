@@ -103,7 +103,7 @@ export default defineConfig({
     ],
   },
   optimizeDeps: {
-    exclude: ['@webexplorer/ffmpeg', '@webexplorer/archive', 'wabt']
+    exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/core', '@ffmpeg/core-mt', '@ffmpeg/util', '@webexplorer/ffmpeg', '@webexplorer/archive', 'wabt']
   },
   server: {
     headers: {

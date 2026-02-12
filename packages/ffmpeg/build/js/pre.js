@@ -2,6 +2,7 @@
  * Constants
  */
 
+const SIZE_I32 = 4;
 const FFMPEG_DEFAULT_ARGS = ["./ffmpeg", "-nostdin", "-y"];
 const FFPROBE_DEFAULT_ARGS = ["./ffprobe"];
 

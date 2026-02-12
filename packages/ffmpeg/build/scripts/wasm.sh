@@ -32,7 +32,7 @@ CONF_FLAGS=(
   -lswscale 
   -Wno-deprecated-declarations 
   $LDFLAGS 
-  -sENVIRONMENT=worker
+  -sENVIRONMENT=worker                     # only target web worker environment, strip Node.js code paths
   -sWASM_BIGINT                            # enable big int support
   -sUSE_SDL=2                              # use emscripten SDL2 lib port
   -sMODULARIZE                             # modularized to use as a library

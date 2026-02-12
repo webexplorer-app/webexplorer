@@ -138,6 +138,7 @@ request-support = Support Anfragen
 # Eingabebereich
 drop-or-paste = Datei ablegen oder Inhalt einfügen
 drop-paste-hint = Ziehen Sie eine Datei hierher, oder drücken Sie Strg+V zum Einfügen
+privacy-notice = Ihre Datei wird nicht hochgeladen. Die gesamte Verarbeitung erfolgt lokal in Ihrem Browser.
 
 # Theme-Umschalter
 switch-to-light = Zum hellen Modus wechseln

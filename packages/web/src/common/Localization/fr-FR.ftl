@@ -138,6 +138,7 @@ request-support = Demander le Support
 # Zone d'entrée
 drop-or-paste = Déposez un fichier ou collez du contenu
 drop-paste-hint = Glissez-déposez un fichier, ou appuyez sur Ctrl+V pour coller
+privacy-notice = Votre fichier n'est pas téléchargé. Tout le traitement se fait localement dans votre navigateur.
 
 # Changement de thème
 switch-to-light = Passer au mode clair

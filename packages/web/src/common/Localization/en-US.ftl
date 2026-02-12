@@ -160,6 +160,7 @@ request-support = Request Support
 # Input Zone
 drop-or-paste = Drop file or paste content
 drop-paste-hint = Drag and drop a file, or press Ctrl+V to paste
+privacy-notice = Your file is not uploaded. All processing happens locally in your browser.
 
 # Theme Toggle
 switch-to-light = Switch to light mode

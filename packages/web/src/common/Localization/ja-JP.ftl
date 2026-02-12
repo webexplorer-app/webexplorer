@@ -138,6 +138,7 @@ request-support = サポートをリクエスト
 # 入力ゾーン
 drop-or-paste = ファイルをドロップまたはコンテンツを貼り付け
 drop-paste-hint = ファイルをドラッグ＆ドロップするか、Ctrl+Vで貼り付け
+privacy-notice = ファイルはアップロードされません。すべての処理はブラウザ内でローカルに行われます。
 
 # テーマ切り替え
 switch-to-light = ライトモードに切り替え

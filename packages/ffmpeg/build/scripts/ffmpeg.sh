@@ -28,6 +28,8 @@ CONF_FLAGS=(
 
 cd ./ffmpeg
 
+ls -l .
+
 emconfigure ./configure "${CONF_FLAGS[@]}" \
       --enable-gpl \
       --enable-libx264 \

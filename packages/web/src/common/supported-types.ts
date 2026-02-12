@@ -246,6 +246,54 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
     category: 'media',
   },
   
+  // Media - FFmpeg (formats not natively supported by browsers)
+  {
+    id: 'ffmpeg',
+    nameKey: 'media-file',
+    defaultName: 'Media File',
+    extensions: [
+      // Video
+      'avi', 'mkv', 'wmv', 'flv', 'f4v',
+      'ts', 'mts', 'm2ts', 'vob',
+      'mpg', 'mpeg', 'm4v', '3gp', '3g2',
+      'mxf', 'rm', 'rmvb', 'asf', 'divx',
+      'ogv', 'swf',
+      // Audio
+      'wma', 'ac3', 'dts', 'ape', 'mka',
+      'opus', 'amr', 'au', 'snd',
+      'mid', 'midi', 'ra', 'ram',
+      'aiff', 'aif', 'caf', 'tta', 'wv',
+    ],
+    mimeTypes: [
+      // Video
+      'video/x-msvideo',
+      'video/x-matroska',
+      'video/x-ms-wmv',
+      'video/x-flv',
+      'video/mp2t',
+      'video/mpeg',
+      'video/3gpp',
+      'video/3gpp2',
+      'video/x-ms-asf',
+      'video/dvd',
+      // Audio
+      'audio/x-ms-wma',
+      'audio/ac3',
+      'audio/x-ape',
+      'audio/x-matroska',
+      'audio/opus',
+      'audio/amr',
+      'audio/basic',
+      'audio/midi',
+      'audio/x-realaudio',
+      'audio/aiff',
+      'audio/x-caf',
+    ],
+    viewer: 'ffmpeg-viewer',
+    lazyLoad: true,
+    category: 'media',
+  },
+
   // 3D Models
   {
     id: 'three',

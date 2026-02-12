@@ -6,27 +6,20 @@
     "access": "public"
   },
   "description": "FFmpeg webassebmly for web platform",
-  "source": "./src/index.ts",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
+  "type": "module",
+  "module": "./dist/ffmpeg.js",
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "types": "./dist/ffmpeg.d.ts",
+      "import": "./dist/ffmpeg.js"
     },
-    "./ffmpeg.wasm": {
-      "import": "./dist/esm/ffmpeg.cacb9e22.wasm",
-      "require": "./dist/cjs/ffmpeg.cacb9e22.wasm"
-    }
+    "./ffmpeg.wasm": "./dist/ffmpeg.wasm"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
     "start": "parcel ./index.html --no-hmr",
-    "build": "parcel build",
-    "clean": "del-cli --force dist .parcel-cache",
-    "postbuild": "npm run copy-types",
-    "copy-types": "cpy src/ffmpeg.d.ts dist/types/ --flat && cpy ./dist/types/* ./dist/cjs --flat && cpy ./dist/types/* ./dist/esm --flat",
+    "build": "cpy src/ffmpeg.js src/ffmpeg.wasm src/ffmpeg.d.ts dist/ --flat",
+    "clean": "del-cli --force dist",
     "build:wasm": "make && cpy ./docker/src/ffmpeg.js ./src --flat && cpy ./docker/src/ffmpeg.wasm ./src --flat",
     "build:all": "npm run build:wasm && npm run build"
   },

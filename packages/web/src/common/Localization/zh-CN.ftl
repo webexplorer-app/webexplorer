@@ -160,6 +160,7 @@ request-support = 请求支持
 # 输入区域
 drop-or-paste = 拖放文件或粘贴内容
 drop-paste-hint = 拖放文件到此处，或按 Ctrl+V 粘贴
+privacy-notice = 您的文件不会被上传，所有处理均在浏览器中本地完成。
 
 # 主题切换
 switch-to-light = 切换到浅色模式

@@ -1,6 +1,7 @@
 import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { createFFmpegWorker } from '../../common/ffmpeg-worker';
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { toBlobURL } from '@ffmpeg/util';
 import { readFile } from '../../common/file';
 import { t } from '../../common/Localization';
 import { LocalizedLitElement } from '../localized-element';
@@ -12,14 +13,25 @@ export class FFmpegViewer extends LocalizedLitElement {
       display: block;
     }
     .ffmpeg-viewer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
-    video {
-      width: 100%;
+    video, audio {
+      max-width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
     }
-    .transcoding-message {
+    .message {
       padding: 1rem;
       text-align: center;
       color: var(--text-muted, #666);
+    }
+    .error-message {
+      padding: 1rem;
+      text-align: center;
+      color: var(--text-error, #c00);
     }
   `;
 
@@ -27,13 +39,34 @@ export class FFmpegViewer extends LocalizedLitElement {
   file: File | null = null;
 
   @state()
+  private isLoading = false;
+
+  @state()
   private isTranscoding = false;
 
   @state()
-  private videoUrl = '';
+  private mediaUrl = '';
 
-  private worker = createFFmpegWorker();
+  @state()
+  private isAudio = false;
+
+  @state()
+  private error = '';
+
+  @state()
+  private logMessage = '';
+
+  private ffmpeg = new FFmpeg();
+  private loaded = false;
   private aborted = false;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.ffmpeg.on('log', ({ message }) => {
+      this.logMessage = message;
+      console.log(message);
+    });
+  }
 
   updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('file') && this.file) {
@@ -44,37 +77,86 @@ export class FFmpegViewer extends LocalizedLitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     this.aborted = true;
-    if (this.videoUrl) {
-      URL.revokeObjectURL(this.videoUrl);
+    if (this.mediaUrl) {
+      URL.revokeObjectURL(this.mediaUrl);
     }
+  }
+
+  private async load() {
+    if (this.loaded) return;
+    this.isLoading = true;
+    const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
+    await this.ffmpeg.load({
+      coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+      wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+    });
+    this.loaded = true;
+    this.isLoading = false;
   }
 
   private async transcode() {
     if (!this.file) return;
 
     this.aborted = false;
-    this.isTranscoding = true;
+    this.error = '';
+    this.mediaUrl = '';
+    this.logMessage = '';
+
+    // Detect audio-only files by extension
+    const audioExts = new Set([
+      'wma', 'ac3', 'dts', 'ape', 'mka', 'opus', 'amr', 'au', 'snd',
+      'mid', 'midi', 'ra', 'ram', 'aiff', 'aif', 'caf', 'tta', 'wv',
+    ]);
+    const ext = this.file.name.split('.').pop()?.toLowerCase() ?? '';
+    this.isAudio = audioExts.has(ext) || this.file.type.startsWith('audio/');
 
     try {
+      await this.load();
+      if (this.aborted) return;
+
+      this.isTranscoding = true;
+
       const buffer = await readFile(this.file);
       if (this.aborted) return;
 
-      await this.worker.writeFile(this.file.name, buffer as Uint8Array);
+      await this.ffmpeg.writeFile(this.file.name, new Uint8Array(buffer as ArrayBuffer));
       if (this.aborted) return;
 
-      await this.worker.ffmpeg('-i', this.file.name, `${this.file.name}.webm`);
+      const outputFile = this.isAudio ? 'output.mp3' : 'output.mp4';
+      const args = this.isAudio
+        ? ['-i', this.file.name, '-c:a', 'libmp3lame', '-b:a', '192k', outputFile]
+        : [
+            '-i', this.file.name,
+            '-c:v', 'libx264',
+            '-preset', 'ultrafast',
+            '-crf', '30',
+            '-c:a', 'aac',
+            '-b:a', '128k',
+            '-movflags', '+faststart',
+            outputFile,
+          ];
+
+      await this.ffmpeg.exec(args);
       if (this.aborted) return;
 
-      const data = await this.worker.readFile(`${this.file.name}.webm`, buffer as Uint8Array);
+      const data = await this.ffmpeg.readFile(outputFile);
       if (this.aborted) return;
 
-      if (this.videoUrl) {
-        URL.revokeObjectURL(this.videoUrl);
+      if (this.mediaUrl) {
+        URL.revokeObjectURL(this.mediaUrl);
       }
-      this.videoUrl = URL.createObjectURL(new Blob([data.buffer], { type: 'video/webm' }));
-      this.isTranscoding = false;
+      // Copy from possible SharedArrayBuffer to a regular ArrayBuffer for Blob
+      const u8 = data as Uint8Array;
+      const buf = new ArrayBuffer(u8.byteLength);
+      new Uint8Array(buf).set(u8);
+      const mimeType = this.isAudio ? 'audio/mpeg' : 'video/mp4';
+      this.mediaUrl = URL.createObjectURL(
+        new Blob([buf], { type: mimeType })
+      );
     } catch (e) {
       console.error('Transcoding failed:', e);
+      this.error = `Transcoding failed: ${e instanceof Error ? e.message : e}`;
+    } finally {
       this.isTranscoding = false;
     }
   }
@@ -82,10 +164,22 @@ export class FFmpegViewer extends LocalizedLitElement {
   render() {
     return html`
       <div class="ffmpeg-viewer">
-        ${this.isTranscoding ? html`
-          <p class="transcoding-message">${t('transcoding', 'Transcoding')}</p>
+        ${this.isLoading ? html`
+          <p class="message">${t('loading', 'Loading ffmpeg-core...')}</p>
         ` : ''}
-        <video controls src=${this.videoUrl}></video>
+        ${this.isTranscoding ? html`
+          <p class="message">${t('transcoding', 'Transcoding...')}</p>
+          <p class="message">${this.logMessage}</p>
+        ` : ''}
+        ${this.error ? html`
+          <p class="error-message">${this.error}</p>
+        ` : ''}
+        ${this.mediaUrl && this.isAudio ? html`
+          <audio controls src=${this.mediaUrl}></audio>
+        ` : ''}
+        ${this.mediaUrl && !this.isAudio ? html`
+          <video controls src=${this.mediaUrl}></video>
+        ` : ''}
       </div>
     `;
   }

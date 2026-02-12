@@ -125,9 +125,9 @@ export class FileViewer extends LitElement {
         this.viewerLoaded = true;
       }
     } else {
-      // Check for unsupported video types - use ffmpeg
+      // Check for unsupported video/audio types - use ffmpeg
       const fileType = mimeType(this.file);
-      if (fileType?.startsWith('video/')) {
+      if (fileType?.startsWith('video/') || fileType?.startsWith('audio/')) {
         this.viewerType = 'ffmpeg';
         this.loadViewer(VIEWER_LOADERS['ffmpeg-viewer']);
       } else {
