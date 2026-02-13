@@ -25,8 +25,25 @@ export class InputZone extends LocalizedLitElement {
 
     .input-zone {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      gap: 0.75rem;
+    }
+
+    .privacy-notice {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text, #333);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .privacy-notice svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
     }
 
     .input-area {
@@ -96,12 +113,6 @@ export class InputZone extends LocalizedLitElement {
     .input-secondary {
       font-size: 0.875rem;
       color: var(--text-muted, #666);
-    }
-
-    .privacy-notice {
-      font-size: 0.75rem;
-      color: var(--text-muted, #999);
-      margin-top: 0.5rem;
     }
   `;
 
@@ -282,6 +293,10 @@ export class InputZone extends LocalizedLitElement {
   render() {
     return html`
       <div class="input-zone">
+        <p class="privacy-notice">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          ${t('privacy-notice', 'Your file is not uploaded. All processing happens locally in your browser.')}
+        </p>
         <div 
           class="input-area ${this.isDragging ? 'dragging' : ''}"
           tabindex="0"
@@ -305,7 +320,6 @@ export class InputZone extends LocalizedLitElement {
             <div class="input-text">
               <span class="input-primary">${t('drop-or-paste', 'Drop file or paste content')}</span>
               <span class="input-secondary">${t('drop-paste-hint', 'Drag and drop a file, or press Ctrl+V to paste')}</span>
-              <span class="privacy-notice">${t('privacy-notice', 'Your file is not uploaded. All processing happens locally in your browser.')}</span>
             </div>
           </div>
         </div>
