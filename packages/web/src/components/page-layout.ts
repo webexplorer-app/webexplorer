@@ -99,7 +99,7 @@ export class PageTitle extends LitElement {
       height: 1.5rem;
       flex-shrink: 0;
     }
-    h4 {
+    h1 {
       margin: 0;
       padding: 0;
       font-size: var(--font-size-3, 1.25rem);
@@ -124,7 +124,7 @@ export class PageTitle extends LitElement {
         ${this.showIcon ? html`
           <img class="title-icon" src="/favicon.svg" alt="Web Explorer" />
         ` : null}
-        <h4>${this.title}</h4>
+        <h1>${this.title}</h1>
       </div>
     `;
   }

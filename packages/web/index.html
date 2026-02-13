@@ -6,13 +6,91 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#3b82f6" />
-  <meta name="description" content="Web Explorer - Preview any file type in your browser" />
+
+  <!-- SEO -->
+  <title>Web Explorer - Open & Preview Any File in Your Browser</title>
+  <meta name="description" content="Free online file viewer. Open PDF, images, videos, audio, code, archives, ebooks, 3D models, and 100+ file formats directly in your browser. No upload, no server — 100% private." />
+  <link rel="canonical" href="https://www.webexplorer.app/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.webexplorer.app/" />
+  <meta property="og:title" content="Web Explorer - Open & Preview Any File in Your Browser" />
+  <meta property="og:description" content="Free online file viewer. Open PDF, images, videos, audio, code, archives, ebooks, 3D models, and 100+ file formats directly in your browser. No upload, no server — 100% private." />
+  <meta property="og:site_name" content="Web Explorer" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Web Explorer - Open & Preview Any File in Your Browser" />
+  <meta name="twitter:description" content="Free online file viewer supporting 100+ formats. Runs entirely in your browser — no uploads, fully private." />
+
+  <!-- Additional SEO meta -->
+  <meta name="keywords" content="file viewer, online file viewer, open file online, PDF viewer, image viewer, video player, audio player, code viewer, archive viewer, epub reader, 3D model viewer, browser file viewer, free file viewer, private file viewer" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Web Explorer" />
+
   <link rel="apple-touch-icon" href="/icon.svg" />
-  <title>Web Explorer</title>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Web Explorer",
+    "url": "https://www.webexplorer.app",
+    "description": "A universal file viewer that runs entirely in your browser. Open and preview PDF, images, videos, audio, code, archives, ebooks, 3D models, and 100+ file formats — no upload required.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires a modern web browser with JavaScript enabled",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "PDF viewing",
+      "Image viewing (PNG, JPG, GIF, SVG, WebP)",
+      "Video playback (MP4, WebM, MKV)",
+      "Audio playback (MP3, WAV, FLAC, OGG)",
+      "Code viewing with syntax highlighting",
+      "Archive extraction (ZIP, TAR, 7Z, RAR)",
+      "Ebook reading (EPUB, MOBI)",
+      "3D model viewing (STL, OBJ, GLTF)",
+      "Office document viewing",
+      "100% client-side, no file uploads"
+    ]
+  }
+  </script>
 </head>
 
 <body>
   <div id="root"></div>
+
+  <!-- SEO: crawlable fallback content for search engines -->
+  <noscript>
+    <main>
+      <h1>Web Explorer - Open & Preview Any File in Your Browser</h1>
+      <p>Web Explorer is a free, private online file viewer that lets you open and preview over 100 file formats directly in your browser. No file uploads, no server processing — everything runs locally on your device.</p>
+      <h2>Supported File Formats</h2>
+      <ul>
+        <li><strong>Documents:</strong> PDF, DOCX, PPTX, XLSX, ODT, ODS, ODP</li>
+        <li><strong>Images:</strong> PNG, JPG, JPEG, GIF, BMP, SVG, WebP, ICO, TIFF</li>
+        <li><strong>Videos:</strong> MP4, WebM, MKV, AVI, MOV</li>
+        <li><strong>Audio:</strong> MP3, WAV, FLAC, OGG, AAC, MIDI</li>
+        <li><strong>Code:</strong> JS, TS, Python, Java, C, C++, HTML, CSS, JSON, XML, YAML, and more</li>
+        <li><strong>Archives:</strong> ZIP, TAR, GZ, 7Z, RAR, BZ2</li>
+        <li><strong>Ebooks:</strong> EPUB, MOBI</li>
+        <li><strong>3D Models:</strong> STL, OBJ, GLTF, GLB, FBX</li>
+        <li><strong>Databases:</strong> SQLite</li>
+        <li><strong>Fonts:</strong> TTF, OTF, WOFF, WOFF2</li>
+        <li><strong>Torrents:</strong> .torrent files</li>
+        <li><strong>Guitar Tabs:</strong> GP3, GP4, GP5, GPX</li>
+      </ul>
+      <h2>Privacy First</h2>
+      <p>All file processing happens entirely in your browser using WebAssembly and JavaScript. Your files never leave your device.</p>
+    </main>
+  </noscript>
+
   <script type="module" src="/src/main.ts"></script>
 </body>
 

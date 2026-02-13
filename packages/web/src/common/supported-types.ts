@@ -634,7 +634,7 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
       // Query languages
       'sql',
       'graphql', 'gql',
-      // Plain text (but not log, ini, json, xml which have specialized viewers)
+      // Plain text
       'txt', 'text',
     ],
     mimeTypes: [

@@ -7,7 +7,6 @@ import { getFileTypeByMime, getFileTypeByExtension } from '../common/supported-t
 import './viewers/image-viewer';
 import './viewers/video-viewer';
 import './viewers/audio-viewer';
-import './viewers/text-viewer';
 import './viewers/binary-viewer';
 import './viewers/default-viewer';
 
@@ -69,6 +68,36 @@ export class FileViewer extends LitElement {
 
   @state()
   private viewerType: string = 'default';
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener('viewer-selected', this.handleViewerSelected as EventListener);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('viewer-selected', this.handleViewerSelected as EventListener);
+  }
+
+  private handleViewerSelected = (e: CustomEvent<{ viewerId: string; viewer: string; lazyLoad: boolean }>) => {
+    e.stopPropagation();
+    const { viewerId, viewer, lazyLoad } = e.detail;
+    this.viewerType = viewerId;
+    this.viewerLoaded = false;
+
+    if (lazyLoad) {
+      const viewerLoader = VIEWER_LOADERS[viewer];
+      if (viewerLoader) {
+        this.loadViewer(viewerLoader);
+      } else {
+        console.error(`No viewer loader found for: ${viewer}`);
+        this.viewerType = 'default';
+        this.viewerLoaded = true;
+      }
+    } else {
+      this.viewerLoaded = true;
+    }
+  };
 
   willUpdate(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('file')) {

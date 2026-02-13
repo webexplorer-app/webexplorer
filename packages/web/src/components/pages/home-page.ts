@@ -142,7 +142,7 @@ export class HomePage extends LocalizedLitElement {
     .supports {
       margin-top: var(--size-4, 1rem);
     }
-    .supports h3 {
+    .supports h2 {
       margin-bottom: var(--size-4, 1rem);
       color: var(--primary, #333);
       font-weight: var(--font-weight-6, 600);
@@ -257,7 +257,7 @@ export class HomePage extends LocalizedLitElement {
               </div>
             </div>
             <div class="supports">
-              <h3>${t('supported-files', 'Supported Files')}</h3>
+              <h2>${t('supported-files', 'Supported Files')}</h2>
               <supported-files-list></supported-files-list>
             </div>
           </div>
