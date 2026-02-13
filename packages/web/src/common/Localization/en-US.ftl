@@ -186,4 +186,10 @@ formats-available = format(s) available
 html-source = HTML Source
 failed-to-parse-clipboard = Failed to parse clipboard data
 no-data = No data
+
+# URL Viewer
+url-file = Internet Shortcut
+url-shortcut = Internet Shortcut
+open-url = Open Link
+failed-to-parse-url = Failed to parse URL file
 clear = Clear

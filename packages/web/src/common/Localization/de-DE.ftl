@@ -165,3 +165,9 @@ html-source = HTML-Quellcode
 failed-to-parse-clipboard = Fehler beim Parsen der Zwischenablage-Daten
 no-data = Keine Daten
 clear = Löschen
+
+# URL-Viewer
+url-file = Internetverknüpfung
+url-shortcut = Internetverknüpfung
+open-url = Link öffnen
+failed-to-parse-url = Fehler beim Parsen der URL-Datei

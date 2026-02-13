@@ -165,3 +165,9 @@ html-source = HTML 소스
 failed-to-parse-clipboard = 클립보드 데이터 구문 분석 실패
 no-data = 데이터 없음
 clear = 지우기
+
+# URL 뷰어
+url-file = 인터넷 바로가기
+url-shortcut = 인터넷 바로가기
+open-url = 링크 열기
+failed-to-parse-url = URL 파일 구문 분석 실패

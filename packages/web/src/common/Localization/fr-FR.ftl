@@ -165,3 +165,9 @@ html-source = Code HTML
 failed-to-parse-clipboard = Échec de l'analyse des données du presse-papiers
 no-data = Aucune donnée
 clear = Effacer
+
+# Visionneuse URL
+url-file = Raccourci Internet
+url-shortcut = Raccourci Internet
+open-url = Ouvrir le lien
+failed-to-parse-url = Échec de l'analyse du fichier URL

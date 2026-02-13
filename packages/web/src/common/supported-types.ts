@@ -539,6 +539,21 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
     category: 'other',
   },
   
+  // URL / Internet Shortcut
+  {
+    id: 'url',
+    nameKey: 'url-file',
+    defaultName: 'Internet Shortcut',
+    extensions: ['url'],
+    mimeTypes: [
+      'application/x-url',
+      'application/internet-shortcut',
+    ],
+    viewer: 'url-viewer',
+    lazyLoad: true,
+    category: 'other',
+  },
+  
   // Structured Data (JSON/XML tree view)
   {
     id: 'tree',

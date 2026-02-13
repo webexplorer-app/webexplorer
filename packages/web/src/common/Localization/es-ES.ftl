@@ -165,3 +165,9 @@ html-source = Código HTML
 failed-to-parse-clipboard = Error al analizar los datos del portapapeles
 no-data = Sin datos
 clear = Limpiar
+
+# Visor de URL
+url-file = Acceso directo de Internet
+url-shortcut = Acceso directo de Internet
+open-url = Abrir enlace
+failed-to-parse-url = Error al analizar el archivo URL

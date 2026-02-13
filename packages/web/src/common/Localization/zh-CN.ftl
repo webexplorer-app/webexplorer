@@ -186,4 +186,10 @@ formats-available = 种格式可用
 html-source = HTML 源码
 failed-to-parse-clipboard = 解析剪贴板数据失败
 no-data = 无数据
+
+# URL 查看器
+url-file = 网址快捷方式
+url-shortcut = 网址快捷方式
+open-url = 打开链接
+failed-to-parse-url = 解析 URL 文件失败
 clear = 清除

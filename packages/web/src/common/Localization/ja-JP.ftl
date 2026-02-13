@@ -165,3 +165,9 @@ html-source = HTMLソース
 failed-to-parse-clipboard = クリップボードデータの解析に失敗しました
 no-data = データなし
 clear = クリア
+
+# URL ビューア
+url-file = インターネットショートカット
+url-shortcut = インターネットショートカット
+open-url = リンクを開く
+failed-to-parse-url = URLファイルの解析に失敗しました

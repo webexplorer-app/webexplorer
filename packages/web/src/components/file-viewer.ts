@@ -44,6 +44,7 @@ const VIEWER_LOADERS: Record<string, () => Promise<unknown>> = {
   'certificate-viewer': () => import('./viewers/certificate-viewer'),
   'fiddler-viewer': () => import('./viewers/fiddler-viewer'),
   'clipboard-viewer': () => import('./viewers/clipboard-viewer'),
+  'url-viewer': () => import('./viewers/url-viewer'),
 };
 
 @customElement('file-viewer')
@@ -241,6 +242,8 @@ export class FileViewer extends LitElement {
         return html`<fiddler-viewer .file=${file}></fiddler-viewer>`;
       case 'clipboard':
         return html`<clipboard-viewer .file=${file}></clipboard-viewer>`;
+      case 'url':
+        return html`<url-viewer .file=${file}></url-viewer>`;
       default:
         return html`<default-viewer .file=${file}></default-viewer>`;
     }
