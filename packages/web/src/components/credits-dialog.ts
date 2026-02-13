@@ -7,11 +7,11 @@ interface OpenSourceProject {
   name: string;
   description: string;
   url: string;
-  category: 'framework' | 'media' | 'document' | 'utility' | 'editor';
+  category: 'framework' | 'media' | 'document' | 'utility' | 'editor' | 'data';
 }
 
 const OPEN_SOURCE_PROJECTS: OpenSourceProject[] = [
-  // Frameworks
+  // Frameworks & Build Tools
   {
     name: 'Lit',
     description: 'Simple, fast web components',
@@ -37,7 +37,7 @@ const OPEN_SOURCE_PROJECTS: OpenSourceProject[] = [
     category: 'framework',
   },
 
-  // Editor
+  // Code Editor
   {
     name: 'CodeMirror',
     description: 'Extensible code editor component',
@@ -45,7 +45,7 @@ const OPEN_SOURCE_PROJECTS: OpenSourceProject[] = [
     category: 'editor',
   },
 
-  // Media
+  // Media & Graphics
   {
     name: 'Three.js',
     description: '3D library for WebGL',
@@ -65,31 +65,75 @@ const OPEN_SOURCE_PROJECTS: OpenSourceProject[] = [
     category: 'media',
   },
 
-  // Document
+  // Document Processing
   {
     name: 'UnionPDF',
-    description: 'PDF rendering engine',
-    url: 'https://github.com/nickyvanurk/unionpdf',
+    description: 'PDF rendering engine for the web',
+    url: 'https://github.com/jichang/unionpdf',
     category: 'document',
   },
   {
-    name: 'libarchive.js',
-    description: 'Archive extraction in browser',
-    url: 'https://github.com/nickyvanurk/libarchive.js',
+    name: 'docx-preview',
+    description: 'Word document renderer for browser',
+    url: 'https://github.com/VolodymyrBaydalka/docxjs',
+    category: 'document',
+  },
+  {
+    name: 'rtf.js',
+    description: 'RTF document parser and renderer',
+    url: 'https://github.com/tbluemel/rtf.js',
+    category: 'document',
+  },
+  {
+    name: 'SheetJS',
+    description: 'Spreadsheet parser and writer',
+    url: 'https://sheetjs.com',
+    category: 'document',
+  },
+  {
+    name: 'Marked',
+    description: 'Markdown parser and compiler',
+    url: 'https://marked.js.org',
+    category: 'document',
+  },
+  {
+    name: 'postal-mime',
+    description: 'MIME/EML email message parser',
+    url: 'https://github.com/postalsys/postal-mime',
+    category: 'document',
+  },
+  {
+    name: 'libarchive',
+    description: 'Archive extraction via WebAssembly',
+    url: 'https://www.libarchive.org',
     category: 'document',
   },
 
-  // Utility
+  // Data
   {
-    name: 'Comlink',
-    description: 'Web Workers made easy',
-    url: 'https://github.com/GoogleChromeLabs/comlink',
-    category: 'utility',
+    name: 'sql.js',
+    description: 'SQLite compiled to WebAssembly',
+    url: 'https://sql.js.org',
+    category: 'data',
+  },
+  {
+    name: 'csv-parse',
+    description: 'CSV parsing library',
+    url: 'https://csv.js.org',
+    category: 'data',
   },
   {
     name: 'WebTorrent',
     description: 'Streaming torrent client for web',
     url: 'https://webtorrent.io',
+    category: 'data',
+  },
+
+  // Utilities
+  {
+    name: 'Comlink',
+    description: 'Web Workers made easy',
+    url: 'https://github.com/GoogleChromeLabs/comlink',
     category: 'utility',
   },
   {
@@ -105,12 +149,6 @@ const OPEN_SOURCE_PROJECTS: OpenSourceProject[] = [
     category: 'utility',
   },
   {
-    name: 'csv-parse',
-    description: 'CSV parsing library',
-    url: 'https://csv.js.org',
-    category: 'utility',
-  },
-  {
     name: 'mime',
     description: 'MIME type detection',
     url: 'https://github.com/broofa/mime',
@@ -123,6 +161,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   editor: 'Code Editor',
   media: 'Media & Graphics',
   document: 'Document Processing',
+  data: 'Data & Parsing',
   utility: 'Utilities',
 };
 
@@ -358,7 +397,7 @@ export class CreditsDialog extends LocalizedLitElement {
     if (!this.open) return null;
 
     // Group projects by category
-    const categories = ['framework', 'editor', 'media', 'document', 'utility'];
+    const categories = ['framework', 'editor', 'media', 'document', 'data', 'utility'];
     const groupedProjects = categories.map(cat => ({
       category: cat,
       projects: OPEN_SOURCE_PROJECTS.filter(p => p.category === cat),
