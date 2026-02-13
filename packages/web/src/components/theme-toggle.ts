@@ -16,20 +16,25 @@ export class ThemeToggle extends LocalizedLitElement {
       width: 2.25rem;
       height: 2.25rem;
       padding: 0;
-      border: 1px solid var(--border, #ccc);
-      border-radius: var(--radius-2, 4px);
-      background: var(--surface, #f5f5f5);
+      border: none;
+      border-radius: var(--radius-2, 8px);
+      background: transparent;
       color: var(--text-muted, #6b7280);
       cursor: pointer;
-      transition: background-color 0.15s ease;
+      transition: all 0.15s ease;
     }
 
     button svg {
-      width: 1.125rem;
-      height: 1.125rem;
+      width: 1.25rem;
+      height: 1.25rem;
     }
     button:hover {
-      background-color: var(--surface-hover, #e8e8e8);
+      background: var(--surface-hover, #f3f4f6);
+      color: var(--accent, #3b82f6);
+      transform: scale(1.05);
+    }
+    button:active {
+      transform: scale(0.95);
     }
   `;
 
