@@ -1,5 +1,92 @@
 # https://www.robotstxt.org/robotstxt.html
+
+# Allow major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# Block AI crawlers and scrapers
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: YouBot
+Disallow: /
+
+# Block security scanners and corporate crawlers
+User-agent: PaloAltoNetworks
+Disallow: /
+
+User-agent: Expanse
+Disallow: /
+
+User-agent: CensysInspect
+Disallow: /
+
+User-agent: Shodan
+Disallow: /
+
+User-agent: ZmEu
+Disallow: /
+
+User-agent: Nessus
+Disallow: /
+
+User-agent: Qualys
+Disallow: /
+
+# Block SEO and marketing crawlers
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+# Block all other bots by default
 User-agent: *
-Disallow:
+Disallow: /
 
 Sitemap: https://www.webexplorer.app/sitemap.xml
