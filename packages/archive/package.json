@@ -47,12 +47,12 @@
   "homepage": "https://github.com/exploreronweb/webexplorer#readme",
   "dependencies": {
     "@types/emscripten": "^1.41.5",
-    "cpy-cli": "^6.0.0",
+    "cpy-cli": "^7.0.0",
     "del-cli": "^7.0.0",
-    "parcel": "^2.16.1",
+    "parcel": "^2.16.4",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "vitest": "^4.0.15"
+    "vitest": "^4.0.18"
   }
 }
