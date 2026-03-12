@@ -100,6 +100,17 @@ export class SupportedFilesList extends LocalizedLitElement {
     .icon-hex { color: #546e7a; }
     .icon-diff { color: #e65100; }
     .icon-certificate { color: #00897b; }
+    .icon-fiddler { color: #1565c0; }
+    .icon-clipboard { color: #7e57c2; }
+    .icon-url { color: #0288d1; }
+    .icon-ffmpeg { color: #7b1fa2; }
+    .icon-mermaid { color: #ff3670; }
+    .icon-graphviz { color: #0d47a1; }
+    .icon-vega { color: #4c78a8; }
+    .icon-drawio { color: #f08705; }
+    .icon-excalidraw { color: #6965db; }
+    .icon-geojson { color: #2e7d32; }
+    .icon-plantuml { color: #c62828; }
 
     .extension {
       font-family: var(--font-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace);
@@ -263,6 +274,50 @@ export class SupportedFilesList extends LocalizedLitElement {
       case 'certificate':
         return html`<span class="${iconClass}">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+        </span>`;
+      case 'fiddler':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.49L17.5 6.5 9.99 9.99 6.5 17.5zm5.5-6.6c.61 0 1.1.49 1.1 1.1s-.49 1.1-1.1 1.1-1.1-.49-1.1-1.1.49-1.1 1.1-1.1z"/></svg>
+        </span>`;
+      case 'clipboard':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 2h-4.18C14.4.84 13.3 0 12 0c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"/></svg>
+        </span>`;
+      case 'url':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+        </span>`;
+      case 'ffmpeg':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4zm-6.5 9.5L10 12l1.5-1.5L10 9l2-2 4 4-4 4-2-2z"/></svg>
+        </span>`;
+      case 'mermaid':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5zm4 4h-2v-2h2v2zm0-4h-2V7h2v5z"/><path d="M5 8l3 3-3 3M19 8l-3 3 3 3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </span>`;
+      case 'graphviz':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><line x1="6" y1="9" x2="12" y2="15" stroke="currentColor" stroke-width="2"/><line x1="18" y1="9" x2="12" y2="15" stroke="currentColor" stroke-width="2"/></svg>
+        </span>`;
+      case 'vega':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm0-4h8v-2H5v2zm0-4h14v-2H5v2zm0-4h8V6H5v2zm0-6v2h14V2H5z" opacity=".3"/><path d="M3 22h18V2H3v20zM5 4h4v4H5V4zm0 6h14v2H5v-2zm0 4h8v2H5v-2zm0 4h14v2H5v-2z"/></svg>
+        </span>`;
+      case 'drawio':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="3" width="8" height="6" rx="1"/><rect x="14" y="3" width="8" height="6" rx="1"/><rect x="8" y="15" width="8" height="6" rx="1"/><line x1="6" y1="9" x2="6" y2="12" stroke="currentColor" stroke-width="2"/><line x1="18" y1="9" x2="18" y2="12" stroke="currentColor" stroke-width="2"/><line x1="6" y1="12" x2="18" y2="12" stroke="currentColor" stroke-width="2"/><line x1="12" y1="12" x2="12" y2="15" stroke="currentColor" stroke-width="2"/></svg>
+        </span>`;
+      case 'excalidraw':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+        </span>`;
+      case 'geojson':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </span>`;
+      case 'plantuml':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v2H3V3zm0 4h8v2H3V7zm0 4h8v2H3v-2zm12-8h6v2h-6V3zm0 4h6v2h-6V7zm0 4h6v2h-6v-2z"/><path d="M9 15l3 3-3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>`;
       default:
         return html`<span class="${iconClass}">

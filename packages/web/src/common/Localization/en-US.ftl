@@ -193,3 +193,12 @@ url-shortcut = Internet Shortcut
 open-url = Open Link
 failed-to-parse-url = Failed to parse URL file
 clear = Clear
+
+# Chart/Diagram Viewers
+mermaid-file = Mermaid Diagram
+graphviz-file = Graphviz Diagram
+vega-file = Vega/Vega-Lite Chart
+drawio-file = Draw.io Diagram
+excalidraw-file = Excalidraw Diagram
+geojson-file = GeoJSON Map
+plantuml-file = PlantUML Diagram

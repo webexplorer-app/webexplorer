@@ -171,3 +171,12 @@ url-file = Raccourci Internet
 url-shortcut = Raccourci Internet
 open-url = Ouvrir le lien
 failed-to-parse-url = Échec de l'analyse du fichier URL
+
+# Visionneuses de graphiques/diagrammes
+mermaid-file = Diagramme Mermaid
+graphviz-file = Diagramme Graphviz
+vega-file = Graphique Vega/Vega-Lite
+drawio-file = Diagramme Draw.io
+excalidraw-file = Diagramme Excalidraw
+geojson-file = Carte GeoJSON
+plantuml-file = Diagramme PlantUML

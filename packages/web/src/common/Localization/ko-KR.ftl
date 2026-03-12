@@ -171,3 +171,12 @@ url-file = 인터넷 바로가기
 url-shortcut = 인터넷 바로가기
 open-url = 링크 열기
 failed-to-parse-url = URL 파일 구문 분석 실패
+
+# 차트/다이어그램 뷰어
+mermaid-file = Mermaid 다이어그램
+graphviz-file = Graphviz 다이어그램
+vega-file = Vega/Vega-Lite 차트
+drawio-file = Draw.io 다이어그램
+excalidraw-file = Excalidraw 다이어그램
+geojson-file = GeoJSON 지도
+plantuml-file = PlantUML 다이어그램

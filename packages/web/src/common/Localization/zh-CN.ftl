@@ -193,3 +193,12 @@ url-shortcut = 网址快捷方式
 open-url = 打开链接
 failed-to-parse-url = 解析 URL 文件失败
 clear = 清除
+
+# 图表/图形查看器
+mermaid-file = Mermaid 图表
+graphviz-file = Graphviz 图表
+vega-file = Vega/Vega-Lite 图表
+drawio-file = Draw.io 图表
+excalidraw-file = Excalidraw 图表
+geojson-file = GeoJSON 地图
+plantuml-file = PlantUML 图表

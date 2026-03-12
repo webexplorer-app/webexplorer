@@ -44,6 +44,13 @@ const VIEWER_LOADERS: Record<string, () => Promise<unknown>> = {
   'fiddler-viewer': () => import('./viewers/fiddler-viewer'),
   'clipboard-viewer': () => import('./viewers/clipboard-viewer'),
   'url-viewer': () => import('./viewers/url-viewer'),
+  'mermaid-viewer': () => import('./viewers/mermaid-viewer'),
+  'graphviz-viewer': () => import('./viewers/graphviz-viewer'),
+  'vega-viewer': () => import('./viewers/vega-viewer'),
+  'drawio-viewer': () => import('./viewers/drawio-viewer'),
+  'excalidraw-viewer': () => import('./viewers/excalidraw-viewer'),
+  'geojson-viewer': () => import('./viewers/geojson-viewer'),
+  'plantuml-viewer': () => import('./viewers/plantuml-viewer'),
 };
 
 @customElement('file-viewer')
@@ -128,7 +135,11 @@ export class FileViewer extends LitElement {
     const lastDot = fileName.lastIndexOf('.');
     const extension = lastDot >= 0 ? fileName.substring(lastDot + 1) : '';
     
-    let supportedType = getFileTypeByExtension(extension);
+    // Also try compound extension (e.g. "vg.json", "drawio.xml")
+    const secondLastDot = lastDot > 0 ? fileName.lastIndexOf('.', lastDot - 1) : -1;
+    const compoundExtension = secondLastDot >= 0 ? fileName.substring(secondLastDot + 1) : '';
+    
+    let supportedType = getFileTypeByExtension(compoundExtension) || getFileTypeByExtension(extension);
     
     // If no match by extension, try MIME type
     if (!supportedType) {
@@ -273,6 +284,20 @@ export class FileViewer extends LitElement {
         return html`<clipboard-viewer .file=${file}></clipboard-viewer>`;
       case 'url':
         return html`<url-viewer .file=${file}></url-viewer>`;
+      case 'mermaid':
+        return html`<mermaid-viewer .file=${file}></mermaid-viewer>`;
+      case 'graphviz':
+        return html`<graphviz-viewer .file=${file}></graphviz-viewer>`;
+      case 'vega':
+        return html`<vega-viewer .file=${file}></vega-viewer>`;
+      case 'drawio':
+        return html`<drawio-viewer .file=${file}></drawio-viewer>`;
+      case 'excalidraw':
+        return html`<excalidraw-viewer .file=${file}></excalidraw-viewer>`;
+      case 'geojson':
+        return html`<geojson-viewer .file=${file}></geojson-viewer>`;
+      case 'plantuml':
+        return html`<plantuml-viewer .file=${file}></plantuml-viewer>`;
       default:
         return html`<default-viewer .file=${file}></default-viewer>`;
     }

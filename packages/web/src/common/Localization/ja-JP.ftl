@@ -171,3 +171,12 @@ url-file = インターネットショートカット
 url-shortcut = インターネットショートカット
 open-url = リンクを開く
 failed-to-parse-url = URLファイルの解析に失敗しました
+
+# チャート/ダイアグラムビューア
+mermaid-file = Mermaidダイアグラム
+graphviz-file = Graphvizダイアグラム
+vega-file = Vega/Vega-Liteチャート
+drawio-file = Draw.ioダイアグラム
+excalidraw-file = Excalidrawダイアグラム
+geojson-file = GeoJSONマップ
+plantuml-file = PlantUMLダイアグラム
