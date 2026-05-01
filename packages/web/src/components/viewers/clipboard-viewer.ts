@@ -1,8 +1,8 @@
 import { html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { LocalizedLitElement } from '../localized-element';
 import { t } from '../../common/Localization';
+import '../file-viewer';
 
 interface ClipboardFormat {
   type: string;
@@ -46,6 +46,9 @@ export class ClipboardViewer extends LocalizedLitElement {
       border-bottom: 2px solid transparent;
       margin-bottom: -2px;
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
     }
 
     .format-tab:hover {
@@ -58,62 +61,49 @@ export class ClipboardViewer extends LocalizedLitElement {
       border-bottom-color: var(--primary, #0066CC);
     }
 
+    .format-tab input[type="checkbox"] {
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .copy-btn {
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--border, #ddd);
+      border-radius: 4px;
+      background: var(--surface, #fff);
+      color: var(--text, #333);
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .copy-btn:hover {
+      background: var(--surface-hover, #f3f4f6);
+    }
+
+    .copy-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .copy-btn.copied {
+      color: var(--success, #16a34a);
+      border-color: var(--success, #16a34a);
+    }
+
     .format-content {
       border: 1px solid var(--border, #ddd);
       border-radius: 4px;
       overflow: hidden;
-    }
-
-    .text-content {
-      padding: 1rem;
-      font-family: var(--font-mono, monospace);
-      font-size: 0.875rem;
-      white-space: pre-wrap;
-      word-break: break-all;
-      background: var(--surface-alt, #f5f5f5);
-      color: var(--text, #333);
-    }
-
-    .html-content {
-      padding: 1rem;
-      background: white;
-      color: #333;
-    }
-
-    .html-source {
-      margin-top: 1rem;
-    }
-
-    .html-source-header {
-      padding: 0.5rem 1rem;
-      background: var(--surface-alt, #f5f5f5);
-      border-bottom: 1px solid var(--border, #ddd);
-      font-size: 0.75rem;
-      color: var(--text-muted, #666);
-      font-weight: 500;
-    }
-
-    .image-content {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 1rem;
-      background: var(--surface-alt, #f5f5f5);
-    }
-
-    .image-content img {
-      max-width: 100%;
-      border: 1px solid var(--border, #ddd);
-      border-radius: 4px;
-    }
-
-    .json-content {
-      padding: 1rem;
-      font-family: var(--font-mono, monospace);
-      font-size: 0.875rem;
-      white-space: pre-wrap;
-      background: var(--surface-alt, #f5f5f5);
-      color: var(--text, #333);
+      min-height: 200px;
     }
 
     .loading {
@@ -149,6 +139,12 @@ export class ClipboardViewer extends LocalizedLitElement {
   @state()
   private error: string | null = null;
 
+  @state()
+  private copied = false;
+
+  @state()
+  private selectedFormats: Set<string> = new Set();
+
   willUpdate(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('file') && this.file) {
       this.loadClipboardData();
@@ -165,7 +161,12 @@ export class ClipboardViewer extends LocalizedLitElement {
       const text = await this.file.text();
       this.clipboardData = JSON.parse(text) as ClipboardData;
       
-      // Set active format to first available
+      // Set active format to first available and select all by default
+      const allTypes: string[] = [
+        ...this.clipboardData.formats.map(f => f.type),
+        ...this.clipboardData.images.map(i => i.type),
+      ];
+      this.selectedFormats = new Set(allTypes);
       if (this.clipboardData.formats.length > 0) {
         this.activeFormat = this.clipboardData.formats[0].type;
       } else if (this.clipboardData.images.length > 0) {
@@ -196,42 +197,83 @@ export class ClipboardViewer extends LocalizedLitElement {
     return labels[type] || type;
   }
 
-  private renderFormatContent(format: ClipboardFormat) {
-    switch (format.viewer) {
-      case 'text':
-        return html`<div class="text-content">${format.data}</div>`;
-      
-      case 'html':
-        return html`
-          <div class="html-content">${unsafeHTML(format.data)}</div>
-          <div class="html-source">
-            <div class="html-source-header">${t('html-source', 'HTML Source')}</div>
-            <div class="text-content">${format.data}</div>
-          </div>
-        `;
-      
-      case 'json':
-        try {
-          const formatted = JSON.stringify(JSON.parse(format.data), null, 2);
-          return html`<div class="json-content">${formatted}</div>`;
-        } catch {
-          return html`<div class="text-content">${format.data}</div>`;
-        }
-      
-      case 'rtf':
-        return html`<div class="text-content">${format.data}</div>`;
-      
-      default:
-        return html`<div class="text-content">${format.data}</div>`;
-    }
+  private getExtensionForType(type: string): string {
+    const extensions: Record<string, string> = {
+      'text/plain': 'txt',
+      'text/html': 'html',
+      'text/rtf': 'rtf',
+      'application/rtf': 'rtf',
+      'application/json': 'json',
+      'text/uri-list': 'txt',
+      'image/png': 'png',
+      'image/jpeg': 'jpg',
+      'image/gif': 'gif',
+      'image/webp': 'webp',
+      'image/bmp': 'bmp',
+    };
+    return extensions[type] || 'bin';
   }
 
-  private renderImageContent(image: { type: string; data: string }) {
-    return html`
-      <div class="image-content">
-        <img src="data:${image.type};base64,${image.data}" alt="Clipboard image" />
-      </div>
-    `;
+  private getActiveFile(): File | null {
+    if (!this.clipboardData || !this.activeFormat) return null;
+
+    const { formats, images } = this.clipboardData;
+    const textFormat = formats.find(f => f.type === this.activeFormat);
+    if (textFormat) {
+      const ext = this.getExtensionForType(textFormat.type);
+      return new File([textFormat.data], `clipboard.${ext}`, { type: textFormat.type });
+    }
+
+    const imageFormat = images.find(i => i.type === this.activeFormat);
+    if (imageFormat) {
+      const binary = atob(imageFormat.data);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      const ext = this.getExtensionForType(imageFormat.type);
+      return new File([bytes], `clipboard.${ext}`, { type: imageFormat.type });
+    }
+
+    return null;
+  }
+
+  private toggleFormat(type: string) {
+    const next = new Set(this.selectedFormats);
+    if (next.has(type)) {
+      next.delete(type);
+    } else {
+      next.add(type);
+    }
+    this.selectedFormats = next;
+  }
+
+  private async copySelectedContent() {
+    const { formats, images } = this.clipboardData!;
+    const blobs: Record<string, Blob> = {};
+
+    try {
+      for (const type of this.selectedFormats) {
+        const textFormat = formats.find(f => f.type === type);
+        if (textFormat) {
+          blobs[type] = new Blob([textFormat.data], { type });
+          continue;
+        }
+        const imageFormat = images.find(i => i.type === type);
+        if (imageFormat) {
+          const res = await fetch(`data:${imageFormat.type};base64,${imageFormat.data}`);
+          blobs[type] = await res.blob();
+        }
+      }
+
+      if (Object.keys(blobs).length > 0) {
+        await navigator.clipboard.write([new ClipboardItem(blobs)]);
+      }
+      this.copied = true;
+      setTimeout(() => { this.copied = false; }, 2000);
+    } catch (e) {
+      console.error('Failed to copy:', e);
+    }
   }
 
   render() {
@@ -253,32 +295,44 @@ export class ClipboardViewer extends LocalizedLitElement {
       ...images.map(i => ({ type: i.type, isImage: true })),
     ];
 
-    const activeTextFormat = formats.find(f => f.type === this.activeFormat);
-    const activeImageFormat = images.find(i => i.type === this.activeFormat);
+    const activeFile = this.getActiveFile();
 
     return html`
       <div class="clipboard-viewer">
-        <div class="stats">
-          ${allFormats.length} ${t('formats-available', 'format(s) available')}
+        <div class="toolbar">
+          <div class="stats">
+            ${allFormats.length} ${t('formats-available', 'format(s) available')}
+          </div>
+          <button
+            class="copy-btn ${this.copied ? 'copied' : ''}"
+            ?disabled=${this.selectedFormats.size === 0}
+            @click=${() => this.copySelectedContent()}
+          >
+            ${this.copied ? t('copied', 'Copied!') : t('copy', 'Copy')}
+          </button>
         </div>
         
         <div class="formats-tabs">
           ${allFormats.map(f => html`
             <button 
               class="format-tab ${f.type === this.activeFormat ? 'active' : ''}"
-              @click=${() => this.activeFormat = f.type}
+              @click=${() => { this.activeFormat = f.type; this.copied = false; }}
             >
+              <input
+                type="checkbox"
+                .checked=${this.selectedFormats.has(f.type)}
+                @click=${(e: Event) => e.stopPropagation()}
+                @change=${() => this.toggleFormat(f.type)}
+              />
               ${this.getFormatLabel(f.type)}
             </button>
           `)}
         </div>
 
         <div class="format-content">
-          ${activeTextFormat 
-            ? this.renderFormatContent(activeTextFormat)
-            : activeImageFormat
-              ? this.renderImageContent(activeImageFormat)
-              : nothing
+          ${activeFile
+            ? html`<file-viewer .file=${activeFile}></file-viewer>`
+            : nothing
           }
         </div>
       </div>

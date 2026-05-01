@@ -1,4 +1,4 @@
-import { html, css } from 'lit';
+import { html, css, nothing } from 'lit';
 import type { PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { LocalizedLitElement } from '../localized-element';
@@ -24,6 +24,15 @@ import { xml } from '@codemirror/lang-xml';
 import { yaml } from '@codemirror/lang-yaml';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language';
+import * as prettier from 'prettier/standalone';
+import prettierPluginBabel from 'prettier/plugins/babel';
+import prettierPluginEstree from 'prettier/plugins/estree';
+import prettierPluginHtml from 'prettier/plugins/html';
+import prettierPluginCss from 'prettier/plugins/postcss';
+import prettierPluginTs from 'prettier/plugins/typescript';
+import prettierPluginMarkdown from 'prettier/plugins/markdown';
+import prettierPluginYaml from 'prettier/plugins/yaml';
+import prettierPluginGraphql from 'prettier/plugins/graphql';
 
 // Language detection patterns
 const LANGUAGE_PATTERNS: Record<string, RegExp> = {
@@ -194,6 +203,11 @@ export class CodeViewer extends LocalizedLitElement {
       color: var(--code-text, #abb2bf);
     }
 
+    .toolbar-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .toolbar-btn.active {
       background: var(--code-active, #2c313a);
       border-color: #61afef;
@@ -220,7 +234,15 @@ export class CodeViewer extends LocalizedLitElement {
   private error: string | null = null;
 
   @state()
-  private wordWrap = false;
+  private wordWrap = true;
+
+  @state()
+  private formatting = false;
+
+  @state()
+  private prettified = false;
+
+  private originalContent = '';
 
   private editorView: EditorView | null = null;
 
@@ -272,6 +294,12 @@ export class CodeViewer extends LocalizedLitElement {
       this.error = e instanceof Error ? e.message : 'Failed to load file';
     } finally {
       this.loading = false;
+      this.originalContent = this.content;
+      this.prettified = false;
+      // Auto-prettify if supported
+      if (this.getPrettierParser(this.language)) {
+        await this.prettifyCode();
+      }
       // Wait for the container to be rendered, then create editor
       await this.updateComplete;
       // Use requestAnimationFrame to ensure DOM is ready
@@ -332,6 +360,76 @@ export class CodeViewer extends LocalizedLitElement {
     });
   }
 
+  private getPrettierParser(language: string): string | null {
+    switch (language) {
+      case 'javascript':
+        return 'babel';
+      case 'typescript':
+        return 'typescript';
+      case 'json':
+        return 'json';
+      case 'html':
+        return 'html';
+      case 'css':
+        return 'css';
+      case 'markdown':
+        return 'markdown';
+      case 'yaml':
+        return 'yaml';
+      case 'graphql':
+        return 'graphql';
+      case 'php':
+        return 'php';
+      default:
+        return null;
+    }
+  }
+
+  private async prettifyCode() {
+    const parser = this.getPrettierParser(this.language);
+    if (!parser) return;
+
+    this.formatting = true;
+    try {
+      const formatted = await prettier.format(this.originalContent, {
+        parser,
+        plugins: [
+          prettierPluginBabel,
+          prettierPluginEstree,
+          prettierPluginHtml,
+          prettierPluginCss,
+          prettierPluginTs,
+          prettierPluginMarkdown,
+          prettierPluginYaml,
+          prettierPluginGraphql,
+        ],
+        semi: true,
+        singleQuote: true,
+        trailingComma: 'all',
+        tabWidth: 2,
+      });
+      this.content = formatted;
+      this.lineCount = this.content.split('\n').length;
+      this.prettified = true;
+      this.createEditor();
+    } catch (e) {
+      console.error('Prettify failed:', e);
+    } finally {
+      this.formatting = false;
+    }
+  }
+
+  private togglePrettify() {
+    if (this.prettified) {
+      this.content = this.originalContent;
+      this.lineCount = this.content.split('\n').length;
+      this.prettified = false;
+      this.createEditor();
+    } else {
+      this.prettifyCode();
+    }
+  }
+
   private updateWordWrap() {
     // Recreate editor with new wrap setting
     this.createEditor();
@@ -344,6 +442,7 @@ export class CodeViewer extends LocalizedLitElement {
   }
 
   private renderToolbar() {
+    const canPrettify = this.getPrettierParser(this.language) !== null;
     return html`
       <div class="toolbar">
         <div class="file-info">
@@ -355,6 +454,15 @@ export class CodeViewer extends LocalizedLitElement {
         >
           ${t('word-wrap', 'Word Wrap')}
         </button>
+        ${canPrettify ? html`
+          <button 
+            class="toolbar-btn ${this.prettified ? 'active' : ''}"
+            ?disabled=${this.formatting}
+            @click=${() => this.togglePrettify()}
+          >
+            ${this.formatting ? t('formatting', 'Formatting...') : t('prettify', 'Prettify')}
+          </button>
+        ` : nothing}
         <div class="stats">
           ${this.lineCount} ${t('lines', 'lines')} · ${this.formatFileSize(this.file?.size || 0)}
         </div>
