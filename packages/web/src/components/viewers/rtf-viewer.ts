@@ -17,6 +17,56 @@ export class RtfViewer extends LocalizedLitElement {
     }
     .rtf-viewer {
     }
+
+    .toolbar {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--surface-alt, #f5f5f5);
+      border-bottom: 1px solid var(--border, #ddd);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      align-items: center;
+    }
+
+    .toolbar button {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.375rem 0.75rem;
+      border: 1px solid var(--border, #ddd);
+      background: var(--background, #fff);
+      color: var(--text-primary, #333);
+      border-radius: 4px;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toolbar button:hover {
+      background: var(--surface-hover, #e8e8e8);
+    }
+
+    .toolbar button.active {
+      background: var(--primary, #3b82f6);
+      color: white;
+      border-color: var(--primary, #3b82f6);
+    }
+
+    .source-container {
+      padding: 1rem;
+      font-family: var(--font-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      background: var(--surface-alt, #f5f5f5);
+      border: 1px solid var(--border, #ddd);
+      border-radius: 4px;
+      margin: 1rem;
+      overflow: auto;
+    }
+
     .rtf-container {
       background: white;
       border: 1px solid var(--border, #ddd);
@@ -57,9 +107,29 @@ export class RtfViewer extends LocalizedLitElement {
   @state()
   private error: string | null = null;
 
+  @state()
+  private sourceText = '';
+
+  @state()
+  private showSource = false;
+
+  private renderedElements: HTMLElement[] = [];
+
   updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('file') && this.file) {
       this.loadRtf();
+    }
+    if (changedProperties.has('showSource') && !this.showSource && !this.loading && !this.error) {
+      this.appendRenderedContent();
+    }
+  }
+
+  private async appendRenderedContent() {
+    await this.updateComplete;
+    const container = this.shadowRoot?.querySelector('.rtf-content');
+    if (container) {
+      container.innerHTML = '';
+      this.renderedElements.forEach(el => container.appendChild(el.cloneNode(true)));
     }
   }
 
@@ -72,8 +142,13 @@ export class RtfViewer extends LocalizedLitElement {
     try {
       const arrayBuffer = await this.file.arrayBuffer();
       
+      // Store source text for text view
+      const decoder = new TextDecoder('latin1');
+      this.sourceText = decoder.decode(arrayBuffer);
+
       const doc = new RTFJS.Document(arrayBuffer, {});
       const elements = await doc.render();
+      this.renderedElements = elements as HTMLElement[];
       
       this.loading = false;
       
@@ -106,9 +181,22 @@ export class RtfViewer extends LocalizedLitElement {
 
     return html`
       <div class="rtf-viewer">
-        <div class="rtf-container">
-          <div class="rtf-content"></div>
+        <div class="toolbar">
+          <button class=${!this.showSource ? 'active' : ''} @click=${() => this.showSource = false}>
+            ${t('preview', 'Preview')}
+          </button>
+          <button class=${this.showSource ? 'active' : ''} @click=${() => this.showSource = true}>
+            ${t('text', 'Text')}
+          </button>
         </div>
+        ${this.showSource
+          ? html`<div class="source-container">${this.sourceText}</div>`
+          : html`
+            <div class="rtf-container">
+              <div class="rtf-content"></div>
+            </div>
+          `
+        }
       </div>
     `;
   }

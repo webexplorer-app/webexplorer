@@ -157,6 +157,19 @@ export class CodeViewer extends LocalizedLitElement {
       flex: 1;
     }
 
+    .preview-container {
+      flex: 1;
+      background: white;
+      border: none;
+    }
+
+    .preview-container iframe {
+      width: 100%;
+      min-height: 500px;
+      border: none;
+      background: white;
+    }
+
     .cm-editor {
       font-family: var(--font-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace);
       font-size: 0.875rem;
@@ -242,6 +255,9 @@ export class CodeViewer extends LocalizedLitElement {
   @state()
   private prettified = false;
 
+  @state()
+  private showPreview = false;
+
   private originalContent = '';
 
   private editorView: EditorView | null = null;
@@ -260,6 +276,10 @@ export class CodeViewer extends LocalizedLitElement {
     
     if (changedProperties.has('wordWrap') && this.editorView) {
       this.updateWordWrap();
+    }
+
+    if (changedProperties.has('showPreview') && !this.showPreview && !this.loading) {
+      requestAnimationFrame(() => this.createEditor());
     }
   }
 
@@ -441,6 +461,10 @@ export class CodeViewer extends LocalizedLitElement {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   }
 
+  private hasPreview(): boolean {
+    return this.language === 'html' || (this.file?.name.endsWith('.svg') ?? false);
+  }
+
   private renderToolbar() {
     const canPrettify = this.getPrettierParser(this.language) !== null;
     return html`
@@ -448,6 +472,14 @@ export class CodeViewer extends LocalizedLitElement {
         <div class="file-info">
           <span class="language-badge">${this.language}</span>
         </div>
+        ${this.hasPreview() ? html`
+          <button 
+            class="toolbar-btn ${this.showPreview ? 'active' : ''}"
+            @click=${() => this.showPreview = !this.showPreview}
+          >
+            ${t('preview', 'Preview')}
+          </button>
+        ` : nothing}
         <button 
           class="toolbar-btn ${this.wordWrap ? 'active' : ''}"
           @click=${() => this.wordWrap = !this.wordWrap}
@@ -482,7 +514,17 @@ export class CodeViewer extends LocalizedLitElement {
     return html`
       <div class="container">
         ${this.renderToolbar()}
-        <div class="editor-container"></div>
+        ${this.showPreview && this.hasPreview()
+          ? html`
+            <div class="preview-container">
+              <iframe
+                sandbox="allow-scripts"
+                srcdoc=${this.originalContent}
+              ></iframe>
+            </div>
+          `
+          : html`<div class="editor-container"></div>`
+        }
       </div>
     `;
   }
