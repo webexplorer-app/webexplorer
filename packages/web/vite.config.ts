@@ -1,7 +1,7 @@
 import path from 'path'
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
-import { alphaTab } from '@coderline/alphatab-vite'
+import { alphaTab } from './plugins/alphatab-vite/alphaTabVitePlugin'
 import { VitePWA } from 'vite-plugin-pwa'
 
 const nodePolyfillsPluginOptions = nodePolyfills({
@@ -11,9 +11,9 @@ const nodePolyfillsPluginOptions = nodePolyfills({
   exclude: [],
   // Whether to polyfill specific globals.
   globals: {
-    Buffer: true, // can also be 'build', 'dev', or false
-    global: true,
-    process: true,
+    Buffer: 'build',
+    global: 'build',
+    process: 'build',
   },
   // Override the default polyfills for specific modules.
   overrides: {
@@ -24,10 +24,48 @@ const nodePolyfillsPluginOptions = nodePolyfills({
   protocolImports: true,
 });
 
+// Remove deprecated esbuild config from node-polyfills plugin to suppress Vite 8 warning
+const origConfig = (nodePolyfillsPluginOptions as any).config;
+if (origConfig) {
+  (nodePolyfillsPluginOptions as any).config = function (...args: any[]) {
+    const result = origConfig.apply(this, args);
+    if (result && 'esbuild' in result) {
+      delete result.esbuild;
+    }
+    return result;
+  };
+}
+
+/**
+ * Injects global polyfills (Buffer, global, process) in dev mode via a
+ * transform hook, replacing the deprecated esbuild.banner approach.
+ */
+function globalPolyfillsPlugin(): Plugin {
+  return {
+    name: 'global-polyfills',
+    apply: 'serve',
+    transform(code, id) {
+      // Only inject into entry-like modules (the main HTML script)
+      if (id.includes('main.ts')) {
+        const banner = [
+          'import { Buffer } from "vite-plugin-node-polyfills/shims/buffer";',
+          'import global from "vite-plugin-node-polyfills/shims/global";',
+          'import process from "vite-plugin-node-polyfills/shims/process";',
+          'globalThis.Buffer = Buffer;',
+          'globalThis.global = global;',
+          'globalThis.process = process;',
+        ].join('\n');
+        return { code: banner + '\n' + code, map: null };
+      }
+    },
+  };
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     nodePolyfillsPluginOptions,
+    globalPolyfillsPlugin(),
     alphaTab(),
     VitePWA({
       registerType: 'autoUpdate',
@@ -93,15 +131,27 @@ export default defineConfig({
   assetsInclude: ['**/*.wasm'],
   worker: {
     format: 'es',
-    plugins: () => [
-      nodePolyfills({
+    plugins: () => {
+      const workerPolyfills = nodePolyfills({
         include: ['process'],
         globals: {
-          process: true,
+          process: 'build',
         },
         protocolImports: true,
-      }),
-    ],
+      });
+      // Patch out deprecated esbuild config from worker polyfills plugin
+      const origWorkerConfig = (workerPolyfills as any).config;
+      if (origWorkerConfig) {
+        (workerPolyfills as any).config = function (...args: any[]) {
+          const result = origWorkerConfig.apply(this, args);
+          if (result && 'esbuild' in result) {
+            delete result.esbuild;
+          }
+          return result;
+        };
+      }
+      return [workerPolyfills];
+    },
   },
   optimizeDeps: {
     exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/core', '@ffmpeg/core-mt', '@ffmpeg/util', '@webexplorer/ffmpeg', '@webexplorer/archive', 'wabt']

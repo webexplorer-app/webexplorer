@@ -2,6 +2,7 @@ import { html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { LocalizedLitElement } from '../localized-element';
 import { t } from '../../common/Localization';
+import sqlWasmUrl from 'sql.js/dist/sql-wasm.wasm?url';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SqlJsDatabase = any;
@@ -185,7 +186,7 @@ export class SqliteViewer extends LocalizedLitElement {
       // @ts-expect-error - sql.js doesn't have type declarations
       const initSqlJs = (await import('sql.js')).default;
       const SQL = await initSqlJs({
-        locateFile: (file: string) => `https://sql.js.org/dist/${file}`
+        locateFile: () => sqlWasmUrl
       });
 
       // Read file and create database

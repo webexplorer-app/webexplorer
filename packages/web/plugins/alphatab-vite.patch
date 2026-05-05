@@ -1,0 +1,111 @@
+diff --git a/packages/vite/src/bridge/build.ts b/packages/vite/src/bridge/build.ts
+index ecf9c02..1d9fcfb 100644
+--- a/packages/vite/src/bridge/build.ts
++++ b/packages/vite/src/bridge/build.ts
+@@ -173,8 +173,12 @@ function wrapEnvironmentLoad(environment: BuildEnvironment, hook?: Plugin['load'
+     }
+ 
+     const fn = getHookHandler(hook);
+-    const handler: Plugin['load'] = function (id, ...args) {
+-        return fn.call(injectEnvironmentInContext(this, environment), id, injectSsrFlag(args[0], environment));
++    const handler: Plugin['load'] = async function (id, ...args) {
++        const result = await fn.call(injectEnvironmentInContext(this, environment), id, injectSsrFlag(args[0], environment));
++        if (result && typeof result === 'object' && !('moduleType' in result)) {
++            (result as any).moduleType = 'js';
++        }
++        return result;
+     };
+ 
+     if ('handler' in hook) {
+@@ -192,13 +196,17 @@ function wrapEnvironmentTransform(environment: BuildEnvironment, hook?: Plugin['
+     }
+ 
+     const fn = getHookHandler(hook);
+-    const handler: Plugin['transform'] = function (code, importer, ...args) {
+-        return fn.call(
++    const handler: Plugin['transform'] = async function (code, importer, ...args) {
++        const result = await fn.call(
+             injectEnvironmentInContext(this, environment),
+             code,
+             importer,
+             injectSsrFlag(args[0], environment)
+         );
++        if (result && typeof result === 'object' && !('moduleType' in result)) {
++            (result as any).moduleType = 'js';
++        }
++        return result;
+     };
+ 
+     if ('handler' in hook) {
+diff --git a/packages/vite/src/bridge/worker.ts b/packages/vite/src/bridge/worker.ts
+index 1c4c77f..b40af9f 100644
+--- a/packages/vite/src/bridge/worker.ts
++++ b/packages/vite/src/bridge/worker.ts
+@@ -2,7 +2,7 @@
+ 
+ import type { ResolvedConfig } from './config';
+ import { cleanUrl, getHash } from './utils';
+-import type { OutputChunk } from 'rollup';
++import type { OutputChunk } from 'rolldown';
+ import * as path from 'node:path';
+ import { BuildEnvironment } from 'vite';
+ import { injectEnvironmentToHooks } from './build';
+@@ -92,14 +92,14 @@ async function bundleWorkerEntry(config: ResolvedConfig, id: string): Promise<Ou
+     }
+ 
+     // bundle the file as entry to support imports
+-    const { rollup } = await import('rollup');
++    const { rolldown } = await import('rolldown');
+     const { plugins, rollupOptions, format } = config.worker;
+ 
+     const workerConfig = await plugins(newBundleChain);
+     const workerEnvironment = new BuildEnvironment('client', workerConfig); // TODO: should this be 'worker'?
+     await workerEnvironment.init();
+ 
+-    const bundle = await rollup({
++    const bundle = await rolldown({
+         ...rollupOptions,
+         input,
+         plugins: workerEnvironment.plugins.map(p => injectEnvironmentToHooks(workerEnvironment, p)),
+diff --git a/packages/vite/src/detectionGlobalPlugin.ts b/packages/vite/src/detectionGlobalPlugin.ts
+index d2f3f2a..129ca4f 100644
+--- a/packages/vite/src/detectionGlobalPlugin.ts
++++ b/packages/vite/src/detectionGlobalPlugin.ts
+@@ -31,7 +31,8 @@ export function detectionGlobalPlugin(): Plugin {
+                 map:
+                     resolvedConfig.command === 'build' && resolvedConfig.build.sourcemap
+                         ? s.generateMap({ hires: 'boundary', source: id })
+-                        : null
++                        : null,
++                moduleType: 'js'
+             };
+         }
+     };
+diff --git a/packages/vite/src/importMetaPlugin.ts b/packages/vite/src/importMetaPlugin.ts
+index e223079..706c0a1 100644
+--- a/packages/vite/src/importMetaPlugin.ts
++++ b/packages/vite/src/importMetaPlugin.ts
+@@ -197,7 +197,8 @@ export function importMetaUrlPlugin(options: AlphaTabVitePluginOptions): Plugin
+                     map:
+                         resolvedConfig.command === 'build' && resolvedConfig.build.sourcemap
+                             ? s.generateMap({ hires: 'boundary', source: id })
+-                            : null
++                            : null,
++                    moduleType: 'js'
+                 };
+             }
+ 
+diff --git a/packages/vite/src/workerPlugin.ts b/packages/vite/src/workerPlugin.ts
+index 6458912..bb343dd 100644
+--- a/packages/vite/src/workerPlugin.ts
++++ b/packages/vite/src/workerPlugin.ts
+@@ -128,7 +128,8 @@ export function workerPlugin(options: AlphaTabVitePluginOptions): Plugin {
+                 s.prepend(injectEnv);
+                 return {
+                     code: s.toString(),
+-                    map: s.generateMap({ hires: 'boundary' })
++                    map: s.generateMap({ hires: 'boundary' }),
++                    moduleType: 'js'
+                 };
+             }
+ 

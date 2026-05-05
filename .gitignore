@@ -104,3 +104,7 @@ dist
 .tern-port
 
 .parcel-cache
+
+playwright-report
+
+test-results
