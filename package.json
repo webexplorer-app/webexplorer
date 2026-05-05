@@ -19,16 +19,16 @@
     "@parcel/transformer-webmanifest": "^2.16.4",
     "husky": "^9.1.7",
     "stream-browserify": "^3.0.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vm-browserify": "^1.1.2"
   },
   "dependencies": {
     "del-cli": "^7.0.0",
     "docx-preview": "^0.3.7",
-    "mammoth": "^1.11.0",
-    "marked": "^17.0.3",
+    "mammoth": "^1.12.0",
+    "marked": "^18.0.3",
     "rtf.js": "^3.0.9",
-    "sql.js": "^1.14.0",
+    "sql.js": "^1.14.1",
     "xlsx": "^0.18.5"
   }
 }

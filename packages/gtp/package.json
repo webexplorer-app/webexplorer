@@ -34,6 +34,6 @@
     "@webexplorer/common": "^0.1.0",
     "del-cli": "^7.0.0",
     "parcel": "^2.16.4",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }
