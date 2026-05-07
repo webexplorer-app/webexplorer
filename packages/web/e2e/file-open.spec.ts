@@ -112,6 +112,11 @@ test.describe('File Opening - Archives', () => {
     await openFile(page, 'test.zip');
     await expectViewerLoaded(page, 'archive-viewer');
   });
+
+  test('opens gzip file', async ({ page }) => {
+    await openFile(page, 'test.gz');
+    await expectViewerLoaded(page, 'archive-viewer');
+  });
 });
 
 test.describe('File Opening - Code', () => {
