@@ -118,6 +118,7 @@ export class CodeViewer extends LocalizedLitElement {
     .container {
       display: flex;
       flex-direction: column;
+      height: 100%;
     }
 
     .toolbar {
@@ -155,19 +156,85 @@ export class CodeViewer extends LocalizedLitElement {
 
     .editor-container {
       flex: 1;
+      overflow: auto;
     }
 
-    .preview-container {
+    .preview-dialog-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .preview-dialog {
+      background: white;
+      border-radius: 8px;
+      width: 90vw;
+      height: 85vh;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .preview-dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: var(--surface-alt, #f5f5f5);
+      border-bottom: 1px solid var(--border, #ddd);
+      flex-shrink: 0;
+    }
+
+    .preview-dialog-header span {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .preview-dialog-close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1.25rem;
+      color: #666;
+      transition: background 0.15s;
+    }
+
+    .preview-dialog-close:hover {
+      background: var(--surface-hover, #e0e0e0);
+    }
+
+    .preview-dialog iframe {
       flex: 1;
-      background: white;
+      width: 100%;
       border: none;
+      background: white;
     }
 
-    .preview-container iframe {
-      width: 100%;
-      min-height: 500px;
-      border: none;
-      background: white;
+    @media (max-width: 768px) {
+      .preview-dialog {
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
+        border-radius: 0;
+      }
+
+      .preview-dialog-overlay {
+        padding: 0;
+      }
     }
 
     .cm-editor {
@@ -278,7 +345,7 @@ export class CodeViewer extends LocalizedLitElement {
       this.updateWordWrap();
     }
 
-    if (changedProperties.has('showPreview') && !this.showPreview && !this.loading) {
+    if (changedProperties.has('showPreview') && !this.loading && !this.showPreview) {
       requestAnimationFrame(() => this.createEditor());
     }
   }
@@ -455,6 +522,12 @@ export class CodeViewer extends LocalizedLitElement {
     this.createEditor();
   }
 
+  private closePreviewOnBackdrop(e: Event) {
+    if ((e.target as HTMLElement).classList.contains('preview-dialog-overlay')) {
+      this.showPreview = false;
+    }
+  }
+
   private formatFileSize(bytes: number): string {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
@@ -514,18 +587,25 @@ export class CodeViewer extends LocalizedLitElement {
     return html`
       <div class="container">
         ${this.renderToolbar()}
-        ${this.showPreview && this.hasPreview()
-          ? html`
-            <div class="preview-container">
+        <div class="editor-container"></div>
+      </div>
+      ${this.showPreview && this.hasPreview()
+        ? html`
+          <div class="preview-dialog-overlay" @click=${this.closePreviewOnBackdrop}>
+            <div class="preview-dialog">
+              <div class="preview-dialog-header">
+                <span>${t('preview', 'Preview')} — ${this.file?.name}</span>
+                <button class="preview-dialog-close" @click=${() => this.showPreview = false}>×</button>
+              </div>
               <iframe
                 sandbox="allow-scripts"
                 srcdoc=${this.originalContent}
               ></iframe>
             </div>
-          `
-          : html`<div class="editor-container"></div>`
-        }
-      </div>
+          </div>
+        `
+        : nothing
+      }
     `;
   }
 }

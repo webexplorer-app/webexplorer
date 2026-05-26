@@ -61,43 +61,7 @@ export class ClipboardViewer extends LocalizedLitElement {
       border-bottom-color: var(--primary, #0066CC);
     }
 
-    .format-tab input[type="checkbox"] {
-      margin: 0;
-      cursor: pointer;
-    }
 
-    .toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .copy-btn {
-      padding: 0.4rem 0.75rem;
-      border: 1px solid var(--border, #ddd);
-      border-radius: 4px;
-      background: var(--surface, #fff);
-      color: var(--text, #333);
-      font-size: 0.8rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .copy-btn:hover {
-      background: var(--surface-hover, #f3f4f6);
-    }
-
-    .copy-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .copy-btn.copied {
-      color: var(--success, #16a34a);
-      border-color: var(--success, #16a34a);
-    }
 
     .format-content {
       border: 1px solid var(--border, #ddd);
@@ -117,11 +81,6 @@ export class ClipboardViewer extends LocalizedLitElement {
       text-align: center;
       color: var(--error, #dc2626);
     }
-
-    .stats {
-      font-size: 0.875rem;
-      color: var(--text-muted, #666);
-    }
   `;
 
   @property({ attribute: false })
@@ -139,11 +98,7 @@ export class ClipboardViewer extends LocalizedLitElement {
   @state()
   private error: string | null = null;
 
-  @state()
-  private copied = false;
 
-  @state()
-  private selectedFormats: Set<string> = new Set();
 
   willUpdate(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('file') && this.file) {
@@ -161,12 +116,7 @@ export class ClipboardViewer extends LocalizedLitElement {
       const text = await this.file.text();
       this.clipboardData = JSON.parse(text) as ClipboardData;
       
-      // Set active format to first available and select all by default
-      const allTypes: string[] = [
-        ...this.clipboardData.formats.map(f => f.type),
-        ...this.clipboardData.images.map(i => i.type),
-      ];
-      this.selectedFormats = new Set(allTypes);
+      // Set active format to first available
       if (this.clipboardData.formats.length > 0) {
         this.activeFormat = this.clipboardData.formats[0].type;
       } else if (this.clipboardData.images.length > 0) {
@@ -238,44 +188,6 @@ export class ClipboardViewer extends LocalizedLitElement {
     return null;
   }
 
-  private toggleFormat(type: string) {
-    const next = new Set(this.selectedFormats);
-    if (next.has(type)) {
-      next.delete(type);
-    } else {
-      next.add(type);
-    }
-    this.selectedFormats = next;
-  }
-
-  private async copySelectedContent() {
-    const { formats, images } = this.clipboardData!;
-    const blobs: Record<string, Blob> = {};
-
-    try {
-      for (const type of this.selectedFormats) {
-        const textFormat = formats.find(f => f.type === type);
-        if (textFormat) {
-          blobs[type] = new Blob([textFormat.data], { type });
-          continue;
-        }
-        const imageFormat = images.find(i => i.type === type);
-        if (imageFormat) {
-          const res = await fetch(`data:${imageFormat.type};base64,${imageFormat.data}`);
-          blobs[type] = await res.blob();
-        }
-      }
-
-      if (Object.keys(blobs).length > 0) {
-        await navigator.clipboard.write([new ClipboardItem(blobs)]);
-      }
-      this.copied = true;
-      setTimeout(() => { this.copied = false; }, 2000);
-    } catch (e) {
-      console.error('Failed to copy:', e);
-    }
-  }
-
   render() {
     if (this.loading) {
       return html`<div class="loading">${t('loading', 'Loading...')}</div>`;
@@ -299,31 +211,12 @@ export class ClipboardViewer extends LocalizedLitElement {
 
     return html`
       <div class="clipboard-viewer">
-        <div class="toolbar">
-          <div class="stats">
-            ${allFormats.length} ${t('formats-available', 'format(s) available')}
-          </div>
-          <button
-            class="copy-btn ${this.copied ? 'copied' : ''}"
-            ?disabled=${this.selectedFormats.size === 0}
-            @click=${() => this.copySelectedContent()}
-          >
-            ${this.copied ? t('copied', 'Copied!') : t('copy', 'Copy')}
-          </button>
-        </div>
-        
         <div class="formats-tabs">
           ${allFormats.map(f => html`
             <button 
               class="format-tab ${f.type === this.activeFormat ? 'active' : ''}"
-              @click=${() => { this.activeFormat = f.type; this.copied = false; }}
+              @click=${() => { this.activeFormat = f.type; }}
             >
-              <input
-                type="checkbox"
-                .checked=${this.selectedFormats.has(f.type)}
-                @click=${(e: Event) => e.stopPropagation()}
-                @change=${() => this.toggleFormat(f.type)}
-              />
               ${this.getFormatLabel(f.type)}
             </button>
           `)}
