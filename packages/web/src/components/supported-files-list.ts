@@ -1,8 +1,24 @@
 import { html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { t } from '../common/Localization';
 import { SUPPORTED_FILE_TYPES, type SupportedFileType } from '../common/supported-types.js';
 import { LocalizedLitElement } from './localized-element';
+
+type FileCategory = SupportedFileType['category'];
+type CategoryFilter = 'all' | FileCategory;
+
+const CATEGORIES: Array<{ id: CategoryFilter; label: string }> = [
+  { id: 'all', label: 'All' },
+  { id: 'document', label: 'Documents' },
+  { id: 'media', label: 'Media' },
+  { id: 'archive', label: 'Archives' },
+  { id: 'ebook', label: 'Ebooks' },
+  { id: 'data', label: 'Data' },
+  { id: 'code', label: 'Code' },
+  { id: 'other', label: 'Other' },
+];
+
+const FEATURED_TYPE_IDS = new Set(['pdf', 'word', 'excel', 'image', 'video', 'archive', 'psd', 'dicom']);
 
 /**
  * Component that displays a list of supported file types
@@ -17,10 +33,18 @@ export class SupportedFilesList extends LocalizedLitElement {
       width: 100%;
     }
 
+    .browser { border: 1px solid var(--border, #ddd); border-radius: 8px; overflow: hidden; }
+    .controls { display: flex; gap: 0.75rem; align-items: center; padding: 0.75rem; background: var(--surface, #f5f5f5); border-bottom: 1px solid var(--border, #ddd); }
+    .search { box-sizing: border-box; flex: 1; min-width: 0; height: 2.4rem; padding: 0 0.75rem; border: 1px solid var(--border, #ccc); border-radius: 4px; background: var(--background, #fff); color: var(--text-primary, #333); font: inherit; }
+    .result-count { color: var(--text-muted, #666); font-size: 0.8125rem; white-space: nowrap; }
+    .category-filter { display: flex; align-items: center; gap: 0.4rem; color: var(--text-muted, #666); font-size: 0.8125rem; white-space: nowrap; }
+    .category-select { box-sizing: border-box; height: 2.4rem; padding: 0 2rem 0 0.65rem; border: 1px solid var(--border, #ccc); border-radius: 4px; background: var(--background, #fff); color: var(--text-primary, #333); font: inherit; cursor: pointer; }
+    .table-wrap { overflow-x: auto; }
+
     table {
       border-collapse: collapse;
       font-size: 0.875rem;
-      border: 1px solid var(--border, #ddd);
+      border: 0;
       width: 100%;
       border-radius: 0.5rem;
       overflow: hidden;
@@ -76,18 +100,24 @@ export class SupportedFilesList extends LocalizedLitElement {
     .icon-powerpoint { color: #d24726; }
     .icon-rtf { color: #6b7280; }
     .icon-opendocument { color: #ff6f00; }
+    .icon-iwork { color: #5c6bc0; }
     .icon-epub, .icon-mobi, .icon-azw3 { color: #009688; }
     .icon-archive { color: #8d6e63; }
     .icon-image { color: #e91e63; }
+    .icon-psd { color: #1976d2; }
+    .icon-dicom { color: #00838f; }
     .icon-audio { color: #00bcd4; }
     .icon-video { color: #9c27b0; }
     .icon-three { color: #ff9800; }
     .icon-csv { color: #4caf50; }
     .icon-sqlite { color: #003b57; }
+    .icon-parquet { color: #7a5c00; }
+    .icon-notebook { color: #d05a24; }
     .icon-torrent { color: #3f51b5; }
     .icon-wasm { color: #795548; }
     .icon-tab { color: #ff5722; }
     .icon-email { color: #2196f3; }
+    .icon-mbox { color: #0277bd; }
     .icon-code { color: #607d8b; }
     .icon-markdown { color: #42a5f5; }
     .icon-font { color: #ab47bc; }
@@ -124,6 +154,11 @@ export class SupportedFilesList extends LocalizedLitElement {
       font-style: italic;
       margin-left: 0.25rem;
     }
+
+    .empty { padding: 2rem; text-align: center; color: var(--text-muted, #666); }
+    .expand { display: flex; justify-content: center; padding: 0.75rem; border-top: 1px solid var(--border, #ddd); background: var(--surface, #f5f5f5); }
+    .expand button { min-height: 2.25rem; padding: 0 0.85rem; border: 1px solid var(--border, #ccc); border-radius: 4px; background: var(--background, #fff); color: var(--text-primary, #333); cursor: pointer; }
+    @media (max-width: 640px) { .controls { align-items: stretch; flex-direction: column; } .search { flex: none; width: 100%; } .category-filter { justify-content: space-between; } .category-select { flex: 1; max-width: 13rem; } .result-count { align-self: flex-end; } th, td { padding: 0.65rem 0.75rem; } }
   `;
 
   /**
@@ -138,15 +173,27 @@ export class SupportedFilesList extends LocalizedLitElement {
   @property({ type: String })
   category?: string;
 
+  @state()
+  private activeCategory: CategoryFilter = 'all';
+
+  @state()
+  private query = '';
+
+  @state()
+  private expanded = false;
+
   private getDisplayName(nameKey: string, defaultName: string): string {
     return t(nameKey, defaultName);
   }
 
   private getFilteredTypes() {
-    if (this.category) {
-      return SUPPORTED_FILE_TYPES.filter(ft => ft.category === this.category);
-    }
-    return SUPPORTED_FILE_TYPES;
+    const category = this.category || this.activeCategory;
+    const query = this.query.trim().toLowerCase().replace(/^\./, '');
+    return SUPPORTED_FILE_TYPES.filter(fileType => {
+      const matchesCategory = category === 'all' || fileType.category === category;
+      const searchable = `${fileType.defaultName} ${fileType.extensions.join(' ')} ${fileType.category}`.toLowerCase();
+      return matchesCategory && (!query || searchable.includes(query));
+    });
   }
 
   private renderIcon(fileType: SupportedFileType) {
@@ -177,6 +224,10 @@ export class SupportedFilesList extends LocalizedLitElement {
         return html`<span class="${iconClass}">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 12h8v2H8zm0 4h5v2H8z"/></svg>
         </span>`;
+      case 'iwork':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h7v8H3V4c0-.55.45-1 1-1zm9 0h7c.55 0 1 .45 1 1v7h-8V3zM3 13h8v8H4c-.55 0-1-.45-1-1v-7zm10 0h8v7c0 .55-.45 1-1 1h-7v-8zM5 5v4h4V5H5zm10 0v4h4V5h-4zM5 15v4h4v-4H5zm10 0v4h4v-4h-4z"/></svg>
+        </span>`;
       case 'epub':
       case 'mobi':
       case 'azw3':
@@ -190,6 +241,14 @@ export class SupportedFilesList extends LocalizedLitElement {
       case 'image':
         return html`<span class="${iconClass}">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+        </span>`;
+      case 'psd':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 7l10 5 10-5-10-5zm-7.5 9.5L2 12.75l10 5 10-5-2.5-1.25L12 15.25 4.5 11.5zm0 5L2 17.75l10 5 10-5-2.5-1.25L12 20.25 4.5 16.5z"/></svg>
+        </span>`;
+      case 'dicom':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h5v2H5v4H3V4c0-.55.45-1 1-1zm11 0h5c.55 0 1 .45 1 1v5h-2V5h-4V3zM3 15h2v4h4v2H4c-.55 0-1-.45-1-1v-5zm16 0h2v5c0 .55-.45 1-1 1h-5v-2h4v-4zM11 7h2v4h4v2h-4v4h-2v-4H7v-2h4V7z"/></svg>
         </span>`;
       case 'audio':
         return html`<span class="${iconClass}">
@@ -211,6 +270,14 @@ export class SupportedFilesList extends LocalizedLitElement {
         return html`<span class="${iconClass}">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c3.86 0 7 1.57 7 3.5S15.86 12 12 12 5 10.43 5 8.5 8.14 5 12 5zm0 14c-3.86 0-7-1.57-7-3.5v-2c1.41 1.16 4.01 2 7 2s5.59-.84 7-2v2c0 1.93-3.14 3.5-7 3.5zm0-5c-3.86 0-7-1.57-7-3.5v-2c1.41 1.16 4.01 2 7 2s5.59-.84 7-2v2c0 1.93-3.14 3.5-7 3.5z"/></svg>
         </span>`;
+      case 'parquet':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h5v18H3V3zm6 0h5v8H9V3zm0 9h5v9H9v-9zm6-9h6v5h-6V3zm0 6h6v6h-6V9zm0 7h6v5h-6v-5z"/></svg>
+        </span>`;
+      case 'notebook':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h2v2h10V3h2v2h1c.55 0 1 .45 1 1v14c0 .55-.45 1-1 1h-1v2h-2v-2H7v2H5v-2H4c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h1V3zm2 4H5v12h14V7h-2v2h-2V7H9v2H7V7zm2 5h6v2H9v-2zm0 4h4v2H9v-2z"/></svg>
+        </span>`;
       case 'torrent':
         return html`<span class="${iconClass}">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
@@ -226,6 +293,10 @@ export class SupportedFilesList extends LocalizedLitElement {
       case 'email':
         return html`<span class="${iconClass}">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </span>`;
+      case 'mbox':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 10h-4c0 1.66-1.34 3-3 3s-3-1.34-3-3H5V5h14v8zM7 7h10v2H7V7zm0 3h10v2H7v-2z"/></svg>
         </span>`;
       case 'code':
         return html`<span class="${iconClass}">
@@ -327,10 +398,24 @@ export class SupportedFilesList extends LocalizedLitElement {
   }
 
   render() {
-    const types = this.getFilteredTypes();
+    const filteredTypes = this.getFilteredTypes();
+    const isBrowsing = this.expanded || Boolean(this.query) || this.activeCategory !== 'all' || Boolean(this.category);
+    const types = isBrowsing ? filteredTypes : filteredTypes.filter(fileType => FEATURED_TYPE_IDS.has(fileType.id));
 
     return html`
-      <table>
+      <div class="browser">
+        <div class="controls">
+          <input class="search" type="search" placeholder=${t('search-formats', 'Search formats or extensions')} .value=${this.query} @input=${(event: InputEvent) => this.query = (event.target as HTMLInputElement).value}>
+          ${this.category ? null : html`<label class="category-filter">
+            <span>${t('category-header', 'Category')}</span>
+            <select class="category-select" .value=${this.activeCategory} @change=${(event: Event) => this.activeCategory = (event.target as HTMLSelectElement).value as CategoryFilter}>
+              ${CATEGORIES.map(category => html`<option value=${category.id}>${t(`category-${category.id}`, category.label)}</option>`)}
+            </select>
+          </label>`}
+          <span class="result-count">${filteredTypes.length} ${filteredTypes.length === 1 ? t('format', 'format') : t('formats', 'formats')}</span>
+        </div>
+        <div class="table-wrap">
+          ${types.length ? html`<table>
         <thead>
           <tr>
             <th>${t('file-type-header', 'File Type')}</th>
@@ -361,7 +446,10 @@ export class SupportedFilesList extends LocalizedLitElement {
             `
           )}
         </tbody>
-      </table>
+          </table>` : html`<div class="empty">${t('no-matching-formats', 'No matching formats')}</div>`}
+        </div>
+        ${!isBrowsing && filteredTypes.length > types.length ? html`<div class="expand"><button @click=${() => this.expanded = true}>${t('view-all-formats', 'View all supported formats')} (${filteredTypes.length})</button></div>` : null}
+      </div>
     `;
   }
 }

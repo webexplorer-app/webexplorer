@@ -28,13 +28,13 @@ export class InputZone extends LocalizedLitElement {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 0.75rem;
     }
 
     .privacy-notice {
-      font-size: 0.875rem;
+      margin: 0;
+      font-size: 0.8125rem;
       font-weight: 500;
-      color: var(--text, #333);
+      color: var(--text-secondary, #666);
       text-align: center;
       display: flex;
       align-items: center;
@@ -47,21 +47,25 @@ export class InputZone extends LocalizedLitElement {
     }
 
     .input-area {
-      width: min(60rem, 100%);
-      min-height: 180px;
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 230px;
       border: 2px dashed var(--border, #ccc);
       border-radius: var(--radius-3, 8px);
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: border-color 0.2s, background-color 0.2s;
+      background: var(--surface, rgba(255, 255, 255, 0.02));
+      transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
       cursor: pointer;
       outline: none;
     }
 
     .input-area:hover,
-    .input-area:focus {
+    .input-area:focus-visible {
       border-color: var(--accent, #0066cc);
+      background-color: var(--surface-hover, rgba(0, 102, 204, 0.04));
+      box-shadow: 0 0 0 3px var(--focus-ring, rgba(0, 102, 204, 0.18));
     }
 
     .input-area.dragging {
@@ -73,7 +77,7 @@ export class InputZone extends LocalizedLitElement {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: var(--size-4, 1rem);
+      gap: 0.9rem;
       color: var(--text-secondary, #666);
       font-size: 1rem;
       pointer-events: none;
@@ -106,13 +110,38 @@ export class InputZone extends LocalizedLitElement {
     }
 
     .input-primary {
-      font-size: 1rem;
+      font-size: 1.125rem;
+      font-weight: 600;
       color: var(--text, #333);
     }
 
     .input-secondary {
       font-size: 0.875rem;
       color: var(--text-muted, #666);
+    }
+
+    .choose-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      min-height: 2.25rem;
+      padding: 0 0.85rem;
+      border-radius: 4px;
+      background: var(--accent, #0066cc);
+      color: white;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .choose-action svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      .input-area { min-height: 210px; }
+      .input-content { padding: 1.25rem; }
+      .privacy-notice { align-items: flex-start; text-align: left; }
     }
   `;
 
@@ -286,21 +315,29 @@ export class InputZone extends LocalizedLitElement {
     return labels[type] || type;
   }
 
-  private handleClick() {
-    this.focus();
+  private requestFilePicker() {
+    this.dispatchEvent(new CustomEvent('request-file-picker', {
+      bubbles: true,
+      composed: true,
+    }));
+  }
+
+  private handleKeyDown(event: KeyboardEvent) {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    this.requestFilePicker();
   }
 
   render() {
     return html`
       <div class="input-zone">
-        <p class="privacy-notice">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          ${t('privacy-notice', 'Your file is not uploaded. All processing happens locally in your browser.')}
-        </p>
         <div 
           class="input-area ${this.isDragging ? 'dragging' : ''}"
           tabindex="0"
-          @click=${this.handleClick}
+          role="button"
+          aria-label=${t('choose-file', 'Choose File')}
+          @click=${this.requestFilePicker}
+          @keydown=${this.handleKeyDown}
           @dragenter=${this.handleDragEnter}
           @dragover=${this.handleDragOver}
           @dragleave=${this.handleDragLeave}
@@ -318,9 +355,17 @@ export class InputZone extends LocalizedLitElement {
               </svg>
             </div>
             <div class="input-text">
-              <span class="input-primary">${t('drop-or-paste', 'Drop file or paste content')}</span>
+              <span class="input-primary">${this.isDragging ? t('release-to-open', 'Release to open file') : t('drop-or-paste', 'Drop file or paste content')}</span>
               <span class="input-secondary">${t('drop-paste-hint', 'Drag and drop a file, or press Ctrl+V to paste')}</span>
             </div>
+            <span class="choose-action">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              ${t('choose-file', 'Choose File')}
+            </span>
+            <p class="privacy-notice">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              ${t('privacy-short', 'Processed locally in your browser. Never uploaded.')}
+            </p>
           </div>
         </div>
       </div>

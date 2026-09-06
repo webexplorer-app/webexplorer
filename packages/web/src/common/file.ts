@@ -1,6 +1,7 @@
 import { Mime } from 'mime';
 import standardTypes from 'mime/types/standard.js';
 import otherTypes from 'mime/types/other.js';
+import { fileTypeFromBlob } from 'file-type/core';
 
 const mime = new Mime(standardTypes, otherTypes);
 
@@ -15,6 +16,16 @@ export function mimeType(file: File): string | undefined {
   const fileType = file.type || mime.getType(file.name);
   if (fileType) {
     return fileType;
+  }
+}
+
+export async function detectMimeType(file: File): Promise<string | undefined> {
+  const detectedType = await fileTypeFromBlob(file);
+  if (detectedType) return detectedType.mime;
+
+  const preamble = new Uint8Array(await file.slice(128, 132).arrayBuffer());
+  if (preamble[0] === 0x44 && preamble[1] === 0x49 && preamble[2] === 0x43 && preamble[3] === 0x4d) {
+    return 'application/dicom';
   }
 }
 

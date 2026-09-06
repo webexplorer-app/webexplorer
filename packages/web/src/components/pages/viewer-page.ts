@@ -54,6 +54,7 @@ export class ViewerPage extends LocalizedLitElement {
     .feedback-btn:active {
       transform: scale(0.95);
     }
+    .embed-viewer { min-height: 100vh; }
   `;
 
   @property({ attribute: false })
@@ -61,6 +62,9 @@ export class ViewerPage extends LocalizedLitElement {
 
   @property({ type: Boolean })
   darkMode = false;
+
+  @property({ type: Boolean })
+  embedMode = false;
 
   connectedCallback() {
     super.connectedCallback();
@@ -84,6 +88,10 @@ export class ViewerPage extends LocalizedLitElement {
   render() {
     if (!this.file) {
       return html`<div>${t('no-file-selected', 'No file selected')}</div>`;
+    }
+
+    if (this.embedMode) {
+      return html`<div class="embed-viewer"><file-viewer .file=${this.file} .darkMode=${this.darkMode}></file-viewer></div>`;
     }
 
     return html`

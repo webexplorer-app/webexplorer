@@ -9,6 +9,7 @@ import '../supported-files-list';
 import '../credits-dialog';
 import '../input-zone';
 import { LocalizedLitElement } from '../localized-element';
+import { applyTheme } from '../../common/theme';
 
 @customElement('home-page')
 export class HomePage extends LocalizedLitElement {
@@ -122,30 +123,65 @@ export class HomePage extends LocalizedLitElement {
     .explorer {
       display: flex;
       flex-direction: column;
-      gap: var(--size-8, 2rem);
+      gap: 1.5rem;
+      width: min(60rem, 100%);
+      margin: 0 auto;
     }
     .file-input-section {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: var(--size-6, 1.5rem);
       width: 100%;
     }
-    .file-input-row {
+    file-picker {
+      display: none;
+    }
+    .embed-notice {
       display: flex;
       align-items: center;
-      gap: var(--size-4, 1rem);
-      width: 100%;
-      max-width: 600px;
-      justify-content: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.8rem 1rem;
+      border-left: 3px solid var(--accent, #0066cc);
+      background: var(--background-alt, #fafafa);
+      color: var(--text-secondary, #666);
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+    .embed-notice strong {
+      color: var(--text-primary, #333);
+    }
+    .embed-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-shrink: 0;
+      color: var(--text-link, #0066cc);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .embed-contact:hover {
+      color: var(--text-link-hover, #004499);
+      text-decoration: underline;
+    }
+    .embed-contact svg {
+      width: 1rem;
+      height: 1rem;
     }
     .supports {
-      margin-top: var(--size-4, 1rem);
+      margin-top: 0;
     }
     .supports h2 {
-      margin-bottom: var(--size-4, 1rem);
+      margin: 0 0 0.75rem;
       color: var(--primary, #333);
       font-weight: var(--font-weight-6, 600);
+    }
+    @media (max-width: 640px) {
+      .embed-notice {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
     }
   `;
 
@@ -174,6 +210,10 @@ export class HomePage extends LocalizedLitElement {
     }
   }
 
+  private openFilePicker() {
+    this.renderRoot.querySelector('file-picker')?.open();
+  }
+
   private toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
@@ -183,16 +223,8 @@ export class HomePage extends LocalizedLitElement {
   }
 
   private handleThemeMenuClick() {
-    // Directly toggle the theme (same logic as theme-toggle component)
     const isDark = document.body.classList.contains('dark-mode');
-    if (isDark) {
-      document.body.classList.remove('dark-mode');
-      localStorage.setItem('theme', 'light');
-    } else {
-      document.body.classList.add('dark-mode');
-      localStorage.setItem('theme', 'dark');
-    }
-    window.dispatchEvent(new CustomEvent('theme-changed', { detail: { dark: !isDark } }));
+    applyTheme(isDark ? 'light' : 'dark', { persist: true, notify: true });
     this.closeMenu();
   }
 
@@ -251,11 +283,22 @@ export class HomePage extends LocalizedLitElement {
         <page-content>
           <div class="explorer">
             <div class="file-input-section">
-              <input-zone @file-input=${this.handleFileInput}></input-zone>
-              <div class="file-input-row">
-                <file-picker @files-selected=${this.handleFilesSelected}></file-picker>
-              </div>
+              <input-zone @file-input=${this.handleFileInput} @request-file-picker=${this.openFilePicker}></input-zone>
+              <file-picker @files-selected=${this.handleFilesSelected}></file-picker>
             </div>
+            <aside class="embed-notice">
+              <span>
+                <strong>${t('embed-web-explorer', 'Embed Web Explorer')}</strong>
+                ${t('embed-contact-notice', 'Want to open files from your own website? Contact me to set up iframe access.')}
+              </span>
+              <a
+                class="embed-contact"
+                href="mailto:jichang_dev@outlook.com?subject=Web%20Explorer%20Embed%20Integration"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                ${t('contact-me', 'Contact me')}
+              </a>
+            </aside>
             <div class="supports">
               <h2>${t('supported-files', 'Supported Files')}</h2>
               <supported-files-list></supported-files-list>

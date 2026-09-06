@@ -83,6 +83,13 @@ export class EmailViewer extends LocalizedLitElement {
       border-radius: 4px;
       color: var(--text, #333);
     }
+    iframe.email-content {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 420px;
+      white-space: normal;
+      background: white;
+    }
     .attachments-list {
       list-style: none;
       padding: 0;
@@ -186,7 +193,7 @@ export class EmailViewer extends LocalizedLitElement {
           </tbody>
         </table>
         ${this.email.html
-          ? html`<div class="email-content" .innerHTML=${this.email.html}></div>`
+          ? html`<iframe class="email-content" sandbox referrerpolicy="no-referrer" .srcdoc=${this.email.html} title=${this.email.subject || t('email-content', 'Email content')}></iframe>`
           : html`<p class="email-content">${this.email.text}</p>`}
       </div>
     `;

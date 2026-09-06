@@ -112,6 +112,21 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
     lazyLoad: true,
     category: 'document',
   },
+  {
+    id: 'iwork',
+    nameKey: 'iwork-file',
+    defaultName: 'Apple iWork Document',
+    extensions: ['pages', 'numbers', 'key'],
+    mimeTypes: [
+      'application/vnd.apple.pages',
+      'application/vnd.apple.numbers',
+      'application/vnd.apple.keynote',
+    ],
+    viewer: 'iwork-viewer',
+    lazyLoad: true,
+    category: 'document',
+    note: 'embedded preview',
+  },
   
   // Ebooks
   {
@@ -155,6 +170,7 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
     mimeTypes: [
       'application/zip',
       'application/x-zip-compressed',
+      'application/x-7z-compressed',
       'application/x-tar',
       'application/x-compressed',
       'application/vnd.rar',
@@ -196,6 +212,27 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
     viewer: 'image-viewer',
     lazyLoad: false,
     category: 'media',
+  },
+  {
+    id: 'psd',
+    nameKey: 'psd-file',
+    defaultName: 'Photoshop Document',
+    extensions: ['psd'],
+    mimeTypes: ['image/vnd.adobe.photoshop', 'image/x-photoshop'],
+    viewer: 'psd-viewer',
+    lazyLoad: true,
+    category: 'media',
+  },
+  {
+    id: 'dicom',
+    nameKey: 'dicom-file',
+    defaultName: 'DICOM Medical Image',
+    extensions: ['dcm', 'dicom', 'ima'],
+    mimeTypes: ['application/dicom', 'application/dicom+json'],
+    viewer: 'dicom-viewer',
+    lazyLoad: true,
+    category: 'media',
+    note: 'uncompressed images',
   },
   
   // Fonts
@@ -355,6 +392,27 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
     lazyLoad: true,
     category: 'data',
   },
+  {
+    id: 'parquet',
+    nameKey: 'parquet-file',
+    defaultName: 'Apache Parquet File',
+    extensions: ['parquet'],
+    mimeTypes: ['application/vnd.apache.parquet', 'application/x-parquet'],
+    viewer: 'parquet-viewer',
+    lazyLoad: true,
+    category: 'data',
+  },
+  {
+    id: 'notebook',
+    nameKey: 'notebook-file',
+    defaultName: 'Jupyter Notebook',
+    extensions: ['ipynb'],
+    mimeTypes: ['application/x-ipynb+json'],
+    viewer: 'notebook-viewer',
+    lazyLoad: true,
+    category: 'data',
+    note: 'read-only preview',
+  },
   
   // Code/Binary
   {
@@ -393,6 +451,16 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
       'multipart/related',
     ],
     viewer: 'email-viewer',
+    lazyLoad: true,
+    category: 'other',
+  },
+  {
+    id: 'mbox',
+    nameKey: 'mbox-file',
+    defaultName: 'Mailbox File',
+    extensions: ['mbox'],
+    mimeTypes: ['application/mbox', 'application/x-mbox'],
+    viewer: 'mbox-viewer',
     lazyLoad: true,
     category: 'other',
   },

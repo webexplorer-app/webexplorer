@@ -1,6 +1,7 @@
 import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { t } from '../common/Localization';
+import { applyTheme, getPreferredThemeMode } from '../common/theme';
 import { LocalizedLitElement } from './localized-element';
 
 @customElement('theme-toggle')
@@ -43,14 +44,7 @@ export class ThemeToggle extends LocalizedLitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    // Check for saved preference or system preference
-    const saved = localStorage.getItem('theme');
-    if (saved) {
-      this.isDarkMode = saved === 'dark';
-    } else {
-      this.isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-    this.applyTheme();
+    this.isDarkMode = applyTheme(getPreferredThemeMode());
     this._onThemeChanged = this._onThemeChanged.bind(this);
     window.addEventListener('theme-changed', this._onThemeChanged);
   }
@@ -65,19 +59,8 @@ export class ThemeToggle extends LocalizedLitElement {
     this.isDarkMode = detail.dark;
   }
 
-  private applyTheme() {
-    if (this.isDarkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
-    }
-  }
-
   private toggleTheme() {
-    this.isDarkMode = !this.isDarkMode;
-    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
-    this.applyTheme();
-    window.dispatchEvent(new CustomEvent('theme-changed', { detail: { dark: this.isDarkMode } }));
+    this.isDarkMode = applyTheme(this.isDarkMode ? 'light' : 'dark', { persist: true, notify: true });
   }
 
   render() {

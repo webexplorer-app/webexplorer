@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { mimeType } from '../common/file';
+import { detectMimeType, mimeType } from '../common/file';
 import { getFileTypeByMime, getFileTypeByExtension } from '../common/supported-types';
 
 // Import viewer components that are always loaded (small/common)
@@ -18,15 +18,21 @@ const VIEWER_LOADERS: Record<string, () => Promise<unknown>> = {
   'powerpoint-viewer': () => import('./viewers/powerpoint-viewer'),
   'rtf-viewer': () => import('./viewers/rtf-viewer'),
   'opendocument-viewer': () => import('./viewers/opendocument-viewer'),
+  'iwork-viewer': () => import('./viewers/iwork-viewer'),
   'epub-viewer': () => import('./viewers/epub-viewer'),
   'mobi-viewer': () => import('./viewers/mobi-viewer'),
   'archive-viewer': () => import('./viewers/archive-viewer'),
+  'psd-viewer': () => import('./viewers/psd-viewer'),
+  'dicom-viewer': () => import('./viewers/dicom-viewer'),
   'three-viewer': () => import('./viewers/three-viewer'),
   'tab-viewer': () => import('./viewers/tab-viewer'),
   'torrent-viewer': () => import('./viewers/torrent-viewer'),
   'csv-viewer': () => import('./viewers/csv-viewer'),
   'sqlite-viewer': () => import('./viewers/sqlite-viewer'),
+  'parquet-viewer': () => import('./viewers/parquet-viewer'),
+  'notebook-viewer': () => import('./viewers/notebook-viewer'),
   'email-viewer': () => import('./viewers/email-viewer'),
+  'mbox-viewer': () => import('./viewers/mbox-viewer'),
   'wasm-viewer': () => import('./viewers/wasm-viewer'),
   'ffmpeg-viewer': () => import('./viewers/ffmpeg-viewer'),
   'code-viewer': () => import('./viewers/code-viewer'),
@@ -113,7 +119,7 @@ export class FileViewer extends LitElement {
       this.viewerType = 'default';
       
       if (this.file) {
-        this.determineViewer();
+        void this.determineViewer();
       }
     }
   }
@@ -124,14 +130,16 @@ export class FileViewer extends LitElement {
     }
   }
 
-  private determineViewer() {
+  private async determineViewer() {
     if (!this.file) {
       this.viewerType = 'default';
       return;
     }
 
+    const file = this.file;
+
     // Try to match by file extension first (more reliable for some file types like RTF)
-    const fileName = this.file.name;
+    const fileName = file.name;
     const lastDot = fileName.lastIndexOf('.');
     const extension = lastDot >= 0 ? fileName.substring(lastDot + 1) : '';
     
@@ -143,9 +151,18 @@ export class FileViewer extends LitElement {
     
     // If no match by extension, try MIME type
     if (!supportedType) {
-      const fileType = mimeType(this.file);
+      const fileType = mimeType(file);
       if (fileType) {
         supportedType = getFileTypeByMime(fileType);
+      }
+    }
+
+    // Browsers often leave File.type empty for extensionless uploads.
+    if (!supportedType) {
+      const detectedType = await detectMimeType(file);
+      if (this.file !== file) return;
+      if (detectedType) {
+        supportedType = getFileTypeByMime(detectedType);
       }
     }
 
@@ -167,7 +184,8 @@ export class FileViewer extends LitElement {
       }
     } else {
       // Check for unsupported video/audio types - use ffmpeg
-      const fileType = mimeType(this.file);
+      const fileType = mimeType(file) || await detectMimeType(file);
+      if (this.file !== file) return;
       if (fileType?.startsWith('video/') || fileType?.startsWith('audio/')) {
         this.viewerType = 'ffmpeg';
         this.loadViewer(VIEWER_LOADERS['ffmpeg-viewer']);
@@ -226,6 +244,8 @@ export class FileViewer extends LitElement {
         return html`<rtf-viewer .file=${file}></rtf-viewer>`;
       case 'opendocument':
         return html`<opendocument-viewer .file=${file}></opendocument-viewer>`;
+      case 'iwork':
+        return html`<iwork-viewer .file=${file}></iwork-viewer>`;
       case 'epub':
         return html`<epub-viewer .file=${file}></epub-viewer>`;
       case 'mobi':
@@ -244,12 +264,22 @@ export class FileViewer extends LitElement {
         return html`<audio-viewer .file=${file}></audio-viewer>`;
       case 'image':
         return html`<image-viewer .file=${file}></image-viewer>`;
+      case 'psd':
+        return html`<psd-viewer .file=${file}></psd-viewer>`;
+      case 'dicom':
+        return html`<dicom-viewer .file=${file}></dicom-viewer>`;
       case 'csv':
         return html`<csv-viewer .file=${file}></csv-viewer>`;
       case 'sqlite':
         return html`<sqlite-viewer .file=${file}></sqlite-viewer>`;
+      case 'parquet':
+        return html`<parquet-viewer .file=${file}></parquet-viewer>`;
+      case 'notebook':
+        return html`<notebook-viewer .file=${file}></notebook-viewer>`;
       case 'email':
         return html`<email-viewer .file=${file}></email-viewer>`;
+      case 'mbox':
+        return html`<mbox-viewer .file=${file}></mbox-viewer>`;
       case 'wasm':
         return html`<wasm-viewer .file=${file}></wasm-viewer>`;
       case 'ffmpeg':

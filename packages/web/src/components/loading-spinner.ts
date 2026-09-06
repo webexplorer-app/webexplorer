@@ -21,7 +21,7 @@ export class LoadingSpinner extends LocalizedLitElement {
       width: 40px;
       height: 40px;
       border: 3px solid var(--border-light, #f3f3f3);
-      border-top-color: var(--primary, #333);
+      border-top-color: var(--accent, #0066cc);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
