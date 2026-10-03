@@ -1,7 +1,6 @@
-import path from 'path'
 import { defineConfig, type Plugin } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
-import { alphaTab } from './plugins/alphatab-vite/alphaTabVitePlugin'
+import { alphaTab } from '@coderline/alphatab-vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 const nodePolyfillsPluginOptions = nodePolyfills({
@@ -155,13 +154,6 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/core', '@ffmpeg/core-mt', '@ffmpeg/util', '@webexplorer/ffmpeg', '@webexplorer/archive', 'wabt']
-  },
-  resolve: {
-    alias: {
-      'vite-plugin-node-polyfills/shims/buffer': path.resolve(__dirname, 'node_modules/vite-plugin-node-polyfills/shims/buffer/dist/index.js'),
-      'vite-plugin-node-polyfills/shims/global': path.resolve(__dirname, 'node_modules/vite-plugin-node-polyfills/shims/global/dist/index.js'),
-      'vite-plugin-node-polyfills/shims/process': path.resolve(__dirname, 'node_modules/vite-plugin-node-polyfills/shims/process/dist/index.js'),
-    },
   },
   server: {
     headers: {

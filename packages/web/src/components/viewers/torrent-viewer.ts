@@ -67,6 +67,16 @@ export class TorrentViewer extends LocalizedLitElement {
     .torrent-preview {
       width: 100%;
     }
+    .torrent-preview img,
+    .torrent-preview audio,
+    .torrent-preview video,
+    .torrent-preview iframe {
+      display: block;
+      width: 100%;
+      max-height: 70vh;
+      border: 0;
+      object-fit: contain;
+    }
   `;
 
   @property({ attribute: false })
@@ -93,6 +103,7 @@ export class TorrentViewer extends LocalizedLitElement {
   }
 
   disconnectedCallback() {
+    this.clearFileUrls();
     super.disconnectedCallback();
     this.client?.destroy();
   }
@@ -100,6 +111,8 @@ export class TorrentViewer extends LocalizedLitElement {
   private loadTorrent() {
     if (!this.file) return;
 
+    this.clearFileUrls();
+    this.previewedFiles = new Set();
     this.state = State.Loading;
     this.client = new WebTorrent();
 
@@ -108,18 +121,20 @@ export class TorrentViewer extends LocalizedLitElement {
       const result = reader.result as ArrayBuffer;
       const buffer = Buffer.from(result);
 
-      this.client!.add(buffer, (torrent: Torrent) => {
+      this.client!.add(buffer, async (torrent: Torrent) => {
         this.torrent = torrent;
-        this.state = State.Success;
 
-        // Get blob URLs for all files
-        torrent.files.forEach((file: TorrentFile) => {
-          file.getBlobURL((_err: Error | string | undefined, url?: string) => {
-            if (url) {
-              this.fileUrls = new Map(this.fileUrls).set(file.name, url);
-            }
-          });
-        });
+        try {
+          const fileUrls = await Promise.all(torrent.files.map(async (file: TorrentFile) => {
+            const blob = await file.blob();
+            return [file.name, URL.createObjectURL(blob)] as const;
+          }));
+          this.fileUrls = new Map(fileUrls);
+          this.state = State.Success;
+        } catch (error) {
+          console.error('Failed to load torrent files:', error);
+          this.state = State.Failure;
+        }
       });
 
       this.client!.on('error', () => {
@@ -136,13 +151,29 @@ export class TorrentViewer extends LocalizedLitElement {
 
   private handlePreview(file: TorrentFile) {
     this.previewedFiles = new Set(this.previewedFiles).add(file.name);
-    
-    this.updateComplete.then(() => {
-      const container = this.shadowRoot?.querySelector(`#preview-${file.name.replace(/[^a-zA-Z0-9]/g, '_')}`);
-      if (container) {
-        file.appendTo(container as HTMLElement);
-      }
-    });
+  }
+
+  private clearFileUrls() {
+    for (const url of this.fileUrls.values()) {
+      URL.revokeObjectURL(url);
+    }
+    this.fileUrls = new Map();
+  }
+
+  private renderPreview(file: TorrentFile) {
+    const url = this.fileUrls.get(file.name);
+    if (!url) return null;
+
+    if (file.type.startsWith('image/')) {
+      return html`<img src=${url} alt=${file.name}>`;
+    }
+    if (file.type.startsWith('audio/')) {
+      return html`<audio src=${url} controls></audio>`;
+    }
+    if (file.type.startsWith('video/')) {
+      return html`<video src=${url} controls></video>`;
+    }
+    return html`<iframe src=${url} title=${file.name}></iframe>`;
   }
 
   render() {
@@ -172,7 +203,7 @@ export class TorrentViewer extends LocalizedLitElement {
               <p>${file.name}</p>
               <button
                 type="button"
-                ?disabled=${this.previewedFiles.has(file.name)}
+                ?disabled=${this.previewedFiles.has(file.name) || !this.fileUrls.has(file.name)}
                 @click=${() => this.handlePreview(file)}
               >
                 ${t('preview', 'Preview')}
@@ -188,7 +219,7 @@ export class TorrentViewer extends LocalizedLitElement {
             <div
               id="preview-${file.name.replace(/[^a-zA-Z0-9]/g, '_')}"
               class="torrent-preview"
-            ></div>
+            >${this.previewedFiles.has(file.name) ? this.renderPreview(file) : null}</div>
           </div>
         `)}
       </div>

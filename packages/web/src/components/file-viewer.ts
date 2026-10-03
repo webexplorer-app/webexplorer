@@ -55,6 +55,7 @@ const VIEWER_LOADERS: Record<string, () => Promise<unknown>> = {
   'vega-viewer': () => import('./viewers/vega-viewer'),
   'drawio-viewer': () => import('./viewers/drawio-viewer'),
   'excalidraw-viewer': () => import('./viewers/excalidraw-viewer'),
+  'tiledmap-viewer': () => import('./viewers/tiledmap-viewer'),
   'geojson-viewer': () => import('./viewers/geojson-viewer'),
   'plantuml-viewer': () => import('./viewers/plantuml-viewer'),
 };
@@ -324,6 +325,8 @@ export class FileViewer extends LitElement {
         return html`<drawio-viewer .file=${file}></drawio-viewer>`;
       case 'excalidraw':
         return html`<excalidraw-viewer .file=${file}></excalidraw-viewer>`;
+      case 'tiledmap':
+        return html`<tiledmap-viewer .file=${file}></tiledmap-viewer>`;
       case 'geojson':
         return html`<geojson-viewer .file=${file}></geojson-viewer>`;
       case 'plantuml':

@@ -207,9 +207,31 @@ test.describe('File Opening - Data', () => {
     await expectViewerLoaded(page, 'torrent-viewer');
   });
 
+  test('renders Guitar Pro tab file', async ({ page }) => {
+    await openFile(page, 'test.gp5');
+    await expectViewerLoaded(page, 'tab-viewer');
+
+    const tabViewer = page.locator('app-root')
+      .locator('viewer-page')
+      .locator('file-viewer')
+      .locator('tab-viewer');
+    await expect(tabViewer.locator('.at-surface svg').first()).toBeVisible({ timeout: 30000 });
+    await expect(tabViewer.locator('.error')).toHaveCount(0);
+  });
+
   test('opens GeoJSON file', async ({ page }) => {
     await openFile(page, 'test.geojson');
     await expectViewerLoaded(page, 'geojson-viewer');
+  });
+
+  test('opens Tiled map file', async ({ page }) => {
+    await openFile(page, 'test.tmj');
+    await expectViewerLoaded(page, 'tiledmap-viewer');
+  });
+
+  test('opens Tiled XML map file', async ({ page }) => {
+    await openFile(page, 'test.tmx');
+    await expectViewerLoaded(page, 'tiledmap-viewer');
   });
 
   test('opens SQLite database file', async ({ page }) => {

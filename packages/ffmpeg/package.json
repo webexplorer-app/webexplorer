@@ -51,15 +51,15 @@
     "cpy-cli": "^7.0.0",
     "crypto-browserify": "^3.12.1",
     "del-cli": "^7.0.0",
-    "jest": "^30.3.0",
+    "jest": "^30.5.2",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
-    "ts-jest": "^29.4.9",
+    "ts-jest": "^29.4.14",
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@types/emscripten": "^1.41.5",
+    "@types/emscripten": "^1.41.6",
     "parcel": "^2.16.4"
   }
 }

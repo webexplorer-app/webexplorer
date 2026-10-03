@@ -139,6 +139,7 @@ export class SupportedFilesList extends LocalizedLitElement {
     .icon-vega { color: #4c78a8; }
     .icon-drawio { color: #f08705; }
     .icon-excalidraw { color: #6965db; }
+    .icon-tiledmap { color: #67b64b; }
     .icon-geojson { color: #2e7d32; }
     .icon-plantuml { color: #c62828; }
 
@@ -385,6 +386,10 @@ export class SupportedFilesList extends LocalizedLitElement {
       case 'geojson':
         return html`<span class="${iconClass}">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </span>`;
+      case 'tiledmap':
+        return html`<span class="${iconClass}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8zM5 5v4h4V5H5zm10 0v4h4V5h-4zM5 15v4h4v-4H5zm10 0v4h4v-4h-4z"/></svg>
         </span>`;
       case 'plantuml':
         return html`<span class="${iconClass}">

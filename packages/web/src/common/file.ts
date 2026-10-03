@@ -1,7 +1,7 @@
 import { Mime } from 'mime';
 import standardTypes from 'mime/types/standard.js';
 import otherTypes from 'mime/types/other.js';
-import { fileTypeFromBlob } from 'file-type/core';
+import { fileTypeFromBlob } from 'file-type';
 
 const mime = new Mime(standardTypes, otherTypes);
 

@@ -705,6 +705,22 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
     category: 'data',
   },
   {
+    id: 'tiledmap',
+    nameKey: 'tiledmap-file',
+    defaultName: 'Tiled Map',
+    extensions: ['tmx', 'tmj'],
+    mimeTypes: [
+      'application/x-tiled-map',
+      'application/x-tmx',
+      'application/vnd.tiled.tmx+xml',
+      'application/vnd.tiled.tmj+json',
+    ],
+    viewer: 'tiledmap-viewer',
+    lazyLoad: true,
+    category: 'data',
+    note: 'embedded assets',
+  },
+  {
     id: 'geojson',
     nameKey: 'geojson-file',
     defaultName: 'GeoJSON Map',

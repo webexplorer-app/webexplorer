@@ -24,11 +24,11 @@
   },
   "dependencies": {
     "del-cli": "^7.0.0",
-    "docx-preview": "^0.3.7",
-    "mammoth": "^1.12.0",
-    "marked": "^18.0.3",
+    "docx-preview": "^0.4.1",
+    "mammoth": "^1.13.0",
+    "marked": "^18.0.14",
     "rtf.js": "^3.0.9",
-    "sql.js": "^1.14.1",
+    "sql.js": "^1.14.2",
     "xlsx": "^0.18.5"
   }
 }
